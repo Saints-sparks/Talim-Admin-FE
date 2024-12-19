@@ -1,21 +1,48 @@
 "use client"
 import Header from "@/components/Header";
-import Overview from "@/components/OverView";
-import TaskTable from "@/components/TaskTable";
-import UpcomingClasses from "@/components/UpcomingClasses";
+import Sidebar from "@/components/Sidebar";
+import StudentCard from "@/components/StudentCard";
 import React from "react";
 
+
+interface Student {
+  name: string;
+  class: string;
+  image: string;
+}
+
 const DashboardPage: React.FC = () => {
-  const greeting = "Good Afternoon, Mr Adam";
-  const tent = "Good job, Mr Adam! Your efforts are paying off!";
+  const user = "Administrator";
+  const tent = "Staff Management!";
+
+
+  const students: Student[] = Array(12).fill({
+    name: 'Emeka Adewale',
+    class: 'SS 3',
+    image: '/images/student-placeholder.jpg', // Replace with actual URLs or use placeholders
+  });
+
   return (
     <div className="p-6 space-y-1 bg-[F8F8F8]">
-      <Header greeting={greeting} tent={tent} />
-    
-     
-      <TaskTable />
+      <Header user={user} tent={tent} />
+      <Sidebar/>
+
+      <main className="p-6">
+          <div className="flex justify-between items-center mb-6">
+            <h1 className="text-2xl font-semibold"> Manage all students registered in the Learning Management System</h1>
+            <button className="px-4 py-2 bg-blue-600 text-white rounded">+ Add Student</button>
+          </div>
+          <div className="grid grid-cols-3 gap-4">
+            {students.map((student, index) => (
+              <StudentCard key={index} student={student} />
+            ))}
+          </div>
+        </main>
+
     </div>
   );
 };
 
 export default DashboardPage;
+
+

@@ -31,7 +31,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
 
   return (
     <div
-      className={`bg-black w-64 h-full flex flex-col justify-between ${className}`}
+      className={`bg-white w-64 h-full flex flex-col justify-between ${className}`}
     >
       <div className="py-7 hover:bg-gray-200 flex items-center gap-4 cursor-pointer border-b-2">
         <HiHome className="text-xl" />

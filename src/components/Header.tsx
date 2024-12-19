@@ -5,14 +5,14 @@ import { HiOutlineBell } from "react-icons/hi";
 
 // Define the prop type for the greeting
 interface HeaderProps {
-  greeting: string;
+  user: string;
   tent: string; // Make sure tent is included in the type
 }
 
-const Header: React.FC<HeaderProps> = ({ greeting, tent }) => { 
+const Header: React.FC<HeaderProps> = ({ user, tent }) => { 
     const [currentDate, setCurrentDate] = useState('');
     
-    useEffect(() => {// Destructure both greeting and tent
+    useEffect(() => {
   const date = new Date().toLocaleDateString('en-GB', {
     day: '2-digit',
     month: 'short',
@@ -23,11 +23,11 @@ const Header: React.FC<HeaderProps> = ({ greeting, tent }) => {
   
 
   return (
-    <header className="flex justify-between items-center bg-white py-4 px-3 mt-[-15px]">
+    <header className="flex justify-between items-center bg-black py-4 px-3 mt-[-15px] shadow-md">
       {/* Greeting Section */}
       <div>
         <h1 className="text-2xl font-semibold text-gray-800 flex items-center">
-          {greeting} <span className="ml-2">👋</span>
+          {user} 
         </h1>
         <p className="text-sm text-gray-600">{tent}</p> {/* Display tent here */}
       </div>
