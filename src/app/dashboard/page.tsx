@@ -32,6 +32,7 @@ const DashboardPage: React.FC = () => {
             <h1 className="text-2xl font-semibold"> Manage all students registered in the Learning Management System</h1>
             <button className="px-4 py-2 bg-blue-600 text-white rounded">+ Add Student</button>
           </div>
+          
           <div className="grid grid-cols-3 gap-4">
             {students.map((student, index) => (
               <StudentCard key={index} student={student} />

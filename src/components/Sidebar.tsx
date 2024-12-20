@@ -184,8 +184,8 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
         <div className="flex items-center gap-4">
           <FaUserCircle className="text-3xl text-gray-600" />
           <div>
-            <div className="font-semibold">Adam Musa</div>
-            <div className="text-sm text-gray-600">Teacher</div>
+            <div className="font-semibold">Admin</div>
+            <div className="text-sm text-gray-600">Logout</div>
           </div>
         </div>
         <FiLogOut
