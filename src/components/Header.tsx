@@ -23,7 +23,7 @@ const Header: React.FC<HeaderProps> = ({ user, tent }) => {
   
 
   return (
-    <header className="flex justify-between items-center bg-black py-4 px-3 mt-[-15px] shadow-md">
+    <header className="flex justify-between items-center bg-white py-4 px-3 mt-[-15px] shadow-md">
       {/* Greeting Section */}
       <div>
         <h1 className="text-2xl font-semibold text-gray-800 flex items-center">

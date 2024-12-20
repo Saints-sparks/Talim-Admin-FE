@@ -25,9 +25,9 @@ const DashboardPage: React.FC = () => {
   return (
     <div className="p-6 space-y-1 bg-[F8F8F8]">
       <Header user={user} tent={tent} />
-      <Sidebar/>
+    
 
-      <main className="p-6">
+      <main className="p-6 text-gray-800">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-semibold"> Manage all students registered in the Learning Management System</h1>
             <button className="px-4 py-2 bg-blue-600 text-white rounded">+ Add Student</button>
