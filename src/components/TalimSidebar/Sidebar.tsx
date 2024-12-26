@@ -42,7 +42,7 @@ const navItems: NavItem[] = [
   },
   {
     title: "Settings",
-    href: "/settings",
+    href: "/talimsetting",
     icon: Settings,
   },
 ]
