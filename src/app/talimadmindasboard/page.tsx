@@ -1,102 +1,105 @@
 "use client";
 
-import React, { useState } from "react";
-import Register from "../talimregister/page";
 
-const SchoolOverview = () => {
-  const [showRegister, setShowRegister] = useState(false); // State to toggle Register view
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import  Sidebartalim  from "../../components/TalimSidebar/Sidebar"
+import { SchoolList } from "../../components/talimdashboard/school-lis"
+import { StatsCard } from "../../components/talimdashboard/stats-card"
+import { Filter, Search } from 'lucide-react'
+import Image from "next/image"
+import { useState } from "react"
 
-  const handleRegisterClick = () => {
-    setShowRegister(true); // Show the Register component
-  };
 
+const stats = {
+  totalSchools: 220,
+  activeNow: 32,
+  totalSchoolsIncrease: 40,
+  activeIncrease: 20,
+}
+
+
+const schools = [
+  {
+    id: "UPS-101",
+    name: "University Preparatory Secondary School",
+    address: "36, 37, 45 & 49 Garrick Layout, Off, Siluko Rd, Benin City",
+    principal: {
+      name: "Juliet Urevbu",
+    },
+    teacherCount: 40,
+    studentCount: 324,
+  },
+  {
+    id: "HLS-102",
+    name: "Honeyland Secondary School",
+    address: "J73F+FAP, Idimu, Lagos 102213, Lagos",
+    principal: {
+      name: "Sarah Johnson",
+    },
+    teacherCount: 35,
+    studentCount: 280,
+  },
+]
+
+export default function Page() {
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen">
+     
+
       {/* Main Content */}
-      <main className="flex-1 p-4">
-        {!showRegister ? (
-          <>
-            <header className="flex justify-between items-center mb-4">
-              <h1 className="text-2xl font-bold">School Overview</h1>
-              <button
-                className="bg-blue-500 text-white px-4 py-2 rounded-md"
-                onClick={handleRegisterClick} // Set the click handler
-              >
-                + Register School
-              </button>
-            </header>
+      <div className="flex-1 lg:ml-0">
+        <header className="sticky top-0 z-40 border-b bg-white">
+          <div className="flex h-16 items-center justify-between px-6">
+            <h1 className="text-lg font-semibold">School Overview</h1>
+            <Button variant="default" >Register School</Button>
+          </div>
+        </header>
 
-            {/* Stats Section */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-              <div className="bg-white p-4 rounded-md shadow-md">
-                <h2 className="text-xl font-semibold">Total Schools</h2>
-                <p className="text-3xl font-bold">220</p>
-                <p className="text-green-500">+40% vs last month</p>
-              </div>
-              <div className="bg-white p-4 rounded-md shadow-md">
-                <h2 className="text-xl font-semibold">Active now</h2>
-                <p className="text-3xl font-bold">32</p>
-                <p className="text-green-500">+20% vs last month</p>
-              </div>
-            </div>
-
-            {/* Filters Section */}
-            <div className="flex justify-between items-center mb-4">
-              <div>
-                <button className="bg-blue-100 text-blue-500 px-4 py-2 rounded-md">
-                  BN, LG, +4
-                </button>
-                <button className="ml-2 bg-gray-100 px-4 py-2 rounded-md">
-                  More Filters
-                </button>
-              </div>
-              <input
-                type="text"
-                placeholder="Search"
-                className="p-2 border border-gray-300 rounded-md"
+        <main className="p-6">
+          <div className="grid gap-6">
+            {/* Stats */}
+            <div className="grid gap-6 md:grid-cols-2">
+              <StatsCard
+                title="Total Schools"
+                value={stats.totalSchools}
+                increase={stats.totalSchoolsIncrease}
+              />
+              <StatsCard
+                title="Active now"
+                value={stats.activeNow}
+                increase={stats.activeIncrease}
               />
             </div>
 
-            {/* School Cards */}
-            <div className="grid grid-cols-1 gap-4">
-              {[1, 2].map((item, index) => (
-                <div
-                  key={index}
-                  className="bg-white p-4 rounded-md shadow-md flex flex-col md:flex-row justify-between"
-                >
-                  <div>
-                    <h3 className="text-xl font-semibold">
-                      University Preparatory Secondary School
-                    </h3>
-                    <p className="text-gray-500">#UPS-10001</p>
-                    <p className="text-gray-500">
-                      36, 37, 45 & 49 Garrick Layout, Off, Siluko Rd, Benin City
-                    </p>
-                  </div>
-                  <div className="flex items-center space-x-4">
-                    <div>
-                      <p className="text-sm text-gray-500">Principal</p>
-                      <p className="text-md font-semibold">Juliet Urevbu</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-500">Teachers</p>
-                      <p className="text-md font-semibold">40</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-500">Students</p>
-                      <p className="text-md font-semibold">324</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
+            {/* Filters */}
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge variant="secondary" className="gap-1">
+                  BN_LG_14
+                  <button className="rounded-full hover:bg-gray-200">✕</button>
+                </Badge>
+                <Button variant="outline" size="sm" className="gap-2">
+                  <Filter className="h-4 w-4" />
+                  More filters
+                </Button>
+              </div>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+                <Input
+                  placeholder="Search..."
+                  className="w-full pl-9 sm:w-[300px]"
+                />
+              </div>
             </div>
-          </>
-        ) : (
-          <Register /> // Render the Register component
-        )}
-      </main>
-    </div>
-  );
-};
 
-export default SchoolOverview;
+            {/* School List */}
+            <SchoolList schools={schools} />
+          </div>
+        </main>
+      </div>
+    </div>
+  )
+}
+
