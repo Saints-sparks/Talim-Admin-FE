@@ -1,7 +1,5 @@
 'use client';
-
-import RegistrationForm from '@/components/Registrationform/Form';
-import Sidebar from '@/components/TalimSidebar/Sidebar';
+import { SchoolRegistrationForm } from '@/components/Registrationform/Form';
 import React from 'react';
 
 
@@ -13,7 +11,7 @@ export default function Register() {
 
       {/* Main Content */}
       <main className="w-[100%] bg-slate-300">
-        <RegistrationForm/>
+        <SchoolRegistrationForm/>
       
       </main>
     </div>

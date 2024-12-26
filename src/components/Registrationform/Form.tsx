@@ -1,256 +1,300 @@
-'use client';
+"use client"
 
-import React, { useState } from 'react';
+import { useState, useRef } from "react"
+import Image from "next/image"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Upload } from 'lucide-react'
 
-const statesInNigeria = [
-  'Abia', 'Adamawa', 'Akwa Ibom', 'Anambra', 'Bauchi', 'Bayelsa', 'Benue', 'Borno',
-  'Cross River', 'Delta', 'Ebonyi', 'Edo', 'Ekiti', 'Enugu', 'FCT - Abuja', 'Gombe',
-  'Imo', 'Jigawa', 'Kaduna', 'Kano', 'Katsina', 'Kebbi', 'Kogi', 'Kwara', 'Lagos',
-  'Nasarawa', 'Niger', 'Ogun', 'Ondo', 'Osun', 'Oyo', 'Plateau', 'Rivers', 'Sokoto',
-  'Taraba', 'Yobe', 'Zamfara',
-];
+// Nigerian states
+const NIGERIAN_STATES = [
+  "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", "Benue", "Borno",
+  "Cross River", "Delta", "Ebonyi", "Edo", "Ekiti", "Enugu", "FCT", "Gombe", "Imo",
+  "Jigawa", "Kaduna", "Kano", "Katsina", "Kebbi", "Kogi", "Kwara", "Lagos", "Nasarawa",
+  "Niger", "Ogun", "Ondo", "Osun", "Oyo", "Plateau", "Rivers", "Sokoto", "Taraba",
+  "Yobe", "Zamfara"
+]
 
-const RegistrationForm = () => {
-  const [formData, setFormData] = useState({
-    schoolName: '',
-    schoolEmail: '',
-    principalName: '',
-    location: '',
-    state: '',
-    academicYear: '',
-    term: '',
-    primaryClasses: '',
-    secondaryClasses: '',
-  });
+const ACADEMIC_YEARS = ["2023/2024", "2024/2025", "2025/2026"]
+const TERMS = ["First Term", "Second Term", "Third Term"]
 
-  const [selectedImage, setSelectedImage] = useState(null);
+interface FormData {
+  schoolLogo: string
+  schoolName: string
+  schoolId: string
+  emailAddress: string
+  principalName: string
+  location: string
+  state: string
+  academicYear: string
+  term: string
+  primaryClasses: string
+  secondaryClasses: string
+}
 
-  // Handle file upload
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
+export function SchoolRegistrationForm() {
+  const [formData, setFormData] = useState<FormData>({
+    schoolLogo: "",
+    schoolName: "",
+    schoolId: "10021",
+    emailAddress: "",
+    principalName: "",
+    location: "",
+    state: "",
+    academicYear: "",
+    term: "",
+    primaryClasses: "",
+    secondaryClasses: ""
+  })
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [previewUrl, setPreviewUrl] = useState<string>("")
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setSelectedImage(imageUrl);
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setPreviewUrl(reader.result as string)
+        setFormData(prev => ({ ...prev, schoolLogo: reader.result as string }))
+      }
+      reader.readAsDataURL(file)
     }
-  };
+  }
 
-  // Handle input change
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  // Handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Form submitted:', formData);
-
-    // Reset form fields
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    // Here you would typically send the formData to your backend
+    console.log("Form submitted:", formData)
+    
+    // Reset form
     setFormData({
-      schoolName: '',
-      schoolEmail: '',
-      principalName: '',
-      location: '',
-      state: '',
-      academicYear: '',
-      term: '',
-      primaryClasses: '',
-      secondaryClasses: '',
-    });
-    setSelectedImage(null);
-  };
+      schoolLogo: "",
+      schoolName: "",
+      schoolId: "10021",
+      emailAddress: "",
+      principalName: "",
+      location: "",
+      state: "",
+      academicYear: "",
+      term: "",
+      primaryClasses: "",
+      secondaryClasses: ""
+    })
+    setPreviewUrl("")
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""
+    }
+  }
 
   return (
-    <div className="w-full max-w-4xl mx-auto mt-10">
-      <form onSubmit={handleSubmit} className="bg-white shadow-lg rounded-lg p-8">
-        {/* Page Header */}
-        <header className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-800">New School Information</h1>
-          <p className="text-sm text-gray-500">Edit school information here</p>
-        </header>
+    <form onSubmit={handleSubmit} className="container mx-auto p-6 space-y-6">
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-bold">New School Information</h1>
+          <p className="text-muted-foreground">Edit school information here</p>
+        </div>
+        <Button type="submit" className="bg-indigo-700 hover:bg-indigo-800">
+          Register School
+        </Button>
+      </div>
 
-        {/* General Information */}
-        <section className="mb-10">
-          <h2 className="text-xl font-semibold text-gray-700 mb-4">General Information</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Upload School Logo */}
-            <div className="col-span-1">
-              <label className="block text-gray-700 font-medium mb-2">School Logo</label>
-              <div
-                className="border-dashed border-2 border-gray-300 text-center py-8 rounded-md cursor-pointer"
-                onClick={() => document.getElementById('fileInput').click()}
-              >
-                {selectedImage ? (
-                  <img
-                    src={selectedImage}
-                    alt="School Logo"
-                    className="w-32 h-32 mx-auto object-cover rounded-md"
-                  />
-                ) : (
-                  <div>
-                    <p className="text-gray-400 mb-2">Drop school’s logo here or</p>
-                    <span className="text-blue-600 font-semibold">browse</span>
-                  </div>
-                )}
-                <input
-                  type="file"
-                  id="fileInput"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleImageUpload}
+      <Card>
+        <CardHeader>
+          <CardTitle>General information</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {/* Logo Upload */}
+          <div className="flex flex-col items-center justify-center border-2 border-dashed rounded-lg p-6 max-w-[200px]">
+            {previewUrl ? (
+              <div className="relative w-full aspect-square">
+                <Image
+                  src={previewUrl}
+                  alt="School logo preview"
+                  fill
+                  className="object-contain"
                 />
               </div>
-            </div>
-            {/* School Details */}
-            <div>
-              <label className="block text-gray-700 mb-1">School Name*</label>
-              <input
-                type="text"
-                name="schoolName"
+            ) : (
+              <div className="text-center space-y-2">
+                <Upload className="mx-auto h-8 w-8 text-gray-400" />
+                <div className="text-sm">
+                  Drop school&apos;s logo here or{" "}
+                  <span 
+                    className="text-indigo-600 cursor-pointer hover:underline"
+                    onClick={() => fileInputRef.current?.click()}
+                  >
+                    browse
+                  </span>
+                </div>
+              </div>
+            )}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleFileUpload}
+            />
+          </div>
+
+          {/* School Details */}
+          <div className="grid gap-6 md:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="schoolName">School Name*</Label>
+              <Input
+                id="schoolName"
                 value={formData.schoolName}
-                onChange={handleInputChange}
+                onChange={e => setFormData(prev => ({ ...prev, schoolName: e.target.value }))}
                 placeholder="Enter school's name"
-                className="w-full p-3 border rounded"
+                required
               />
             </div>
-            <div>
-              <label className="block text-gray-700 mb-1">School ID</label>
-              <input
-                type="text"
-                value="10021"
+            <div className="space-y-2">
+              <Label htmlFor="schoolId">School ID</Label>
+              <Input
+                id="schoolId"
+                value={formData.schoolId}
+                onChange={e => setFormData(prev => ({ ...prev, schoolId: e.target.value }))}
+                placeholder="10021"
                 disabled
-                className="w-full p-3 border rounded bg-gray-100"
               />
             </div>
-            <div>
-              <label className="block text-gray-700 mb-1">School Email Address</label>
-              <input
+            <div className="space-y-2">
+              <Label htmlFor="emailAddress">School email address</Label>
+              <Input
+                id="emailAddress"
                 type="email"
-                name="schoolEmail"
-                value={formData.schoolEmail}
-                onChange={handleInputChange}
+                value={formData.emailAddress}
+                onChange={e => setFormData(prev => ({ ...prev, emailAddress: e.target.value }))}
                 placeholder="Enter school's email address"
-                className="w-full p-3 border rounded"
               />
             </div>
-            <div>
-              <label className="block text-gray-700 mb-1">Principal / Primary Contact</label>
-              <input
-                type="text"
-                name="principalName"
+            <div className="space-y-2">
+              <Label htmlFor="principalName">Principal / primary contact</Label>
+              <Input
+                id="principalName"
                 value={formData.principalName}
-                onChange={handleInputChange}
+                onChange={e => setFormData(prev => ({ ...prev, principalName: e.target.value }))}
                 placeholder="Enter principal name"
-                className="w-full p-3 border rounded"
               />
             </div>
-            <div>
-              <label className="block text-gray-700 mb-1">Location</label>
-              <input
-                type="text"
-                name="location"
+            <div className="space-y-2">
+              <Label htmlFor="location">Location*</Label>
+              <Input
+                id="location"
                 value={formData.location}
-                onChange={handleInputChange}
+                onChange={e => setFormData(prev => ({ ...prev, location: e.target.value }))}
                 placeholder="Enter school's location"
-                className="w-full p-3 border rounded"
+                required
               />
             </div>
-            <div>
-              <label className="block text-gray-700 mb-1">State</label>
-              <select
-                name="state"
+            <div className="space-y-2">
+              <Label htmlFor="state">State</Label>
+              <Select
                 value={formData.state}
-                onChange={handleInputChange}
-                className="w-full p-3 border rounded"
+                onValueChange={value => setFormData(prev => ({ ...prev, state: value }))}
               >
-                <option value="">Select state</option>
-                {statesInNigeria.map((state, index) => (
-                  <option key={index} value={state}>
-                    {state}
-                  </option>
-                ))}
-              </select>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select" />
+                </SelectTrigger>
+                <SelectContent>
+                  {NIGERIAN_STATES.map(state => (
+                    <SelectItem key={state} value={state}>
+                      {state}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
-        </section>
+        </CardContent>
+      </Card>
 
-        {/* Academic Session Information */}
-        <section className="mb-10">
-          <h2 className="text-xl font-semibold text-gray-700 mb-4">Academic Session Information</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-gray-700 mb-1">Which academic year is this for?</label>
-              <select
-                name="academicYear"
+      <Card>
+        <CardHeader>
+          <CardTitle>Academic session information</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-6 md:grid-cols-2">
+            <div className="space-y-2">
+              <Label>Which academic year is this for?</Label>
+              <Select
                 value={formData.academicYear}
-                onChange={handleInputChange}
-                className="w-full p-3 border rounded"
+                onValueChange={value => setFormData(prev => ({ ...prev, academicYear: value }))}
               >
-                <option value="">Select academic year</option>
-                <option value="2023/2024">2023/2024</option>
-                <option value="2024/2025">2024/2025</option>
-              </select>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select academic year" />
+                </SelectTrigger>
+                <SelectContent>
+                  {ACADEMIC_YEARS.map(year => (
+                    <SelectItem key={year} value={year}>
+                      {year}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-            <div>
-              <label className="block text-gray-700 mb-1">What term is it?</label>
-              <select
-                name="term"
+            <div className="space-y-2">
+              <Label>What term is it?</Label>
+              <Select
                 value={formData.term}
-                onChange={handleInputChange}
-                className="w-full p-3 border rounded"
+                onValueChange={value => setFormData(prev => ({ ...prev, term: value }))}
               >
-                <option value="">Select term</option>
-                <option value="First Term">First Term</option>
-                <option value="Second Term">Second Term</option>
-              </select>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select term" />
+                </SelectTrigger>
+                <SelectContent>
+                  {TERMS.map(term => (
+                    <SelectItem key={term} value={term}>
+                      {term}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
-        </section>
+        </CardContent>
+      </Card>
 
-        {/* Class Information */}
-        <section className="mb-10">
-          <h2 className="text-xl font-semibold text-gray-700 mb-4">Class Information</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-gray-700 mb-1">How many primary classes?</label>
-              <input
+      <Card>
+        <CardHeader>
+          <CardTitle>Class information</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-6 md:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="primaryClasses">How many primary classes?</Label>
+              <Input
+                id="primaryClasses"
                 type="number"
-                name="primaryClasses"
                 value={formData.primaryClasses}
-                onChange={handleInputChange}
+                onChange={e => setFormData(prev => ({ ...prev, primaryClasses: e.target.value }))}
                 placeholder="Enter total number"
-                className="w-full p-3 border rounded"
               />
             </div>
-            <div>
-              <label className="block text-gray-700 mb-1">How many secondary classes?</label>
-              <input
+            <div className="space-y-2">
+              <Label htmlFor="secondaryClasses">How many secondary classes?</Label>
+              <Input
+                id="secondaryClasses"
                 type="number"
-                name="secondaryClasses"
                 value={formData.secondaryClasses}
-                onChange={handleInputChange}
+                onChange={e => setFormData(prev => ({ ...prev, secondaryClasses: e.target.value }))}
                 placeholder="Enter total number"
-                className="w-full p-3 border rounded"
               />
             </div>
           </div>
-        </section>
+        </CardContent>
+      </Card>
+    </form>
+  )
+}
 
-        {/* Submit Button */}
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            className="bg-blue-600 text-white px-6 py-2 rounded shadow hover:bg-blue-700"
-          >
-            Register School
-          </button>
-        </div>
-      </form>
-    </div>
-  );
-};
-
-export default RegistrationForm;

@@ -1,24 +1,19 @@
 "use client";
 
-
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import  Sidebartalim  from "../../components/TalimSidebar/Sidebar"
-import { SchoolList } from "../../components/talimdashboard/school-lis"
-import { StatsCard } from "../../components/talimdashboard/stats-card"
-import { Filter, Search } from 'lucide-react'
-import Image from "next/image"
-import { useState } from "react"
-
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation"; // Import useRouter
+import { SchoolList } from "../../components/talimdashboard/school-lis";
+import { StatsCard } from "../../components/talimdashboard/stats-card";
+import { Filter, Search } from "lucide-react";
 
 const stats = {
   totalSchools: 220,
   activeNow: 32,
   totalSchoolsIncrease: 40,
   activeIncrease: 20,
-}
-
+};
 
 const schools = [
   {
@@ -41,19 +36,26 @@ const schools = [
     teacherCount: 35,
     studentCount: 280,
   },
-]
+];
 
 export default function Page() {
+  const router = useRouter(); // Initialize useRouter
+
+  // Handle navigation to the talimregister page
+  const handleRegisterClick = () => {
+    router.push("/talimregister");
+  };
+
   return (
     <div className="flex min-h-screen">
-     
-
       {/* Main Content */}
       <div className="flex-1 lg:ml-0">
         <header className="sticky top-0 z-40 border-b bg-white">
           <div className="flex h-16 items-center justify-between px-6">
             <h1 className="text-lg font-semibold">School Overview</h1>
-            <Button variant="default" >Register School</Button>
+            <Button variant="default" onClick={handleRegisterClick}>
+              Register School
+            </Button>
           </div>
         </header>
 
@@ -100,6 +102,5 @@ export default function Page() {
         </main>
       </div>
     </div>
-  )
+  );
 }
-
