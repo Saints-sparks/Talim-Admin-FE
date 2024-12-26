@@ -7,6 +7,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import { PageIndicatorProvider } from "./context/PageIndicatorContext";
 import Sidebar from "@/components/Sidebar";
+import Sidebartalim from "@/components/TalimSidebar/Sidebar";
 import { usePathname } from "next/navigation"; // Import usePathname for routing
 import classNames from "classnames"; // Import classnames
 
@@ -30,8 +31,6 @@ const poppins = Poppins({
   weight: ["300", "400", "500", "600", "700"],
 });
 
-
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -39,9 +38,8 @@ export default function RootLayout({
 }>) {
   const pathname = usePathname(); // Get current route
 
-  // Define routes where the sidebar should be hidden
-  const noSidebarRoutes = ["/"]; // Add any other routes as needed
-  const showSidebar = !noSidebarRoutes.includes(pathname); // Determine if sidebar should be shown
+  // Check if the current route contains "talim"
+  const isTalimPage = pathname.includes("talim");
 
   return (
     <html lang="en">
@@ -51,10 +49,18 @@ export default function RootLayout({
         <PageIndicatorProvider>
           {/* Main layout structure */}
           <div className="flex">
-            {showSidebar && (
+            {/* Conditionally render the appropriate sidebar */}
+            {isTalimPage ? (
+              <Sidebartalim className="fixed left-0 top-0 h-full w-64 bg-gray-200" />
+            ) : (
               <Sidebar className="fixed left-0 top-0 h-full w-64 bg-black" />
             )}
-            <main className={classNames("flex-1 p-4", { "ml-64": showSidebar })}>
+
+            <main
+              className={classNames("flex-1 p-4", {
+                "ml-64": true, // Add margin-left only when a sidebar is rendered
+              })}
+            >
               {children}
             </main>
           </div>

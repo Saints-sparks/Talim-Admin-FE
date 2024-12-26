@@ -17,10 +17,8 @@ type SidebarProps = {
   className?: string; // Make className optional
 };
 
-const Sidebar: React.FC<SidebarProps> = ({ className }) => {
-  const [isManageTrackOpen, setIsManageTrackOpen] = useState(false);
-  const [isCurriculumOpen, setIsCurriculumOpen] = useState(false);
-  const [isStudentsOpen, setIsStudentsOpen] = useState(false); // Add state for Student section
+const Sidebartalim: React.FC<SidebarProps> = ({ className }) => {
+ 
 
   const router = useRouter(); // Initialize the router
 
@@ -68,21 +66,21 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
           onClick={() => handleNavigate("/messages")}
         >
           <MdOutlineMessage className="text-xl" />
-          <span>Messages</span>
+          <span>User Management </span>
         </div>
         <div
           className="p-4 hover:bg-gray-200 flex items-center gap-4 cursor-pointer"
           onClick={() => handleNavigate("/grades")}
         >
           <HiOutlineChartBar className="text-xl" />
-          <span>Grades</span>
+          <span>Announcement </span>
         </div>
         <div
           className="p-4 hover:bg-gray-200 flex items-center gap-4 cursor-pointer"
           onClick={() => handleNavigate("/notifications")}
         >
           <MdOutlineNotifications className="text-xl" />
-          <span>Notifications</span>
+          <span>Support</span>
         </div>
         <div
           className="p-4 hover:bg-gray-200 flex items-center gap-4 cursor-pointer"
@@ -111,4 +109,4 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
   );
 };
 
-export default Sidebar;
+export default Sidebartalim;
