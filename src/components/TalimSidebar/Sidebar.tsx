@@ -25,11 +25,7 @@ const navItems: NavItem[] = [
     href: "/talimschool",
     icon: School,
   },
-  {
-    title: "User management",
-    href: "/user-management",
-    icon: Users,
-  },
+ 
   {
     title: "Announcements",
     href: "/talimannouncement",
