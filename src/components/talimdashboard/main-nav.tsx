@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Register from "../talimregister/page";
+import Register from "../../app/talimregister/page";
 
 const SchoolOverview = () => {
   const [showRegister, setShowRegister] = useState(false); // State to toggle Register view

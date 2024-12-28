@@ -70,7 +70,7 @@ export function SchoolManagement() {
       students: 1000 + index,
       teachers: 50 + index,
       location: `City ${index + 1}`,
-      status: "Active",
+      status: "Active" as const,
     })),
   ])
 
