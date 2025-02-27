@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import loginIllustration from "../../../public/Super-Admin .png"
+import loginIllustration from "../../../public/Super-Admin.png"
 
 export function LoginForm() {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)

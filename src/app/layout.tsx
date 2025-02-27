@@ -6,10 +6,9 @@ import localFont from "next/font/local";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { PageIndicatorProvider } from "./context/PageIndicatorContext";
-import Sidebar from "@/components/Sidebar";
+
 import Sidebartalim from "@/components/TalimSidebar/Sidebar";
-import { usePathname, useRouter } from "next/navigation"; // Import usePathname and useRouter for routing
-import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation"; // Import usePathname for route handling
 import classNames from "classnames"; // Import classnames
 
 // Local Fonts
@@ -37,16 +36,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [loggedIn, setLoggedIn] = useState(false); // Track user's login status
   const pathname = usePathname(); // Get current route
-  const router = useRouter();
-
-  // Redirect to login page if not logged in
-  useEffect(() => {
-    if (!loggedIn && pathname !== "/talimadminlogin") {
-      router.push("/talimadminlogin");
-    }
-  }, [loggedIn, pathname, router]);
 
   // Check if the current route contains "talim"
   const isTalimPage = pathname.includes("talim");
@@ -59,18 +49,14 @@ export default function RootLayout({
         <PageIndicatorProvider>
           {/* Main layout structure */}
           <div className="flex">
-            {/* Conditionally render the sidebar */}
-            {loggedIn && (
-              isTalimPage ? (
-                <Sidebartalim className="fixed left-0 top-0 h-full w-64 bg-gray-200" />
-              ) : (
-                <Sidebar className="fixed left-0 top-0 h-full w-64 bg-black" />
-              )
+            {/* Render the Talim sidebar only if the route contains "talim" */}
+            {isTalimPage && (
+              <Sidebartalim className="fixed left-0 top-0 h-full w-64 bg-gray-200" />
             )}
 
             <main
               className={classNames("flex-1 p-4", {
-                "ml-64": loggedIn, // Add margin-left only when the sidebar is rendered
+                "ml-64": isTalimPage, // Apply margin-left only when the sidebar is present
               })}
             >
               {children}
