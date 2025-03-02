@@ -23,7 +23,7 @@ export default function Home() {
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setCurrentPage(1);
-    router.push('/dashboard');  // Redirect to /dashboard page
+    router.push('/talimadmindashboard');  // Redirect to /dashboard page
   };
 
   const handleDotClick = (index: number) => {

@@ -16,7 +16,7 @@ export function SchoolList({ schools }: SchoolListProps) {
             <div className="grid gap-6 md:grid-cols-4">
               <div className="space-y-2 md:col-span-2">
                 <div className="flex items-center gap-2">
-                  <h3 className="font-semibold">{school.name}</h3>
+                  <h3 className="font-semibold text-black">{school.name}</h3>
                   <Badge variant="secondary">{school.id}</Badge>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">

@@ -13,9 +13,9 @@ export function StatsCard({ title, value, increase, period = "vs last month" }: 
     <Card>
       <CardContent className="p-6">
         <div className="space-y-4">
-          <p className="text-sm text-muted-foreground">{title}</p>
+          <p className="text-sm text-muted-foreground text-black font-semibold">{title}</p>
           <div className="flex items-center justify-between">
-            <span className="text-3xl font-bold">{value}</span>
+            <span className="text-3xl font-bold text-black">{value}</span>
             <div className="flex items-center gap-1 text-sm text-emerald-600">
               <ArrowUp className="h-4 w-4" />
               <span>{increase}%</span>

@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation"; // Import useRouter
-import { SchoolList } from "../../components/talimdashboard/school-lis";
+import { SchoolList } from "../../components/talimdashboard/school-list";
 import { StatsCard } from "../../components/talimdashboard/stats-card";
 import { Filter, Search } from "lucide-react";
 
