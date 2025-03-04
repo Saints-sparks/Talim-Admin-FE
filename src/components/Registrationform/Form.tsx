@@ -197,16 +197,16 @@ export function SchoolRegistrationForm() {
                 required
               />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-2 ">
               <Label htmlFor="state">State</Label>
-              <Select
+              <Select 
                 value={formData.state}
                 onValueChange={value => setFormData(prev => ({ ...prev, state: value }))}
               >
-                <SelectTrigger>
+                <SelectTrigger >
                   <SelectValue placeholder="Select" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className=" bg-blue-200">
                   {NIGERIAN_STATES.map(state => (
                     <SelectItem key={state} value={state}>
                       {state}
@@ -234,7 +234,7 @@ export function SchoolRegistrationForm() {
                 <SelectTrigger>
                   <SelectValue placeholder="Select academic year" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-blue-200">
                   {ACADEMIC_YEARS.map(year => (
                     <SelectItem key={year} value={year}>
                       {year}
@@ -252,7 +252,7 @@ export function SchoolRegistrationForm() {
                 <SelectTrigger>
                   <SelectValue placeholder="Select term" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-blue-200">
                   {TERMS.map(term => (
                     <SelectItem key={term} value={term}>
                       {term}

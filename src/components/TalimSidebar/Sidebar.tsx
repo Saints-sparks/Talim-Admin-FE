@@ -34,12 +34,12 @@ const navItems: NavItem[] = [
   },
   {
     title: "Support",
-    href: "/",
+    href: "/talimsupport",
     icon: HelpCircle,
   },
   {
     title: "Settings",
-    href: "/",
+    href: "/talimsetting",
     icon: Settings,
   },
 ]

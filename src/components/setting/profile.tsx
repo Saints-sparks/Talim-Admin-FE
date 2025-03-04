@@ -1,45 +1,64 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Image from "next/image"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Label } from "@/components/ui/label"
-import { User, Phone, Mail, Briefcase, MapPin, Clock } from 'lucide-react'
+import { useState } from "react";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Label } from "@/components/ui/label";
+import { User, Phone, Mail, Briefcase, MapPin, Clock, Pencil } from "lucide-react";
 
 interface Activity {
-  date: string
-  location: string
-  time?: string
+  date: string;
+  location: string;
+  time?: string;
 }
 
 const recentActivity: Activity[] = [
   {
     date: "June 09, 2024",
     location: "Edo State, Benin City",
-    time: "12:45pm"
+    time: "12:45pm",
   },
   {
     date: "June 04, 2024",
-    location: "Edo State, Benin City"
-  }
-]
+    location: "Edo State, Benin City",
+  },
+];
 
 export function ProfilePage() {
-  const [profileImage, setProfileImage] = useState("/placeholder.svg")
+  const [profileImage, setProfileImage] = useState("/placeholder.svg");
+  const [isEditing, setIsEditing] = useState(false);
+  const [userData, setUserData] = useState({
+    firstName: "Olivia",
+    lastName: "Eromosele",
+    phone: "09022794720",
+    email: "olivia.eromos@talim.com",
+    role: "Talim Administrator",
+  });
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
+    const file = event.target.files?.[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file)
-      setProfileImage(imageUrl)
+      const imageUrl = URL.createObjectURL(file);
+      setProfileImage(imageUrl);
     }
-  }
+  };
 
   const handleImageRemove = () => {
-    setProfileImage("/placeholder.svg")
-  }
+    setProfileImage("/placeholder.svg");
+  };
+
+  const handleEditToggle = () => {
+    setIsEditing((prev) => !prev);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserData({
+      ...userData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -52,14 +71,14 @@ export function ProfilePage() {
           <AvatarFallback>OE</AvatarFallback>
         </Avatar>
         <div className="space-y-4">
-          <h2 className="text-xl font-semibold">Olivia Eromosele</h2>
+          <h2 className="text-xl font-semibold">{userData.firstName} {userData.lastName}</h2>
           <div className="flex flex-wrap gap-3">
-            <Button 
-              variant="default" 
+            <Button
+              variant="default"
               className="bg-indigo-700 hover:bg-indigo-800"
-              onClick={() => document.getElementById('image-upload')?.click()}
+              onClick={() => document.getElementById("image-upload")?.click()}
             >
-              Change picture
+              Change Picture
             </Button>
             <input
               id="image-upload"
@@ -68,12 +87,12 @@ export function ProfilePage() {
               className="hidden"
               onChange={handleImageChange}
             />
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               className="text-red-500 hover:text-red-600 hover:bg-red-50"
               onClick={handleImageRemove}
             >
-              Remove picture
+              Remove Picture
             </Button>
           </div>
         </div>
@@ -81,48 +100,92 @@ export function ProfilePage() {
 
       {/* Personal Information */}
       <Card>
-        <CardHeader className="bg-gray-100">
-          <CardTitle>Personal information</CardTitle>
+        <CardHeader className="bg-gray-100 flex justify-between items-center">
+          <CardTitle>Personal Information</CardTitle>
+          <Button variant="ghost" onClick={handleEditToggle} className="flex items-center">
+            <Pencil className="w-4 h-4 mr-1" />
+            {isEditing ? "Save" : "Edit"}
+          </Button>
         </CardHeader>
         <CardContent className="grid gap-6 pt-6">
           <div className="grid sm:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label className="flex items-center gap-2">
                 <User className="h-4 w-4" />
-                First name;
+                First Name:
               </Label>
-              <p className="text-lg">Olivia</p>
+              {isEditing ? (
+                <input
+                  type="text"
+                  name="firstName"
+                  value={userData.firstName}
+                  onChange={handleChange}
+                  className="border rounded p-2 w-full"
+                />
+              ) : (
+                <p className="text-lg">{userData.firstName}</p>
+              )}
             </div>
             <div className="space-y-2">
               <Label className="flex items-center gap-2">
                 <User className="h-4 w-4" />
-                Last name;
+                Last Name:
               </Label>
-              <p className="text-lg">Eromosele</p>
+              {isEditing ? (
+                <input
+                  type="text"
+                  name="lastName"
+                  value={userData.lastName}
+                  onChange={handleChange}
+                  className="border rounded p-2 w-full"
+                />
+              ) : (
+                <p className="text-lg">{userData.lastName}</p>
+              )}
             </div>
           </div>
           <div className="grid sm:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label className="flex items-center gap-2">
                 <Phone className="h-4 w-4" />
-                Phone number;
+                Phone Number:
               </Label>
-              <p className="text-lg">09022794720</p>
+              {isEditing ? (
+                <input
+                  type="text"
+                  name="phone"
+                  value={userData.phone}
+                  onChange={handleChange}
+                  className="border rounded p-2 w-full"
+                />
+              ) : (
+                <p className="text-lg">{userData.phone}</p>
+              )}
             </div>
             <div className="space-y-2">
               <Label className="flex items-center gap-2">
                 <Mail className="h-4 w-4" />
-                Email;
+                Email:
               </Label>
-              <p className="text-lg">olivia.eromos@talim.com</p>
+              {isEditing ? (
+                <input
+                  type="email"
+                  name="email"
+                  value={userData.email}
+                  onChange={handleChange}
+                  className="border rounded p-2 w-full"
+                />
+              ) : (
+                <p className="text-lg">{userData.email}</p>
+              )}
             </div>
           </div>
           <div className="space-y-2">
             <Label className="flex items-center gap-2">
               <Briefcase className="h-4 w-4" />
-              Role;
+              Role:
             </Label>
-            <p className="text-lg">Talim administrator</p>
+            <p className="text-lg">{userData.role}</p>
           </div>
         </CardContent>
       </Card>
@@ -130,7 +193,7 @@ export function ProfilePage() {
       {/* Recent Activity */}
       <Card>
         <CardHeader>
-          <CardTitle>Recent activity</CardTitle>
+          <CardTitle>Recent Activity</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="relative">
@@ -159,6 +222,5 @@ export function ProfilePage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
-
