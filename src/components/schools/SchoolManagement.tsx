@@ -1,21 +1,10 @@
 "use client"
 
 import * as React from "react"
-import { useRouter } from "next/navigation";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { useMemo, useCallback } from "react"
+import { useRouter } from "next/navigation"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -30,7 +19,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { useToast } from "../../types/use-toast"
-import { Filter, MoreVertical, Plus } from 'lucide-react'
+import { Filter, MoreVertical, Plus } from "lucide-react"
 
 interface School {
   id: string
@@ -44,7 +33,7 @@ interface School {
 }
 
 export function SchoolManagement() {
-  const router = useRouter();
+  const router = useRouter()
   const [searchTerm, setSearchTerm] = React.useState("")
   const [currentPage, setCurrentPage] = React.useState(1)
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false)
@@ -54,8 +43,8 @@ export function SchoolManagement() {
   const entriesPerPage = 10
 
   const handleViewSchool = (schoolId: string) => {
-    router.push(`/schools/${schoolId}`);
-  };
+    router.push(`/schools/${schoolId}`)
+  }
 
   const [schools, setSchools] = React.useState<School[]>([
     {
@@ -68,29 +57,36 @@ export function SchoolManagement() {
       location: "Lagos",
       status: "Active",
     },
-    ...Array(50).fill(null).map((_, index) => ({
-      id: `SCH-${index + 102}`,
-      name: `Sample School ${index + 1}`,
-      email: `sample${index + 1}@school.edu.ng`,
-      contact: `Mr. Sample ${index + 1}`,
-      students: 1000 + index,
-      teachers: 50 + index,
-      location: `City ${index + 1}`,
-      status: "Active" as const,
-    })),
+    ...Array(50)
+      .fill(null)
+      .map((_, index) => ({
+        id: `SCH-${index + 102}`,
+        name: `Sample School ${index + 1}`,
+        email: `sample${index + 1}@school.edu.ng`,
+        contact: `Mr. Sample ${index + 1}`,
+        students: 1000 + index,
+        teachers: 50 + index,
+        location: `City ${index + 1}`,
+        status: "Active" as const,
+      })),
   ])
 
-  const filteredSchools = schools.filter((school) =>
-    school.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredSchools = useMemo(
+    () => schools.filter((school) => school.name.toLowerCase().includes(searchTerm.toLowerCase())),
+    [schools, searchTerm],
   )
 
-  const totalPages = Math.ceil(filteredSchools.length / entriesPerPage)
-  const paginatedSchools = filteredSchools.slice(
-    (currentPage - 1) * entriesPerPage,
-    currentPage * entriesPerPage
+  const totalPages = useMemo(
+    () => Math.ceil(filteredSchools.length / entriesPerPage),
+    [filteredSchools.length, entriesPerPage],
   )
 
-  const handleToggleStatus = () => {
+  const paginatedSchools = useMemo(
+    () => filteredSchools.slice((currentPage - 1) * entriesPerPage, currentPage * entriesPerPage),
+    [filteredSchools, currentPage],
+  )
+
+  const handleToggleStatus = useCallback(() => {
     if (selectedSchool) {
       setSchools((prev) =>
         prev.map((school) =>
@@ -99,8 +95,8 @@ export function SchoolManagement() {
                 ...school,
                 status: school.status === "Active" ? "Deactivated" : "Active",
               }
-            : school
-        )
+            : school,
+        ),
       )
       toast({
         description: `School ${selectedSchool.id} is now ${
@@ -110,9 +106,9 @@ export function SchoolManagement() {
       setShowToggleDialog(false)
       setSelectedSchool(null)
     }
-  }
+  }, [selectedSchool, toast])
 
-  const handleDelete = () => {
+  const handleDelete = useCallback(() => {
     if (selectedSchool) {
       setSchools((prev) => prev.filter((school) => school.id !== selectedSchool.id))
       toast({
@@ -122,13 +118,17 @@ export function SchoolManagement() {
       setShowDeleteDialog(false)
       setSelectedSchool(null)
     }
-  }
+  }, [selectedSchool, toast])
+
+  const handleRegisterClick = () => {
+    router.push("/talimregister");
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1 className="text-2xl font-bold">Schools</h1>
-        <Button>
+        <Button   variant="default" onClick={handleRegisterClick}>
           <Plus className="mr-2 h-4 w-4" />
           Add a school
         </Button>
@@ -143,11 +143,12 @@ export function SchoolManagement() {
           <Input
             placeholder="Search schools..."
             value={searchTerm}
-            onChange={(e) => {
+            onChange={useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
               setSearchTerm(e.target.value)
               setCurrentPage(1)
-            }}
+            }, [])}
             className="max-w-xs"
+            aria-label="Search schools"
           />
         </div>
 
@@ -177,28 +178,19 @@ export function SchoolManagement() {
                   <TableCell>{school.teachers}</TableCell>
                   <TableCell>{school.location}</TableCell>
                   <TableCell>
-                    <Badge
-                      variant={school.status === "Active" ? "default" : "secondary"}
-                    >
-                      {school.status}
-                    </Badge>
+                    <Badge variant={school.status === "Active" ? "default" : "secondary"}>{school.status}</Badge>
                   </TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 p-0"
-                        >
+                        <Button variant="ghost" size="icon" className="h-8 w-8 p-0">
                           <MoreVertical className="h-4 w-4" />
                           <span className="sr-only">Open menu</span>
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem  onClick={() => router.push(`/SchoolProfile/${school.id}`)}>
-                          Edit
-
+                        <DropdownMenuItem onClick={() => router.push(`/SchoolProfile/${school.id}`)}>
+                          View School Details
                         </DropdownMenuItem>
                         <DropdownMenuItem>Archive</DropdownMenuItem>
                         <DropdownMenuItem
@@ -232,8 +224,9 @@ export function SchoolManagement() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+            onClick={useCallback(() => setCurrentPage((p) => Math.max(1, p - 1)), [])}
             disabled={currentPage === 1}
+            aria-label="Previous page"
           >
             Previous
           </Button>
@@ -243,8 +236,9 @@ export function SchoolManagement() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+            onClick={useCallback(() => setCurrentPage((p) => Math.min(totalPages, p + 1)), [totalPages])}
             disabled={currentPage === totalPages}
+            aria-label="Next page"
           >
             Next
           </Button>
@@ -261,10 +255,7 @@ export function SchoolManagement() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDelete}
-              className="bg-red-600 hover:bg-red-700"
-            >
+            <AlertDialogAction onClick={handleDelete} className="bg-red-600 hover:bg-red-700">
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -276,17 +267,12 @@ export function SchoolManagement() {
           <AlertDialogHeader>
             <AlertDialogTitle>Change School Status</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to{" "}
-              {selectedSchool?.status === "Active" ? "deactivate" : "reactivate"}{" "}
-              this school?
+              Are you sure you want to {selectedSchool?.status === "Active" ? "deactivate" : "reactivate"} this school?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleToggleStatus}
-              className="bg-yellow-600 hover:bg-yellow-700"
-            >
+            <AlertDialogAction onClick={handleToggleStatus} className="bg-yellow-600 hover:bg-yellow-700">
               Confirm
             </AlertDialogAction>
           </AlertDialogFooter>

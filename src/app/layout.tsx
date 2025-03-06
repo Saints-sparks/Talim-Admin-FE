@@ -1,6 +1,6 @@
 "use client";
 
-// app/layout.tsx
+import { usePathname } from "next/navigation";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Poppins } from "next/font/google";
@@ -8,8 +8,7 @@ import "./globals.css";
 import { PageIndicatorProvider } from "./context/PageIndicatorContext";
 
 import Sidebartalim from "@/components/TalimSidebar/Sidebar";
-import { usePathname } from "next/navigation"; // Import usePathname for route handling
-import classNames from "classnames"; // Import classnames
+import classNames from "classnames";
 
 // Local Fonts
 const geistSans = localFont({
@@ -24,7 +23,6 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
-// Google Font: Poppins
 const poppins = Poppins({
   subsets: ["latin"],
   variable: "--font-poppins",
@@ -33,12 +31,8 @@ const poppins = Poppins({
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  const pathname = usePathname(); // Get current route
-
-  // Check if the current route contains "talim"
+}: Readonly<{ children: React.ReactNode }>) {
+  const pathname = usePathname();
   const isTalimPage = pathname.includes("talim");
 
   return (
@@ -47,16 +41,15 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} antialiased`}
       >
         <PageIndicatorProvider>
-          {/* Main layout structure */}
           <div className="flex">
-            {/* Render the Talim sidebar only if the route contains "talim" */}
+            {/* Sidebar appears only on "talim" pages, no login restriction */}
             {isTalimPage && (
               <Sidebartalim className="fixed left-0 top-0 h-full w-64 bg-gray-200" />
             )}
 
             <main
               className={classNames("flex-1 p-4", {
-                "ml-64": isTalimPage, // Apply margin-left only when the sidebar is present
+                "ml-64": isTalimPage, // Sidebar pushes content
               })}
             >
               {children}
