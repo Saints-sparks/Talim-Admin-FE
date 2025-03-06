@@ -18,7 +18,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   {
     title: "Dashboard",
-    href: "/talimadmindashboard",
+    href: "/admindashboard",
     icon: LayoutDashboard,
   },
   {
@@ -29,7 +29,7 @@ const navItems: NavItem[] = [
  
   {
     title: "Announcements",
-    href: "/talimannouncement",
+    href: "admindashboard/announcement",
     icon: Bell,
   },
   {
@@ -62,7 +62,7 @@ export default function Sidebartalim({ className }: SidebarProps) {
   const handleLogin = () => {
     // Mock login logic (e.g., redirect to login page or set login state)
     setIsLoggedIn(true)
-    router.push("/talimadmindasboard")
+    router.push("/admindasboard")
   }
 
   return (

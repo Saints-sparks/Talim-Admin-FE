@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { usePageIndicator } from './context/PageIndicatorContext';
 
 export default function Home() {
   const router = useRouter();

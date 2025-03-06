@@ -5,16 +5,5 @@ export interface SchoolStats {
     activeIncrease: number
   }
   
-  export interface School {
-    id: string
-    name: string
-    address: string
-    principal: {
-      name: string
-      avatar?: string
-    }
-    teacherCount: number
-    studentCount: number
-  }
-  
+
   

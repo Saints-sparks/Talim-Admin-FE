@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { schools } from "@/data/school";
+import { schools } from "@/data/schoolsData";
 import { Search } from "lucide-react";
 
 interface SchoolSelectionModalProps {
