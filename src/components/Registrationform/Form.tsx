@@ -1,11 +1,14 @@
 "use client"
 
 import { useState, useRef } from "react"
+import { useParams, useRouter } from "next/navigation"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { ArrowLeft, MapPin, Calendar, School2, User, Mail, Pencil, Save, X } from "lucide-react"
+
 import {
   Select,
   SelectContent,
@@ -26,6 +29,7 @@ const NIGERIAN_STATES = [
 
 const ACADEMIC_YEARS = ["2023/2024", "2024/2025", "2025/2026"]
 const TERMS = ["First Term", "Second Term", "Third Term"]
+ 
 
 interface FormData {
   schoolLogo: string
@@ -42,6 +46,7 @@ interface FormData {
 }
 
 export function SchoolRegistrationForm() {
+  const router = useRouter()
   const [formData, setFormData] = useState<FormData>({
     schoolLogo: "",
     schoolName: "",
@@ -98,7 +103,15 @@ export function SchoolRegistrationForm() {
   return (
     <form onSubmit={handleSubmit} className="container mx-auto p-6 space-y-6">
       <div className="flex justify-between items-center">
+
+          <Button variant="outline" onClick={() => router.back()} className="mb-6 ">
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Back
+                </Button>
+
+
         <div>
+          
           <h1 className="text-2xl font-bold">New School Information</h1>
           <p className="text-muted-foreground">Edit school information here</p>
         </div>
