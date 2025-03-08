@@ -7,7 +7,7 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace("/talimadminlogin"); // Redirect to login page on load
+    router.replace("/talimadmindashboard"); // Redirect to login page on load
   }, [router]);
 
   return null; // Prevents any other content from rendering

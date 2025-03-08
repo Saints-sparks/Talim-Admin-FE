@@ -10,6 +10,7 @@ import { PageIndicatorProvider } from "./context/PageIndicatorContext";
 
 import Sidebartalim from "@/components/TalimSidebar/Sidebar";
 import TalimAdminLogin from "@/app/talimadminlogin/page";
+import TalimAdminDashboard from "@/app/talimadmindashboard/page"
 import classNames from "classnames";
 
 // Local Fonts
@@ -47,7 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
             <main className={classNames("flex-1 p-4 ml-64")}>
               {/* ✅ Always load the login page first for testing */}
-              {pathname === "/talimadminlogin" ? <TalimAdminLogin /> : children}
+              {pathname === "/talimadmindashboard" ? <TalimAdminDashboard /> : children}
             </main>
           </div>
         </PageIndicatorProvider>
