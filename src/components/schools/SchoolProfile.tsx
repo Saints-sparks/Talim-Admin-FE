@@ -114,8 +114,8 @@ export default function SchoolProfile({ onBack }: { onBack: () => void }) {
       </Card>
 
       {/* Edit Button */}
-      <div className="fixed bottom-6 right-6">
-        <Button variant="outline" className="p-4 rounded-full shadow-lg">
+      <div className="fixed bottom-6 right-6 ">
+        <Button variant="outline" className="p-4 rounded-full shadow-lg hover:bg-green-400">
           <Pencil size={20} />
         </Button>
       </div>

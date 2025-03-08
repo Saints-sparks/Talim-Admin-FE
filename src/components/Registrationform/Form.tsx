@@ -206,9 +206,9 @@ export function SchoolRegistrationForm() {
                 <SelectTrigger >
                   <SelectValue placeholder="Select" />
                 </SelectTrigger>
-                <SelectContent className=" bg-blue-200">
+                <SelectContent className=" bg-gray-300">
                   {NIGERIAN_STATES.map(state => (
-                    <SelectItem key={state} value={state}>
+                    <SelectItem className="hover:bg-gray-600" key={state} value={state}>
                       {state}
                     </SelectItem>
                   ))}
@@ -234,9 +234,9 @@ export function SchoolRegistrationForm() {
                 <SelectTrigger>
                   <SelectValue placeholder="Select academic year" />
                 </SelectTrigger>
-                <SelectContent className="bg-blue-200">
+                <SelectContent className="bg-gray-300">
                   {ACADEMIC_YEARS.map(year => (
-                    <SelectItem key={year} value={year}>
+                    <SelectItem className="hover:bg-gray-600" key={year} value={year}>
                       {year}
                     </SelectItem>
                   ))}
@@ -252,9 +252,9 @@ export function SchoolRegistrationForm() {
                 <SelectTrigger>
                   <SelectValue placeholder="Select term" />
                 </SelectTrigger>
-                <SelectContent className="bg-blue-200">
+                <SelectContent className="bg-gray-300">
                   {TERMS.map(term => (
-                    <SelectItem key={term} value={term}>
+                    <SelectItem className="hover:bg-gray-600" key={term} value={term}>
                       {term}
                     </SelectItem>
                   ))}

@@ -162,7 +162,7 @@ export default function SchoolProfilePage() {
   if (!school) {
     return (
       <div className="container mx-auto p-6">
-        <Button variant="outline" onClick={() => router.back()} className="mb-6">
+        <Button variant="outline" onClick={() => router.back()} className="mb-6 ">
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back
         </Button>
@@ -178,25 +178,25 @@ export default function SchoolProfilePage() {
     <div className="container mx-auto p-6">
       <div className="mb-8">
         <div className="flex justify-between items-center mb-4">
-          <Button variant="ghost" onClick={() => router.back()}>
+          <Button className="hover:bg-gray-600" variant="ghost" onClick={() => router.back()}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back
           </Button>
 
           {isEditing ? (
             <div className="flex gap-2">
-              <Button variant="outline" onClick={() => setIsEditing(false)}>
+              <Button  className="hover:bg-red-600" variant="outline" onClick={() => setIsEditing(false)}>
                 <X className="mr-2 h-4 w-4" />
                 Cancel
               </Button>
-              <Button onClick={form.handleSubmit(onSubmit)} disabled={isLoading}>
+              <Button className="hover:bg-blue-400" onClick={form.handleSubmit(onSubmit)} disabled={isLoading}>
                 <Save className="mr-2 h-4 w-4" />
                 Save Changes
               </Button>
             </div>
           ) : (
-            <Button onClick={() => setIsEditing(true)}>
-              <Pencil className="mr-2 h-4 w-4" />
+            <Button className="hover:bg-gray-400"  onClick={() => setIsEditing(true)}>
+              <Pencil className="mr-2 h-4 w-4 " />
               Edit School
             </Button>
           )}

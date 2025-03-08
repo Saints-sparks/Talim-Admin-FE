@@ -53,7 +53,7 @@ export default function Page() {
         <header className="sticky top-0 z-40 border-b bg-white">
           <div className="flex h-16 items-center justify-between px-6">
             <h1 className="text-lg font-semibold">School Overview</h1>
-            <Button variant="default" onClick={handleRegisterClick}>
+            <Button  className="hover:bg-gray-600" variant="default" onClick={handleRegisterClick}>
               Register School
             </Button>
           </div>

@@ -10,7 +10,7 @@ export default function Register() {
  
 
       {/* Main Content */}
-      <main className="w-[100%] bg-slate-300">
+      <main className="w-[100%] bg-gray-200">
         <SchoolRegistrationForm/>
       
       </main>

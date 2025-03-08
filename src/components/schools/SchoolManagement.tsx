@@ -128,7 +128,7 @@ export function SchoolManagement() {
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1 className="text-2xl font-bold">Schools</h1>
-        <Button   variant="default" onClick={handleRegisterClick}>
+        <Button className="hover:bg-gray-600"  variant="default" onClick={handleRegisterClick}>
           <Plus className="mr-2 h-4 w-4" />
           Add a school
         </Button>
@@ -181,24 +181,25 @@ export function SchoolManagement() {
                     <Badge variant={school.status === "Active" ? "default" : "secondary"}>{school.status}</Badge>
                   </TableCell>
                   <TableCell>
-                    <DropdownMenu>
+                    <DropdownMenu >
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon" className="h-8 w-8 p-0">
                           <MoreVertical className="h-4 w-4" />
                           <span className="sr-only">Open menu</span>
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => router.push(`/SchoolProfile/${school.id}`)}>
-                          View School Details
+                      <DropdownMenuContent className="bg-gray-400 "  align="end">
+                        <DropdownMenuItem className="hover:bg-blue-400" onClick={() => router.push(`/SchoolProfile/${school.id}`)}>
+                          Edit
                         </DropdownMenuItem>
-                        <DropdownMenuItem>Archive</DropdownMenuItem>
-                        <DropdownMenuItem
+                        <DropdownMenuItem className="hover:bg-blue-400">Archive</DropdownMenuItem>
+                        <DropdownMenuItem 
+                        
                           onClick={() => {
                             setSelectedSchool(school)
                             setShowToggleDialog(true)
                           }}
-                          className="text-yellow-600"
+                          className="text-yellow-600 hover:bg-blue-400"
                         >
                           {school.status === "Active" ? "Deactivate" : "Reactivate"}
                         </DropdownMenuItem>
@@ -207,7 +208,7 @@ export function SchoolManagement() {
                             setSelectedSchool(school)
                             setShowDeleteDialog(true)
                           }}
-                          className="text-red-600"
+                          className="text-red-600 hover:bg-blue-400"
                         >
                           Delete
                         </DropdownMenuItem>
@@ -222,6 +223,7 @@ export function SchoolManagement() {
 
         <div className="flex items-center justify-between p-4">
           <Button
+          className="hover:bg-gray-600"
             variant="outline"
             size="sm"
             onClick={useCallback(() => setCurrentPage((p) => Math.max(1, p - 1)), [])}
@@ -230,10 +232,11 @@ export function SchoolManagement() {
           >
             Previous
           </Button>
-          <span className="text-sm text-muted-foreground">
+          <span className="text-sm  text-gray-600 text-muted-foreground">
             Page {currentPage} of {totalPages}
           </span>
           <Button
+          className="hover:bg-gray-600"
             variant="outline"
             size="sm"
             onClick={useCallback(() => setCurrentPage((p) => Math.min(totalPages, p + 1)), [totalPages])}
