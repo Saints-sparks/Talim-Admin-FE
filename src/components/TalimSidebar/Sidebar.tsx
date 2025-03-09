@@ -2,7 +2,7 @@
 
 import { cn } from "../../app/lib/utils";
 import { useRouter, usePathname } from "next/navigation"; // Fix active route detection
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { adminProfiles } from "@/data/adminProfiles";
+import { useNavigationLoading } from "@/app/context/NavigationLoadingContext";
 
 interface NavItem {
   title: string;
@@ -61,15 +62,28 @@ export default function Sidebartalim({ className }: SidebarProps) {
   const pathname = usePathname(); // Get current route
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const { setIsNavigating } = useNavigationLoading();
+
+  const handleNavigation = (href: string) => {
+    setIsNavigating(true);
+    router.push(href);
+  };
+
+  // Watch for pathname changes to detect navigation completion
+  useEffect(() => {
+    setIsNavigating(false);
+  }, [pathname, setIsNavigating]);
 
   const handleLogout = () => {
+    setIsNavigating(true);
     setIsLoggedIn(false);
     router.push("/talimadminlogin");
   };
 
   const handleLogin = () => {
+    setIsNavigating(true);
     setIsLoggedIn(true);
-    router.push("/talimadmindashboard"); // Fixed typo in route
+    router.push("/talimadmindashboard");
   };
 
   return (
@@ -110,17 +124,20 @@ export default function Sidebartalim({ className }: SidebarProps) {
         <div className="flex h-[calc(100vh-4rem)] flex-col justify-between">
           <nav className="space-y-1 p-4">
             {navItems.map((item) => (
-              <Link
+              <a
                 key={item.href}
-                href={item.href}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavigation(item.href);
+                }}
                 className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900",
+                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 cursor-pointer",
                   pathname === item.href && "bg-gray-100 text-gray-900 font-semibold"
                 )}
               >
                 <item.icon className="h-5 w-5" />
                 {item.title}
-              </Link>
+              </a>
             ))}
           </nav>
 
