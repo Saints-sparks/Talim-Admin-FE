@@ -39,7 +39,7 @@ export default function RootLayout({
   const pathname = usePathname(); // Get current route
 
   // Check if the current route contains "talim"
-  const isTalimPage = pathname.includes("talim");
+  const isTalimPage = pathname.includes("talimadmindashboard");
 
   return (
     <html lang="en">

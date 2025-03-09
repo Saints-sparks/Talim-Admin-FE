@@ -8,16 +8,19 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import loginIllustration from "../../../public/Super-Admin.png"
+import { useRouter } from "next/navigation"
 
 export function LoginForm() {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
-
+  const router = useRouter()
+  
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault()
     setIsLoading(true)
 
     setTimeout(() => {
       setIsLoading(false)
+      router.push("/talimadmindashboard") // Redirect to dashboard
     }, 1000)
   }
 
@@ -35,8 +38,8 @@ export function LoginForm() {
             </CardHeader>
             <CardContent>
               <form onSubmit={onSubmit} className="space-y-4">
-                <div className="space-y-4">
-                  <div className="space-y-2">
+                <div className="space-y-4 text-gray-500">
+                  <div className="space-y-2 ">
                     <Label htmlFor="name">Name*</Label>
                     <Input
                       id="name"
