@@ -128,7 +128,7 @@ export function SchoolManagement() {
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1 className="text-2xl font-bold">Schools</h1>
-        <Button className="hover:bg-gray-600"  variant="default" onClick={handleRegisterClick}>
+        <Button className="hover:bg-gray-600 bg-sky-700"  variant="default" onClick={handleRegisterClick}>
           <Plus className="mr-2 h-4 w-4" />
           Add a school
         </Button>
@@ -137,8 +137,8 @@ export function SchoolManagement() {
       <div className="rounded-lg border bg-card">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-4">
           <Button variant="outline" size="sm">
-            <Filter className="mr-2 h-4 w-4" />
-            Filters
+            <Filter className="mr-2 h-4 w-4"/>
+            <p  className="text-gray-600">Filters</p>
           </Button>
           <Input
             placeholder="Search schools..."
@@ -155,7 +155,7 @@ export function SchoolManagement() {
         <div className="relative overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow>
+              <TableRow className="bg-gray-300">
                 <TableHead>School ID</TableHead>
                 <TableHead>Name</TableHead>
                 <TableHead>Email Address</TableHead>
@@ -169,7 +169,7 @@ export function SchoolManagement() {
             </TableHeader>
             <TableBody>
               {paginatedSchools.map((school) => (
-                <TableRow key={school.id}>
+                <TableRow key={school.id} className="text-black">
                   <TableCell className="font-medium">{school.id}</TableCell>
                   <TableCell>{school.name}</TableCell>
                   <TableCell>{school.email}</TableCell>
