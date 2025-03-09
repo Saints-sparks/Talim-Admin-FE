@@ -9,7 +9,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ArrowLeft, Upload, X } from "lucide-react"
 import { LoadingModal } from "@/components/ui/loading-modal"
-import { toast } from "react-hot-toast"
+import { toast } from "sonner"
+import { UploadProgress } from "@/components/ui/upload-progress"
 import {
   Select,
   SelectContent,
@@ -50,6 +51,8 @@ export function SchoolRegistrationForm() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
+  const [uploadStatus, setUploadStatus] = useState<'uploading' | 'success' | 'error'>('uploading')
+  const [uploadError, setUploadError] = useState<string | undefined>()
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [formData, setFormData] = useState<FormData>({
     schoolLogo: "",
@@ -69,6 +72,7 @@ export function SchoolRegistrationForm() {
   })
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [previewUrl, setPreviewUrl] = useState<string>("")
+  const [showUploadProgress, setShowUploadProgress] = useState(false)
 
   const validateFile = (file: File): string | null => {
     if (!file) return "No file selected";
@@ -117,6 +121,11 @@ export function SchoolRegistrationForm() {
 
   const uploadImage = async (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
+      setShowUploadProgress(true)
+      setUploadStatus('uploading')
+      setUploadProgress(0)
+      setUploadError(undefined)
+
       const xhr = new XMLHttpRequest();
       const formData = new FormData();
       formData.append('file', file);
@@ -130,21 +139,38 @@ export function SchoolRegistrationForm() {
 
       xhr.onload = () => {
         try {
+          if (xhr.status === 0) {
+            setUploadStatus('error')
+            setUploadError('Network error occurred. Please check your connection.')
+            reject(new Error('Network error occurred'))
+            return
+          }
+
           const response = JSON.parse(xhr.responseText);
           console.log('Upload response:', response);
 
           if (xhr.status >= 200 && xhr.status < 300 && response.url) {
+            setUploadStatus('success')
+            setTimeout(() => {
+              setShowUploadProgress(false)
+            }, 1000)
             resolve(response.url);
           } else {
+            setUploadStatus('error')
+            setUploadError(response.message || 'Upload failed')
             reject(new Error(response.message || 'Upload failed'));
           }
         } catch (error) {
           console.error('Response parsing error:', xhr.responseText);
+          setUploadStatus('error')
+          setUploadError('Invalid server response')
           reject(new Error('Invalid response format'));
         }
       };
 
       xhr.onerror = () => {
+        setUploadStatus('error')
+        setUploadError('Network error occurred. Please check your connection.')
         reject(new Error('Network error occurred'));
       };
 
@@ -172,7 +198,6 @@ export function SchoolRegistrationForm() {
       let logoUrl = formData.schoolLogo;
       if (selectedFile) {
         try {
-          setUploadProgress(0);
           logoUrl = await uploadImage(selectedFile);
         } catch (error) {
           const errorMessage = error instanceof Error ? error.message : 'Failed to upload image';
@@ -228,7 +253,13 @@ export function SchoolRegistrationForm() {
 
   return (
     <form onSubmit={handleSubmit} className="container mx-auto p-6 space-y-6">
-      <LoadingModal isOpen={isLoading} message={uploadProgress > 0 ? `Uploading image... ${uploadProgress}%` : "Processing your request..."} />
+      {showUploadProgress && (
+        <UploadProgress
+          progress={uploadProgress}
+          status={uploadStatus}
+          errorMessage={uploadError}
+        />
+      )}
       
       <div className="flex justify-between items-center">
         <Button variant="outline" onClick={() => router.back()} className="mb-6">

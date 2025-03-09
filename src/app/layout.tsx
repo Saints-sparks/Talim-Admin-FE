@@ -9,6 +9,7 @@ import "./globals.css";
 import { PageIndicatorProvider } from "./context/PageIndicatorContext";
 import { NavigationLoadingProvider } from "./context/NavigationLoadingContext";
 import { NavigationLoading } from "@/components/ui/navigation-loading";
+import { Toaster } from 'sonner';
 
 import Sidebartalim from "@/components/TalimSidebar/Sidebar";
 import TalimAdminLogin from "@/app/talimadminlogin/page";
@@ -47,6 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <NavigationLoadingProvider>
           <PageIndicatorProvider>
             <NavigationLoading />
+            <Toaster richColors />
             <div className="flex">
               {/* ✅ Sidebar should always appear for testing */}
               <Sidebartalim className="fixed left-0 top-0 h-full w-64 bg-gray-200" />
