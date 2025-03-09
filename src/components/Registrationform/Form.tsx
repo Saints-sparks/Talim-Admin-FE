@@ -39,8 +39,10 @@ interface FormData {
   principalName: string
   location: string
   state: string
-  academicYear: string
-  term: string
+  personalName: string
+  phoneNumber: string
+  personalEmail: string
+  role: string
   primaryClasses: string
   secondaryClasses: string
 }
@@ -55,8 +57,10 @@ export function SchoolRegistrationForm() {
     principalName: "",
     location: "",
     state: "",
-    academicYear: "",
-    term: "",
+    personalName: "",
+    phoneNumber: "",
+    personalEmail: "",
+    role: "",
     primaryClasses: "",
     secondaryClasses: ""
   })
@@ -89,8 +93,10 @@ export function SchoolRegistrationForm() {
       principalName: "",
       location: "",
       state: "",
-      academicYear: "",
-      term: "",
+      personalName: "",
+      phoneNumber: "",
+      personalEmail: "",
+      role: "",
       primaryClasses: "",
       secondaryClasses: ""
     })
@@ -178,7 +184,7 @@ export function SchoolRegistrationForm() {
                 value={formData.schoolId}
                 onChange={e => setFormData(prev => ({ ...prev, schoolId: e.target.value }))}
                 placeholder="10021"
-                disabled
+                required
               />
             </div>
             <div className="space-y-2">
@@ -232,51 +238,59 @@ export function SchoolRegistrationForm() {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Academic session information</CardTitle>
+       <Card>
+       <CardHeader>
+          <CardTitle>Primary Contact Infomation</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-6 md:grid-cols-2">
+       <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-2">
-              <Label>Which academic year is this for?</Label>
-              <Select
-                value={formData.academicYear}
-                onValueChange={value => setFormData(prev => ({ ...prev, academicYear: value }))}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select academic year" />
-                </SelectTrigger>
-                <SelectContent className="bg-gray-300">
-                  {ACADEMIC_YEARS.map(year => (
-                    <SelectItem className="hover:bg-gray-600" key={year} value={year}>
-                      {year}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Label htmlFor="personalName"> Name*</Label>
+              <Input
+                id="personalName"
+                value={formData.personalName}
+                onChange={e => setFormData(prev => ({ ...prev, personalName: e.target.value }))}
+                placeholder="Enter  name"
+                required
+              />
             </div>
             <div className="space-y-2">
-              <Label>What term is it?</Label>
-              <Select
-                value={formData.term}
-                onValueChange={value => setFormData(prev => ({ ...prev, term: value }))}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select term" />
-                </SelectTrigger>
-                <SelectContent className="bg-gray-300">
-                  {TERMS.map(term => (
-                    <SelectItem className="hover:bg-gray-600" key={term} value={term}>
-                      {term}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Label htmlFor="phoneNumber">Phone</Label>
+              <Input
+                id=" phoneNumber"
+                value={formData.phoneNumber}
+                onChange={e => setFormData(prev => ({ ...prev, phoneNumber: e.target.value }))}
+                placeholder="enter phone number +2340000000000"
+                required
+              />
             </div>
-          </div>
-        </CardContent>
-      </Card>
+            <div className="space-y-2">
+              <Label htmlFor="personalEmail"> personal Email address</Label>
+              <Input
+                id="personalEmail"
+                type="email"
+                value={formData.personalEmail}
+                onChange={e => setFormData(prev => ({ ...prev, personalEmail: e.target.value }))}
+                placeholder="Enter personal email address"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="role">role</Label>
+              <Input
+                id="role"
+                value={formData.role}
+                onChange={e => setFormData(prev => ({ ...prev, role: e.target.value }))}
+                placeholder="Enter role  name"
+              />
+            </div>
+            
+            </div>
+            </CardContent>
+       </Card>
+
+
+       
+     
 
       <Card>
         <CardHeader>
