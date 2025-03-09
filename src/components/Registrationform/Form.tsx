@@ -52,7 +52,7 @@ export function SchoolRegistrationForm() {
   const [formData, setFormData] = useState<FormData>({
     schoolLogo: "",
     schoolName: "",
-    schoolId: "10021",
+    schoolId: "",
     emailAddress: "",
     principalName: "",
     location: "",
@@ -88,7 +88,7 @@ export function SchoolRegistrationForm() {
     setFormData({
       schoolLogo: "",
       schoolName: "",
-      schoolId: "10021",
+      schoolId: "",
       emailAddress: "",
       principalName: "",
       location: "",
@@ -183,7 +183,7 @@ export function SchoolRegistrationForm() {
                 id="schoolId"
                 value={formData.schoolId}
                 onChange={e => setFormData(prev => ({ ...prev, schoolId: e.target.value }))}
-                placeholder="10021"
+                placeholder="Enter school ID"
                 required
               />
             </div>
@@ -292,35 +292,7 @@ export function SchoolRegistrationForm() {
        
      
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Class information</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-6 md:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="primaryClasses">How many primary classes?</Label>
-              <Input
-                id="primaryClasses"
-                type="number"
-                value={formData.primaryClasses}
-                onChange={e => setFormData(prev => ({ ...prev, primaryClasses: e.target.value }))}
-                placeholder="Enter total number"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="secondaryClasses">How many secondary classes?</Label>
-              <Input
-                id="secondaryClasses"
-                type="number"
-                value={formData.secondaryClasses}
-                onChange={e => setFormData(prev => ({ ...prev, secondaryClasses: e.target.value }))}
-                placeholder="Enter total number"
-              />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+     
     </form>
   )
 }

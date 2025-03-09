@@ -102,7 +102,7 @@ export function ProfilePage() {
       <Card>
         <CardHeader className="bg-gray-100 flex justify-between items-center">
           <CardTitle>Personal Information</CardTitle>
-          <Button variant="ghost" onClick={handleEditToggle} className="flex items-center">
+          <Button variant="ghost" onClick={handleEditToggle} className="flex items-center text-black hover:bg-gray-600">
             <Pencil className="w-4 h-4 mr-1" />
             {isEditing ? "Save" : "Edit"}
           </Button>
