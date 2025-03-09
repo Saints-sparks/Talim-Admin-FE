@@ -31,6 +31,7 @@ export function SchoolManagement() {
   const [showToggleDialog, setShowToggleDialog] = useState(false)
   const [selectedSchool, setSelectedSchool] = useState<School | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false)
   const [schools, setSchools] = useState<School[]>([])
   const [totalPages, setTotalPages] = useState(1)
   const [totalSchools, setTotalSchools] = useState(0)
@@ -64,11 +65,37 @@ export function SchoolManagement() {
   }
 
   const handleToggleStatus = async () => {
-    if (selectedSchool) {
+    if (!selectedSchool) return;
+
+    try {
+      setIsUpdatingStatus(true)
+      const newStatus = !selectedSchool.active;
+      
+      await schoolService.updateSchoolStatus(selectedSchool._id, newStatus);
+      
+      // Update local state optimistically
+      setSchools(prevSchools => 
+        prevSchools.map(school => 
+          school._id === selectedSchool._id 
+            ? { ...school, active: newStatus }
+            : school
+        )
+      );
+
+      toast.success(`School ${newStatus ? 'activated' : 'deactivated'} successfully`);
+      
+      // Refresh the schools list to ensure we have the latest data
+      await fetchSchools(currentPage);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to update school status';
+      toast.error(errorMessage);
+      
+      // Revert optimistic update on error
+      await fetchSchools(currentPage);
+    } finally {
+      setIsUpdatingStatus(false)
       setShowToggleDialog(false)
       setSelectedSchool(null)
-      // Refresh the schools list
-      fetchSchools(currentPage)
     }
   }
 
@@ -107,7 +134,7 @@ export function SchoolManagement() {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      <LoadingModal isOpen={isLoading} message="Loading schools..." />
+      <LoadingModal isOpen={isLoading || isUpdatingStatus} message={isUpdatingStatus ? "Updating school status..." : "Loading schools..."} />
       
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1 className="text-2xl font-bold">Schools</h1>
@@ -169,7 +196,10 @@ export function SchoolManagement() {
                         {school.location.state}, {school.location.country}
                       </TableCell>
                       <TableCell>
-                        <Badge variant={school.active ? "default" : "secondary"}>
+                        <Badge 
+                          variant={school.active ? "default" : "destructive"}
+                          className={school.active ? "bg-green-100 text-green-800 hover:bg-green-200" : "bg-red-100 text-red-800 hover:bg-red-200"}
+                        >
                           {school.active ? "Active" : "Inactive"}
                         </Badge>
                       </TableCell>
@@ -190,7 +220,7 @@ export function SchoolManagement() {
                                 setSelectedSchool(school)
                                 setShowToggleDialog(true)
                               }}
-                              className="text-yellow-600"
+                              className={school.active ? "text-red-600" : "text-green-600"}
                             >
                               {school.active ? "Deactivate" : "Activate"}
                             </DropdownMenuItem>
@@ -264,7 +294,10 @@ export function SchoolManagement() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleToggleStatus} className="bg-yellow-600 hover:bg-yellow-700">
+            <AlertDialogAction 
+              onClick={handleToggleStatus} 
+              className={selectedSchool?.active ? "bg-red-600 hover:bg-red-700" : "bg-green-600 hover:bg-green-700"}
+            >
               Confirm
             </AlertDialogAction>
           </AlertDialogFooter>

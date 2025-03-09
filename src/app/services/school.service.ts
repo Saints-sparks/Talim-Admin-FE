@@ -43,5 +43,22 @@ export const schoolService = {
     }
 
     return response.json();
+  },
+
+  updateSchoolStatus: async (schoolId: string, active: boolean): Promise<School> => {
+    const response = await fetch(`${API_BASE_URL}/schools/${schoolId}/status`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ active }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Failed to update school status');
+    }
+
+    return response.json();
   }
 }; 
