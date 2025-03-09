@@ -1,14 +1,15 @@
 "use client"
 
 import { useState, useRef } from "react"
-import { useParams, useRouter } from "next/navigation"
+import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { ArrowLeft, MapPin, Calendar, School2, User, Mail, Pencil, Save, X } from "lucide-react"
-
+import { ArrowLeft, Upload, X } from "lucide-react"
+import { LoadingModal } from "@/components/ui/loading-modal"
+import { toast } from "react-hot-toast"
 import {
   Select,
   SelectContent,
@@ -16,7 +17,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Upload } from 'lucide-react'
 
 // Nigerian states
 const NIGERIAN_STATES = [
@@ -27,100 +27,220 @@ const NIGERIAN_STATES = [
   "Yobe", "Zamfara"
 ]
 
-const ACADEMIC_YEARS = ["2023/2024", "2024/2025", "2025/2026"]
-const TERMS = ["First Term", "Second Term", "Third Term"]
- 
+// File upload constants
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 
 interface FormData {
   schoolLogo: string
   schoolName: string
-  schoolId: string
+  schoolPrefix: string
   emailAddress: string
-  principalName: string
-  location: string
+  physicalAddress: string
   state: string
-  personalName: string
-  phoneNumber: string
-  personalEmail: string
-  role: string
-  primaryClasses: string
-  secondaryClasses: string
+  primaryContacts: Array<{
+    name: string
+    phone: string
+    email: string
+    role: string
+  }>
 }
 
 export function SchoolRegistrationForm() {
   const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState(0)
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [formData, setFormData] = useState<FormData>({
     schoolLogo: "",
     schoolName: "",
-    schoolId: "",
+    schoolPrefix: "",
     emailAddress: "",
-    principalName: "",
-    location: "",
+    physicalAddress: "",
     state: "",
-    personalName: "",
-    phoneNumber: "",
-    personalEmail: "",
-    role: "",
-    primaryClasses: "",
-    secondaryClasses: ""
+    primaryContacts: [
+      {
+        name: "",
+        phone: "",
+        email: "",
+        role: ""
+      }
+    ]
   })
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [previewUrl, setPreviewUrl] = useState<string>("")
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setPreviewUrl(reader.result as string)
-        setFormData(prev => ({ ...prev, schoolLogo: reader.result as string }))
-      }
-      reader.readAsDataURL(file)
-    }
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    // Here you would typically send the formData to your backend
-    console.log("Form submitted:", formData)
+  const validateFile = (file: File): string | null => {
+    if (!file) return "No file selected";
     
-    // Reset form
-    setFormData({
-      schoolLogo: "",
-      schoolName: "",
-      schoolId: "",
-      emailAddress: "",
-      principalName: "",
-      location: "",
-      state: "",
-      personalName: "",
-      phoneNumber: "",
-      personalEmail: "",
-      role: "",
-      primaryClasses: "",
-      secondaryClasses: ""
-    })
+    if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
+      return "File type not supported. Please upload a JPEG, PNG, GIF, or WebP image.";
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      return `File is too large. Maximum size is ${MAX_FILE_SIZE / 1024 / 1024}MB.`;
+    }
+
+    return null;
+  };
+
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file
+    const error = validateFile(file);
+    if (error) {
+      toast.error(error);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+      return;
+    }
+
+    // Store the file for later upload
+    setSelectedFile(file);
+
+    // Create preview URL
+    const objectUrl = URL.createObjectURL(file);
+    setPreviewUrl(objectUrl);
+  };
+
+  const handleRemoveLogo = () => {
     setPreviewUrl("")
+    setSelectedFile(null)
+    setFormData(prev => ({ ...prev, schoolLogo: "" }))
     if (fileInputRef.current) {
       fileInputRef.current.value = ""
     }
   }
 
+  const uploadImage = async (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      const formData = new FormData();
+      formData.append('file', file);
+
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          const progress = Math.round((event.loaded / event.total) * 100);
+          setUploadProgress(progress);
+        }
+      };
+
+      xhr.onload = () => {
+        try {
+          const response = JSON.parse(xhr.responseText);
+          console.log('Upload response:', response);
+
+          if (xhr.status >= 200 && xhr.status < 300 && response.url) {
+            resolve(response.url);
+          } else {
+            reject(new Error(response.message || 'Upload failed'));
+          }
+        } catch (error) {
+          console.error('Response parsing error:', xhr.responseText);
+          reject(new Error('Invalid response format'));
+        }
+      };
+
+      xhr.onerror = () => {
+        reject(new Error('Network error occurred'));
+      };
+
+      xhr.open('POST', 'http://localhost:5000/upload/image');
+      xhr.send(formData);
+    });
+  };
+
+  const handlePrimaryContactChange = (index: number, field: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      primaryContacts: prev.primaryContacts.map((contact, i) => 
+        i === index ? { ...contact, [field]: value } : contact
+      )
+    }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    try {
+      setIsLoading(true)
+      
+      // Upload image if selected
+      let logoUrl = formData.schoolLogo;
+      if (selectedFile) {
+        try {
+          setUploadProgress(0);
+          logoUrl = await uploadImage(selectedFile);
+        } catch (error) {
+          const errorMessage = error instanceof Error ? error.message : 'Failed to upload image';
+          toast.error(errorMessage);
+          return;
+        }
+      } else if (!formData.schoolLogo) {
+        toast.error('Please select a school logo');
+        return;
+      }
+
+      const payload = {
+        name: formData.schoolName,
+        email: formData.emailAddress,
+        physicalAddress: formData.physicalAddress,
+        location: {
+          country: "Nigeria",
+          state: formData.state
+        },
+        schoolPrefix: formData.schoolPrefix,
+        primaryContacts: formData.primaryContacts,
+        active: true,
+        logo: logoUrl
+      }
+
+      console.log('Submitting payload:', payload)
+
+      const response = await fetch('http://localhost:5000/schools/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.message || 'Failed to create school')
+      }
+
+      const data = await response.json()
+      toast.success('School registered successfully!')
+      router.push('/talimschool')
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to register school'
+      toast.error(errorMessage)
+      console.error('Registration error:', error)
+    } finally {
+      setIsLoading(false)
+      setUploadProgress(0)
+    }
+  }
+
   return (
     <form onSubmit={handleSubmit} className="container mx-auto p-6 space-y-6">
+      <LoadingModal isOpen={isLoading} message={uploadProgress > 0 ? `Uploading image... ${uploadProgress}%` : "Processing your request..."} />
+      
       <div className="flex justify-between items-center">
-
-          <Button variant="outline" onClick={() => router.back()} className="mb-6 ">
-                  <ArrowLeft className="mr-2 h-4 w-4 bg-slate-600" />
-                  <p className="text-black">Back</p>
-                </Button>
-
+        <Button variant="outline" onClick={() => router.back()} className="mb-6">
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back
+        </Button>
 
         <div>
-          
           <h1 className="text-2xl font-bold">New School Information</h1>
-          <p className="text-muted-foreground">Edit school information here</p>
+          <p className="text-muted-foreground">Register a new school</p>
         </div>
+        
         <Button type="submit" className="bg-indigo-700 hover:bg-indigo-800">
           Register School
         </Button>
@@ -132,7 +252,7 @@ export function SchoolRegistrationForm() {
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Logo Upload */}
-          <div className="flex flex-col items-center justify-center border-2 border-dashed rounded-lg p-6 max-w-[200px]">
+          <div className="flex flex-col items-center justify-center border-2 border-dashed rounded-lg p-6 max-w-[200px] relative">
             {previewUrl ? (
               <div className="relative w-full aspect-square">
                 <Image
@@ -141,27 +261,40 @@ export function SchoolRegistrationForm() {
                   fill
                   className="object-contain"
                 />
+                <button
+                  type="button"
+                  onClick={handleRemoveLogo}
+                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                >
+                  <X className="h-4 w-4" />
+                </button>
               </div>
             ) : (
-              <div className="text-center space-y-2">
-                <Upload className="mx-auto h-8 w-8 text-gray-400" />
-                <div className="text-sm">
-                  Drop school&apos;s logo here or{" "}
-                  <span 
-                    className="text-indigo-600 cursor-pointer hover:underline"
-                    onClick={() => fileInputRef.current?.click()}
-                  >
-                    browse
-                  </span>
+              <label 
+                htmlFor="logo-upload" 
+                className="w-full h-full flex flex-col items-center justify-center cursor-pointer"
+              >
+                <div className="text-center space-y-2">
+                  <Upload className="mx-auto h-8 w-8 text-gray-400" />
+                  <div className="text-sm">
+                    Drop school's logo here or{" "}
+                    <span className="text-indigo-600 hover:underline">
+                      browse
+                    </span>
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    JPEG, PNG, GIF or WebP (max. {MAX_FILE_SIZE / 1024 / 1024}MB)
+                  </div>
                 </div>
-              </div>
+              </label>
             )}
             <input
+              id="logo-upload"
               ref={fileInputRef}
               type="file"
-              accept="image/*"
+              accept={ACCEPTED_IMAGE_TYPES.join(',')}
               className="hidden"
-              onChange={handleFileUpload}
+              onChange={handleFileSelect}
             />
           </div>
 
@@ -178,56 +311,48 @@ export function SchoolRegistrationForm() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="schoolId">School ID</Label>
+              <Label htmlFor="schoolPrefix">School Prefix*</Label>
               <Input
-                id="schoolId"
-                value={formData.schoolId}
-                onChange={e => setFormData(prev => ({ ...prev, schoolId: e.target.value }))}
-                placeholder="Enter school ID"
+                id="schoolPrefix"
+                value={formData.schoolPrefix}
+                onChange={e => setFormData(prev => ({ ...prev, schoolPrefix: e.target.value }))}
+                placeholder="Enter school prefix"
                 required
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="emailAddress">School email address</Label>
+              <Label htmlFor="emailAddress">School email address*</Label>
               <Input
                 id="emailAddress"
                 type="email"
                 value={formData.emailAddress}
                 onChange={e => setFormData(prev => ({ ...prev, emailAddress: e.target.value }))}
                 placeholder="Enter school's email address"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="principalName">Principal / primary contact</Label>
-              <Input
-                id="principalName"
-                value={formData.principalName}
-                onChange={e => setFormData(prev => ({ ...prev, principalName: e.target.value }))}
-                placeholder="Enter principal name"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="location">Location*</Label>
-              <Input
-                id="location"
-                value={formData.location}
-                onChange={e => setFormData(prev => ({ ...prev, location: e.target.value }))}
-                placeholder="Enter school's location"
                 required
               />
             </div>
-            <div className="space-y-2 ">
-              <Label htmlFor="state">State</Label>
+            <div className="space-y-2">
+              <Label htmlFor="physicalAddress">Physical Address*</Label>
+              <Input
+                id="physicalAddress"
+                value={formData.physicalAddress}
+                onChange={e => setFormData(prev => ({ ...prev, physicalAddress: e.target.value }))}
+                placeholder="Enter physical address"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="state">State*</Label>
               <Select 
                 value={formData.state}
                 onValueChange={value => setFormData(prev => ({ ...prev, state: value }))}
               >
-                <SelectTrigger >
-                  <SelectValue placeholder="Select" />
+                <SelectTrigger>
+                  <SelectValue placeholder="Select state" />
                 </SelectTrigger>
-                <SelectContent className=" bg-gray-300">
+                <SelectContent>
                   {NIGERIAN_STATES.map(state => (
-                    <SelectItem className="hover:bg-gray-600" key={state} value={state}>
+                    <SelectItem key={state} value={state}>
                       {state}
                     </SelectItem>
                   ))}
@@ -238,61 +363,58 @@ export function SchoolRegistrationForm() {
         </CardContent>
       </Card>
 
-       <Card>
-       <CardHeader>
-          <CardTitle>Primary Contact Infomation</CardTitle>
+      <Card>
+        <CardHeader>
+          <CardTitle>Primary Contact Information</CardTitle>
         </CardHeader>
         <CardContent>
-       <div className="grid gap-6 md:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="personalName"> Name*</Label>
-              <Input
-                id="personalName"
-                value={formData.personalName}
-                onChange={e => setFormData(prev => ({ ...prev, personalName: e.target.value }))}
-                placeholder="Enter  name"
-                required
-              />
+          {formData.primaryContacts.map((contact, index) => (
+            <div key={index} className="grid gap-6 md:grid-cols-2 mb-6">
+              <div className="space-y-2">
+                <Label htmlFor={`contactName${index}`}>Name*</Label>
+                <Input
+                  id={`contactName${index}`}
+                  value={contact.name}
+                  onChange={e => handlePrimaryContactChange(index, 'name', e.target.value)}
+                  placeholder="Enter contact name"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor={`contactPhone${index}`}>Phone*</Label>
+                <Input
+                  id={`contactPhone${index}`}
+                  value={contact.phone}
+                  onChange={e => handlePrimaryContactChange(index, 'phone', e.target.value)}
+                  placeholder="Enter phone number"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor={`contactEmail${index}`}>Email*</Label>
+                <Input
+                  id={`contactEmail${index}`}
+                  type="email"
+                  value={contact.email}
+                  onChange={e => handlePrimaryContactChange(index, 'email', e.target.value)}
+                  placeholder="Enter email address"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor={`contactRole${index}`}>Role*</Label>
+                <Input
+                  id={`contactRole${index}`}
+                  value={contact.role}
+                  onChange={e => handlePrimaryContactChange(index, 'role', e.target.value)}
+                  placeholder="Enter role"
+                  required
+                />
+              </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="phoneNumber">Phone</Label>
-              <Input
-                id=" phoneNumber"
-                value={formData.phoneNumber}
-                onChange={e => setFormData(prev => ({ ...prev, phoneNumber: e.target.value }))}
-                placeholder="enter phone number +2340000000000"
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="personalEmail"> personal Email address</Label>
-              <Input
-                id="personalEmail"
-                type="email"
-                value={formData.personalEmail}
-                onChange={e => setFormData(prev => ({ ...prev, personalEmail: e.target.value }))}
-                placeholder="Enter personal email address"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="role">role</Label>
-              <Input
-                id="role"
-                value={formData.role}
-                onChange={e => setFormData(prev => ({ ...prev, role: e.target.value }))}
-                placeholder="Enter role  name"
-              />
-            </div>
-            
-            </div>
-            </CardContent>
-       </Card>
-
-
-       
-     
-
-     
+          ))}
+        </CardContent>
+      </Card>
     </form>
   )
 }
