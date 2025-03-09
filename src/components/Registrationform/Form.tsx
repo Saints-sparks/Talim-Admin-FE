@@ -111,8 +111,8 @@ export function SchoolRegistrationForm() {
       <div className="flex justify-between items-center">
 
           <Button variant="outline" onClick={() => router.back()} className="mb-6 ">
-                  <ArrowLeft className="mr-2 h-4 w-4" />
-                  Back
+                  <ArrowLeft className="mr-2 h-4 w-4 bg-slate-600" />
+                  <p className="text-black">Back</p>
                 </Button>
 
 

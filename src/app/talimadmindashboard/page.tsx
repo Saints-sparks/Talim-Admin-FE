@@ -50,7 +50,7 @@ export default function Page() {
     <div className="flex min-h-screen">
       {/* Main Content */}
       <div className="flex-1 lg:ml-0">
-        <header className="sticky top-0 z-40 border-b bg-white">
+        <header className="sticky top-0 z-40 border-b bg-slate-400">
           <div className="flex h-16 items-center justify-between px-6">
             <h1 className="text-lg font-semibold">School Overview</h1>
             <Button  className="hover:bg-gray-600" variant="default" onClick={handleRegisterClick}>
@@ -78,7 +78,7 @@ export default function Page() {
             {/* Filters */}
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex flex-wrap items-center gap-2">
-                <Badge variant="secondary" className="gap-1">
+                <Badge variant="secondary" className="gap-1 bg-sky-700">
                   BN_LG_14
                   <button className="rounded-full hover:bg-gray-200">✕</button>
                 </Badge>
