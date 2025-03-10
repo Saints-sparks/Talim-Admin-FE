@@ -19,9 +19,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { toast } from "sonner"
-import { Eye, Filter, MoreVertical, Plus, School as SchoolIcon, WifiOff } from "lucide-react"
+import { Eye, Filter, MoreVertical, Plus, School as SchoolIcon, Search, WifiOff } from "lucide-react"
 import { School, schoolService } from "@/app/services/school.service"
 import { LoadingModal } from "@/components/ui/loading-modal"
+import { useDebounce } from "@/hooks/use-debounce"
 
 export function SchoolManagement() {
   const router = useRouter()
@@ -36,13 +37,14 @@ export function SchoolManagement() {
   const [totalPages, setTotalPages] = useState(1)
   const [totalSchools, setTotalSchools] = useState(0)
   const [error, setError] = useState<string | null>(null)
+  const debouncedSearch = useDebounce(searchTerm, 500)
   const limit = 10
 
-  const fetchSchools = async (page: number) => {
+  const fetchSchools = async (page: number, query?: string) => {
     try {
       setIsLoading(true)
       setError(null)
-      const response = await schoolService.getAllSchools(page, limit)
+      const response = await schoolService.getAllSchools(page, limit, query)
       setSchools(response.data)
       setTotalPages(response.meta.lastPage)
       setTotalSchools(response.meta.total)
@@ -57,11 +59,16 @@ export function SchoolManagement() {
   }
 
   useEffect(() => {
-    fetchSchools(currentPage)
-  }, [currentPage])
+    fetchSchools(currentPage, debouncedSearch)
+  }, [currentPage, debouncedSearch])
 
   const handleRegisterClick = () => {
     router.push("/talimregister")
+  }
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value)
+    setCurrentPage(1) // Reset to first page when searching
   }
 
   const handleToggleStatus = async () => {
@@ -85,13 +92,13 @@ export function SchoolManagement() {
       toast.success(`School ${newStatus ? 'activated' : 'deactivated'} successfully`);
       
       // Refresh the schools list to ensure we have the latest data
-      await fetchSchools(currentPage);
+      await fetchSchools(currentPage, searchTerm);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to update school status';
       toast.error(errorMessage);
       
       // Revert optimistic update on error
-      await fetchSchools(currentPage);
+      await fetchSchools(currentPage, searchTerm);
     } finally {
       setIsUpdatingStatus(false)
       setShowToggleDialog(false)
@@ -104,7 +111,7 @@ export function SchoolManagement() {
       setShowDeleteDialog(false)
       setSelectedSchool(null)
       // Refresh the schools list
-      fetchSchools(currentPage)
+      fetchSchools(currentPage, searchTerm)
     }
   }
 
@@ -121,7 +128,7 @@ export function SchoolManagement() {
           <SchoolIcon className="h-16 w-16 text-gray-400 mb-4" />
           <h3 className="text-lg font-medium text-gray-900 mb-2">No schools found</h3>
           <p className="text-gray-500 text-center max-w-sm mb-4">
-            Get started by adding your first school to the system.
+            {searchTerm ? "No schools match your search criteria." : "Get started by adding your first school to the system."}
           </p>
         </>
       )}
@@ -155,12 +162,15 @@ export function SchoolManagement() {
               Total Schools: {totalSchools}
             </div>
           </div>
-          <Input
-            placeholder="Search schools..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="max-w-xs"
-          />
+          <div className="relative w-full sm:w-auto">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+            <Input
+              placeholder="Search schools..."
+              value={searchTerm}
+              onChange={handleSearch}
+              className="w-full sm:w-[300px] pl-9"
+            />
+          </div>
         </div>
 
         {(!schools.length || error) ? (

@@ -53,8 +53,17 @@ export interface UpdateSchoolData {
 }
 
 export const schoolService = {
-  getAllSchools: async (page: number = 1, limit: number = 10): Promise<SchoolsResponse> => {
-    const response = await fetch(`${API_BASE_URL}/schools/all?page=${page}&limit=${limit}`);
+  getAllSchools: async (page: number = 1, limit: number = 10, query?: string): Promise<SchoolsResponse> => {
+    const searchParams = new URLSearchParams({
+      page: page.toString(),
+      limit: limit.toString(),
+    });
+
+    if (query) {
+      searchParams.append('query', query);
+    }
+
+    const response = await fetch(`${API_BASE_URL}/schools/search?${searchParams.toString()}`);
     
     if (!response.ok) {
       throw new Error('Failed to fetch schools');
