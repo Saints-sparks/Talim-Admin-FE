@@ -11,6 +11,7 @@ import { ArrowLeft, Upload, X } from "lucide-react"
 import { LoadingModal } from "@/components/ui/loading-modal"
 import { toast } from "sonner"
 import { UploadProgress } from "@/components/ui/upload-progress"
+import { School, schoolService } from "@/app/services/school.service"
 import {
   Select,
   SelectContent,
@@ -47,7 +48,13 @@ interface FormData {
   }>
 }
 
-export function SchoolRegistrationForm() {
+interface SchoolRegistrationFormProps {
+  mode?: 'create' | 'edit'
+  initialData?: School
+  schoolId?: string
+}
+
+export function SchoolRegistrationForm({ mode = 'create', initialData, schoolId }: SchoolRegistrationFormProps) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
@@ -55,13 +62,18 @@ export function SchoolRegistrationForm() {
   const [uploadError, setUploadError] = useState<string | undefined>()
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [formData, setFormData] = useState<FormData>({
-    schoolLogo: "",
-    schoolName: "",
-    schoolPrefix: "",
-    emailAddress: "",
-    physicalAddress: "",
-    state: "",
-    primaryContacts: [
+    schoolLogo: initialData?.logo || "",
+    schoolName: initialData?.name || "",
+    schoolPrefix: initialData?.schoolPrefix || "",
+    emailAddress: initialData?.email || "",
+    physicalAddress: initialData?.physicalAddress || "",
+    state: initialData?.location.state || "",
+    primaryContacts: initialData?.primaryContacts.map(contact => ({
+      name: contact.name,
+      phone: contact.phone,
+      email: contact.email,
+      role: contact.role
+    })) || [
       {
         name: "",
         phone: "",
@@ -71,7 +83,7 @@ export function SchoolRegistrationForm() {
     ]
   })
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const [previewUrl, setPreviewUrl] = useState<string>("")
+  const [previewUrl, setPreviewUrl] = useState<string>(initialData?.logo || "")
   const [showUploadProgress, setShowUploadProgress] = useState(false)
 
   const validateFile = (file: File): string | null => {
@@ -219,32 +231,38 @@ export function SchoolRegistrationForm() {
         },
         schoolPrefix: formData.schoolPrefix,
         primaryContacts: formData.primaryContacts,
-        active: true,
+        active: initialData?.active ?? true,
         logo: logoUrl
       }
 
       console.log('Submitting payload:', payload)
 
-      const response = await fetch('http://localhost:5000/schools/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      })
+      let response;
+      if (mode === 'edit' && schoolId) {
+        response = await schoolService.updateSchool(schoolId, payload);
+        toast.success('School updated successfully!');
+      } else {
+        response = await fetch('http://localhost:5000/schools/create', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
 
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.message || 'Failed to create school')
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to create school');
+        }
+
+        toast.success('School registered successfully!');
       }
 
-      const data = await response.json()
-      toast.success('School registered successfully!')
       router.push('/talimschool')
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to register school'
+      const errorMessage = error instanceof Error ? error.message : 'Failed to process school'
       toast.error(errorMessage)
-      console.error('Registration error:', error)
+      console.error('Form submission error:', error)
     } finally {
       setIsLoading(false)
       setUploadProgress(0)
@@ -268,12 +286,12 @@ export function SchoolRegistrationForm() {
         </Button>
 
         <div>
-          <h1 className="text-2xl font-bold">New School Information</h1>
-          <p className="text-muted-foreground">Register a new school</p>
+          <h1 className="text-2xl font-bold">{mode === 'edit' ? 'Edit School Information' : 'New School Information'}</h1>
+          <p className="text-muted-foreground">{mode === 'edit' ? 'Update school details' : 'Register a new school'}</p>
         </div>
         
         <Button type="submit" className="bg-indigo-700 hover:bg-indigo-800">
-          Register School
+          {mode === 'edit' ? 'Save Changes' : 'Register School'}
         </Button>
       </div>
 

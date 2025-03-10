@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { toast } from "sonner"
-import { Filter, MoreVertical, Plus, School as SchoolIcon, WifiOff } from "lucide-react"
+import { Eye, Filter, MoreVertical, Plus, School as SchoolIcon, WifiOff } from "lucide-react"
 import { School, schoolService } from "@/app/services/school.service"
 import { LoadingModal } from "@/components/ui/loading-modal"
 
@@ -182,7 +182,11 @@ export function SchoolManagement() {
                 </TableHeader>
                 <TableBody>
                   {schools.map((school) => (
-                    <TableRow key={school._id} className="text-black">
+                    <TableRow 
+                      key={school._id} 
+                      className="text-black cursor-pointer hover:bg-gray-50"
+                      onClick={() => router.push(`/SchoolProfile/view/${school._id}`)}
+                    >
                       <TableCell className="font-medium">{school.schoolPrefix}</TableCell>
                       <TableCell>{school.name}</TableCell>
                       <TableCell>{school.email}</TableCell>
@@ -203,7 +207,7 @@ export function SchoolManagement() {
                           {school.active ? "Active" : "Inactive"}
                         </Badge>
                       </TableCell>
-                      <TableCell>
+                      <TableCell onClick={(e) => e.stopPropagation()}>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="icon" className="h-8 w-8 p-0">

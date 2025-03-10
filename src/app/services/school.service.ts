@@ -34,12 +34,58 @@ export interface SchoolsResponse {
   };
 }
 
+export interface UpdateSchoolData {
+  name: string;
+  email: string;
+  physicalAddress: string;
+  location: {
+    country: string;
+    state: string;
+  };
+  primaryContacts: Array<{
+    name: string;
+    phone: string;
+    email: string;
+    role: string;
+  }>;
+  active: boolean;
+  logo: string;
+}
+
 export const schoolService = {
   getAllSchools: async (page: number = 1, limit: number = 10): Promise<SchoolsResponse> => {
     const response = await fetch(`${API_BASE_URL}/schools/all?page=${page}&limit=${limit}`);
     
     if (!response.ok) {
       throw new Error('Failed to fetch schools');
+    }
+
+    return response.json();
+  },
+
+  getSchool: async (schoolId: string): Promise<School> => {
+    const response = await fetch(`${API_BASE_URL}/schools/${schoolId}`);
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Failed to fetch school details');
+    }
+
+    return response.json();
+  },
+
+  updateSchool: async (schoolId: string, data: UpdateSchoolData): Promise<School> => {
+    const response = await fetch(`${API_BASE_URL}/schools/update/${schoolId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Failed to update school');
     }
 
     return response.json();
