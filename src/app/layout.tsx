@@ -1,15 +1,11 @@
 "use client";
-
-import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { PageIndicatorProvider } from "./context/PageIndicatorContext";
 
 import Sidebartalim from "@/components/TalimSidebar/Sidebar";
-import TalimAdminLogin from "@/app/talimadminlogin/page";
 import TalimAdminDashboard from "@/app/talimadmindashboard/page"
 import classNames from "classnames";
 
@@ -34,7 +30,7 @@ const poppins = Poppins({
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isTalimPage = pathname.includes("talim");
+  const isTalimPage = pathname.includes("talimadmindashboard");
 
   return (
     <html lang="en">
@@ -43,11 +39,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       >
         <PageIndicatorProvider>
           <div className="flex">
-            {/* ✅ Sidebar should always appear for testing */}
+            {/* Sidebar should always appear for testing */}
             <Sidebartalim className="fixed left-0 top-0 h-full w-64 bg-gray-200" />
 
             <main className={classNames("flex-1 p-4 ml-64")}>
-              {/* ✅ Always load the login page first for testing */}
+              {/* Always load the login page first for testing */}
               {pathname === "/talimadmindashboard" ? <TalimAdminDashboard /> : children}
             </main>
           </div>
