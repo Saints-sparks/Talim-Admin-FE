@@ -8,20 +8,15 @@ export interface School {
   location: {
     country: string;
     state: string;
-    _id: string;
   };
   schoolPrefix: string;
+  active: boolean;
   primaryContacts: Array<{
     name: string;
     phone: string;
     email: string;
     role: string;
-    _id: string;
   }>;
-  active: boolean;
-  logo: string;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface SchoolsResponse {
@@ -64,9 +59,10 @@ export const schoolService = {
     }
 
     const response = await fetch(`${API_BASE_URL}/schools/search?${searchParams.toString()}`);
-    
+
     if (!response.ok) {
-      throw new Error('Failed to fetch schools');
+      const error = await response.json();
+      throw new Error(error.message || 'Failed to fetch schools');
     }
 
     return response.json();
