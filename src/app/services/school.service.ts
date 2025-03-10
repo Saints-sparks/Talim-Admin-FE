@@ -11,6 +11,7 @@ export interface School {
   };
   schoolPrefix: string;
   active: boolean;
+  logo?: string;
   primaryContacts: Array<{
     name: string;
     phone: string;
