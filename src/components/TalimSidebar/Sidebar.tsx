@@ -1,13 +1,14 @@
 "use client";
 
 import { cn } from "../../app/lib/utils";
-import { useRouter, usePathname } from "next/navigation"; // ✅ Import usePathname
-import { useState } from "react";
+import { useRouter, usePathname } from "next/navigation"; // Fix active route detection
+import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Book, LayoutDashboard, School, Bell, HelpCircle, Settings, ChevronRight, LogOut } from "lucide-react";
 import Link from "next/link";
 import { adminProfiles } from "@/data/adminProfiles";
+import { useNavigationLoading } from "@/app/context/NavigationLoadingContext";
 
 interface NavItem {
   title: string;
@@ -52,10 +53,27 @@ export default function Sidebartalim({ className }: SidebarProps) {
   const pathname = usePathname(); // ✅ Get current route
   const [isOpen, setIsOpen] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const { setIsNavigating } = useNavigationLoading();
+
+  const handleNavigation = (href: string) => {
+    setIsNavigating(true);
+    router.push(href);
+  };
+
+  // Watch for pathname changes to detect navigation completion
+  useEffect(() => {
+    setIsNavigating(false);
+  }, [pathname, setIsNavigating]);
 
   const handleLogout = () => {
+    setIsNavigating(true);
     setIsLoggedIn(false);
     router.push("/talimadminlogin");
+  };
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+    router.push("/talimadmindashboard"); // Fixed typo in route
   };
 
   return (
@@ -96,25 +114,19 @@ export default function Sidebartalim({ className }: SidebarProps) {
         {/* Navigation */}
         <div className="flex h-[calc(100vh-4rem)] flex-col justify-between">
           <nav className="space-y-1 p-4">
-            {navItems.map((item) => {
-              const isActive = pathname === item.href; 
-
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={cn(
-                    "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
-                    isActive
-                      ? "bg-gray-300 text-gray-900 font-semibold" 
-                      : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
-                  )}
-                >
-                  <item.icon className="h-5 w-5" />
-                  {item.title}
-                </Link>
-              );
-            })}
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900",
+                  pathname === item.href && "bg-gray-100 text-gray-900 font-semibold"
+                )}
+              >
+                <item.icon className="h-5 w-5" />
+                {item.title}
+              </Link>
+            ))}
           </nav>
 
           {/* User Profile */}

@@ -25,6 +25,12 @@ export interface School {
     dateSubmitted: string
     label?: string
     requestDate?: string
+    school: {
+      id: string
+      shortName: string
+      name: string
+      email: string
+    }
   }
   
   export interface Attachment {

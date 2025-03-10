@@ -102,7 +102,7 @@ export function AttachmentsView() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <Button variant="outline" className="gap-2">
-          <Filter className="h-4 w-4" />
+          <Filter className="h-4 w-4 text-black" />
           Filters
         </Button>
         <div className="relative w-[300px]">
