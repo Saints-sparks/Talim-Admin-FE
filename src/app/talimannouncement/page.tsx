@@ -153,6 +153,7 @@ const AnnouncementPage = () => {
           totalPages={totalPages}
           currentPage={currentPage}
           onPageChange={setCurrentPage}
+          isRefreshing={isRefreshing}
         />
       )}
     </div>

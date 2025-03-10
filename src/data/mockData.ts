@@ -204,8 +204,45 @@ export const tickets: Ticket[] = [
     dateSubmitted: "Oct 12, 2024",
     label: "File upload not working",
     requestDate: "November 10, 2024",
+    school: {
+      id: "1",
+      shortName: "GH",
+      name: "Greenwood High School",
+      email: "info@greenwoodhigh.edu"
+    }
   },
-  // ... Add more tickets here
+  {
+    id: "2",
+    ticketId: "TK-212",
+    subject: "Password Reset",
+    status: "Active",
+    priority: "Medium",
+    dateSubmitted: "Oct 13, 2024",
+    label: "Account access",
+    requestDate: "November 11, 2024",
+    school: {
+      id: "2",
+      shortName: "SI",
+      name: "Sunrise International School",
+      email: "contact@sunriseinternationalschool.com"
+    }
+  },
+  {
+    id: "3",
+    ticketId: "TK-213",
+    subject: "System Error",
+    status: "Inactive",
+    priority: "Low",
+    dateSubmitted: "Oct 14, 2024",
+    label: "Technical issue",
+    requestDate: "November 12, 2024",
+    school: {
+      id: "3",
+      shortName: "MA",
+      name: "Maple Academy",
+      email: "info@mapleacademy.org"
+    }
+  }
 ]
 
 export const attachments: Attachment[] = [
@@ -213,8 +250,9 @@ export const attachments: Attachment[] = [
     id: "1",
     fileName: "Tech requirements.pdf",
     fileSize: "200 KB",
+    sizeInBytes: 204800, // 200 * 1024
     dateUploaded: "Jan 4, 2022",
-    type: "pdf",
+    type: "pdf"
   },
   // ... Add more attachments here
 ]
