@@ -31,9 +31,9 @@ export function AttachmentsTable({ attachments }: AttachmentsTableProps) {
           <TableHead className="w-12">
             <Checkbox />
           </TableHead>
-          <TableHead>File name</TableHead>
-          <TableHead>File size</TableHead>
-          <TableHead>Date uploaded</TableHead>
+          <TableHead className="text-black">File name</TableHead>
+          <TableHead className="text-black">File size</TableHead>
+          <TableHead className="text-black">Date uploaded</TableHead>
           <TableHead className="w-12"></TableHead>
         </TableRow>
       </TableHeader>

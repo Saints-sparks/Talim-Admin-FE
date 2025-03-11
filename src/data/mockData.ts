@@ -250,11 +250,7 @@ export const attachments: Attachment[] = [
     id: "1",
     fileName: "Tech requirements.pdf",
     fileSize: "200 KB",
-<<<<<<< HEAD
-    sizeInBytes: 204800,
-=======
     sizeInBytes: 204800, // 200 * 1024
->>>>>>> 2f7a205040743e4445e2cebf2477e91eca50c808
     dateUploaded: "Jan 4, 2022",
     type: "pdf"
   },

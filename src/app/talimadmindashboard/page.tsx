@@ -1,16 +1,4 @@
 "use client";
-<<<<<<< HEAD
-import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
-import { FaPlus } from "react-icons/fa"; 
-import Stats from "@/components/talimdashboard/Stats";
-import { SchoolsHeader } from "@/components/talimdashboard/SchoolsHeader";
-import { SchoolsCard } from "@/components/talimdashboard/SchoolsCard";
-
-export default function Page() {
-  const router = useRouter(); 
-  // Handle navigation to the talimregister page
-=======
 
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
@@ -64,7 +52,6 @@ export default function Page() {
     fetchSchools(currentPage, debouncedSearch);
   }, [currentPage, debouncedSearch]);
 
->>>>>>> 2f7a205040743e4445e2cebf2477e91eca50c808
   const handleRegisterClick = () => {
     router.push("/talimregister");
   };
@@ -114,21 +101,6 @@ export default function Page() {
       <LoadingModal isOpen={isLoading} message="Loading schools..." />
       {/* Main Content */}
       <div className="flex-1 lg:ml-0">
-<<<<<<< HEAD
-        <header className="sticky top-0 z-40 border-b bg-white">
-          <div className="flex h-16 items-center justify-between px-6">
-            <h1 className="text-lg text-black font-semibold">School Overview</h1>
-            <Button variant="default" className="text-sm bg-blue-700 font-semibold" onClick={handleRegisterClick}>
-             <FaPlus /> Register School
-            </Button>
-          </div>
-        </header>
-      <Stats />
-      <div className="school-container">
-<SchoolsHeader />
-  <SchoolsCard  />
-  </div>
-=======
         <header className="sticky top-0 z-40 border-b bg-white shadow-sm">
           <div className="flex h-16 items-center justify-between px-6">
             <h1 className="text-xl font-bold text-gray-800">School Overview</h1>
@@ -278,7 +250,6 @@ export default function Page() {
             )}
           </div>
         </main>
->>>>>>> 2f7a205040743e4445e2cebf2477e91eca50c808
       </div>
     </div>
   );
