@@ -18,6 +18,7 @@ import {
 import Link from "next/link";
 import { adminProfiles } from "@/data/adminProfiles";
 import { useNavigationLoading } from "@/app/context/NavigationLoadingContext";
+import { useAuthContext } from '@/app/context/AuthContext';
 
 interface NavItem {
   title: string;
@@ -61,8 +62,8 @@ export default function Sidebartalim({ className }: SidebarProps) {
   const router = useRouter();
   const pathname = usePathname(); // Get current route
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const { setIsNavigating } = useNavigationLoading();
+  const { logout, isAuthenticated } = useAuthContext();
 
   const handleNavigation = (href: string) => {
     setIsNavigating(true);
@@ -74,16 +75,15 @@ export default function Sidebartalim({ className }: SidebarProps) {
     setIsNavigating(false);
   }, [pathname, setIsNavigating]);
 
-  const handleLogout = () => {
-    setIsNavigating(true);
-    setIsLoggedIn(false);
-    router.push("/talimadminlogin");
-  };
-
-  const handleLogin = () => {
-    setIsNavigating(true);
-    setIsLoggedIn(true);
-    router.push("/talimadmindashboard");
+  const handleLogout = async () => {
+    try {
+      setIsNavigating(true);
+      await logout();
+    } catch (error) {
+      console.error('Logout failed:', error);
+    } finally {
+      setIsNavigating(false);
+    }
   };
 
   return (
@@ -143,7 +143,7 @@ export default function Sidebartalim({ className }: SidebarProps) {
 
           {/* User Profile */}
           <div className="border-t p-4">
-            {isLoggedIn ? (
+            {isAuthenticated ? (
               <div className="flex flex-col gap-4">
                 <div className="flex items-center gap-3">
                   <Avatar className="h-9 w-9">
@@ -181,7 +181,10 @@ export default function Sidebartalim({ className }: SidebarProps) {
                 </Button>
               </div>
             ) : (
-              <Button className="w-full" onClick={handleLogin}>
+              <Button 
+                className="w-full" 
+                onClick={() => router.push('/talimadminlogin')}
+              >
                 Login
               </Button>
             )}

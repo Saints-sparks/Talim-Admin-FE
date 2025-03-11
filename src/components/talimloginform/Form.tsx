@@ -2,23 +2,71 @@
 
 import * as React from "react"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { toast } from "react-hot-toast"
+import { Loader2, Eye, EyeOff } from "lucide-react"
 import loginIllustration from "../../../public/Super-Admin.png"
+import { authService } from "@/app/services/auth.service"
+import nookies from 'nookies'
 
 export function LoginForm() {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
+  const [showPassword, setShowPassword] = React.useState(false)
+  const [formData, setFormData] = React.useState({
+    email: "",
+    password: "",
+  })
+  const router = useRouter()
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword)
+  }
 
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault()
     setIsLoading(true)
 
-    setTimeout(() => {
+    try {
+      // Login request
+      const response = await authService.login(formData)
+
+      // Store tokens in cookies
+      nookies.set(null, 'access_token', response.access_token, {
+        maxAge: 30 * 24 * 60 * 60, // 30 days
+        path: '/',
+      })
+      nookies.set(null, 'refresh_token', response.refresh_token, {
+        maxAge: 30 * 24 * 60 * 60,
+        path: '/',
+      })
+
+      // Get user info
+      const userInfo = await authService.introspectToken(response.access_token)
+
+      // Store user info in localStorage
+      localStorage.setItem('user', JSON.stringify(userInfo.user))
+
+      toast.success('Login successful!')
+      router.push('/talimadmindashboard')
+    } catch (error) {
+      console.error('Login error:', error)
+      toast.error(error instanceof Error ? error.message : 'Failed to login')
+    } finally {
       setIsLoading(false)
-    }, 1000)
+    }
   }
 
   return (
@@ -37,23 +85,14 @@ export function LoginForm() {
               <form onSubmit={onSubmit} className="space-y-4">
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="name">Name*</Label>
-                    <Input
-                      id="name"
-                      placeholder="Enter your name"
-                      type="text"
-                      autoCapitalize="none"
-                      autoCorrect="off"
-                      disabled={isLoading}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
                     <Label htmlFor="email">Email*</Label>
                     <Input
                       id="email"
+                      name="email"
                       placeholder="Enter your email"
                       type="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
                       autoCapitalize="none"
                       autoComplete="email"
                       autoCorrect="off"
@@ -63,20 +102,32 @@ export function LoginForm() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="password">Password*</Label>
-                    <Input
-                      id="password"
-                      placeholder="Create a password"
-                      type="password"
-                      autoCapitalize="none"
-                      autoComplete="new-password"
-                      autoCorrect="off"
-                      disabled={isLoading}
-                      required
-                      minLength={8}
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      Must be at least 8 characters.
-                    </p>
+                    <div className="relative">
+                      <Input
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        type={showPassword ? "text" : "password"}
+                        value={formData.password}
+                        onChange={handleInputChange}
+                        autoCapitalize="none"
+                        autoComplete="current-password"
+                        disabled={isLoading}
+                        required
+                        className="pr-10" // Add padding for the icon
+                      />
+                      <button
+                        type="button"
+                        onClick={togglePasswordVisibility}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                      >
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </button>
+                    </div>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Checkbox id="remember" />
@@ -91,7 +142,14 @@ export function LoginForm() {
                     className="w-full bg-indigo-700 hover:bg-indigo-800" 
                     disabled={isLoading}
                   >
-                    {isLoading ? "Logging in..." : "Log in"}
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Logging in...
+                      </>
+                    ) : (
+                      "Log in"
+                    )}
                   </Button>
                   <Button 
                     variant="outline" 

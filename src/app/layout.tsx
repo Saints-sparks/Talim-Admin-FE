@@ -1,20 +1,8 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import { PageIndicatorProvider } from "./context/PageIndicatorContext";
-import { NavigationLoadingProvider } from "./context/NavigationLoadingContext";
-import { NavigationLoading } from "@/components/ui/navigation-loading";
-import { Toaster } from 'sonner';
-
-import Sidebartalim from "@/components/TalimSidebar/Sidebar";
-import TalimAdminLogin from "@/app/talimadminlogin/page";
-import TalimAdminDashboard from "@/app/talimadmindashboard/page"
-import classNames from "classnames";
+import { ClientLayout } from "@/components/layouts/ClientLayout";
 
 // Local Fonts
 const geistSans = localFont({
@@ -35,31 +23,18 @@ const poppins = Poppins({
   weight: ["300", "400", "500", "600", "700"],
 });
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-  const router = useRouter();
-  const isTalimPage = pathname.includes("talim");
+export const metadata: Metadata = {
+  title: "Talim Admin",
+  description: "Talim Admin Dashboard",
+};
 
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} antialiased text-black`}
-      >
-        <NavigationLoadingProvider>
-          <PageIndicatorProvider>
-            <NavigationLoading />
-            <Toaster richColors />
-            <div className="flex">
-              {/* ✅ Sidebar should always appear for testing */}
-              <Sidebartalim className="fixed left-0 top-0 h-full w-64 bg-gray-200" />
-
-              <main className={classNames("flex-1 p-4 ml-64")}>
-                {/* ✅ Always load the login page first for testing */}
-                {pathname === "/talimadmindashboard" ? <TalimAdminDashboard /> : children}
-              </main>
-            </div>
-          </PageIndicatorProvider>
-        </NavigationLoadingProvider>
+      <body className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} antialiased text-black`}>
+        <ClientLayout>
+          {children}
+        </ClientLayout>
       </body>
     </html>
   );
