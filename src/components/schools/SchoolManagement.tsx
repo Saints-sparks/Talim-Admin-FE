@@ -217,39 +217,49 @@ export function SchoolManagement() {
                           {school.active ? "Active" : "Inactive"}
                         </Badge>
                       </TableCell>
-                      <TableCell onClick={(e) => e.stopPropagation()}>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className="h-8 w-8 p-0">
-                              <MoreVertical className="h-4 w-4" />
-                              <span className="sr-only">Open menu</span>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => router.push(`/SchoolProfile/${school._id}`)}>
-                              Edit
-                            </DropdownMenuItem>
-                            <DropdownMenuItem 
-                              onClick={() => {
-                                setSelectedSchool(school)
-                                setShowToggleDialog(true)
-                              }}
-                              className={school.active ? "text-red-600" : "text-green-600"}
-                            >
-                              {school.active ? "Deactivate" : "Activate"}
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => {
-                                setSelectedSchool(school)
-                                setShowDeleteDialog(true)
-                              }}
-                              className="text-red-600"
-                            >
-                              Delete
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
+
+<TableCell className="relative" onClick={(e) => e.stopPropagation()}>
+  <DropdownMenu>
+    <DropdownMenuTrigger asChild>
+      <Button variant="ghost" size="icon" className="h-8 w-8 p-0">
+        <MoreVertical className="h-4 w-4" />
+        <span className="sr-only">Open menu</span>
+      </Button>
+    </DropdownMenuTrigger>
+    <DropdownMenuContent
+      align="end"
+      className="absolute right-0 top-8 w-40 bg-gray-100 shadow-lg border border-gray-200 rounded-lg z-50"
+    >
+      {/* Edit Option */}
+      <DropdownMenuItem onClick={() => router.push(`/SchoolProfile/${school._id}`)}>
+        Edit
+      </DropdownMenuItem>
+
+      {/* Dynamic Activate/Deactivate Option */}
+      <DropdownMenuItem
+        onClick={() => {
+          setSelectedSchool(school);
+          setShowToggleDialog(true);
+        }}
+        className={school.active ? "text-red-600" : "text-green-600"}
+      >
+        {school.active ? "Deactivate" : "Activate"}
+      </DropdownMenuItem>
+
+      {/* Always Visible Delete Option */}
+      <DropdownMenuItem
+        onClick={() => {
+          setSelectedSchool(school);
+          setShowDeleteDialog(true);
+        }}
+        className="text-red-600"
+      >
+        Delete
+      </DropdownMenuItem>
+    </DropdownMenuContent>
+  </DropdownMenu>
+</TableCell>
+
                     </TableRow>
                   ))}
                 </TableBody>
@@ -282,41 +292,58 @@ export function SchoolManagement() {
       </div>
 
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete school</AlertDialogTitle>
-            <AlertDialogDescription>
-              Do you want to remove this school? This action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete} className="bg-red-600 hover:bg-red-700">
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+  <AlertDialogContent className="max-w-md p-6 bg-white rounded-lg shadow-lg">
+    <AlertDialogHeader className="space-y-2">
+      <AlertDialogTitle className="text-lg font-semibold text-gray-900">
+        Delete School
+      </AlertDialogTitle>
+      <AlertDialogDescription className="text-gray-600">
+        Are you sure you want to remove this school? <br />
+        <span className="font-medium">This action cannot be undone.</span>
+      </AlertDialogDescription>
+    </AlertDialogHeader>
+    <AlertDialogFooter className="flex justify-end space-x-3">
+      <AlertDialogCancel className="px-4 py-2 border rounded-md text-gray-600 hover:bg-gray-100">
+        Cancel
+      </AlertDialogCancel>
+      <AlertDialogAction 
+        onClick={handleDelete} 
+        className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+      >
+        Delete
+      </AlertDialogAction>
+    </AlertDialogFooter>
+  </AlertDialogContent>
+</AlertDialog>
 
-      <AlertDialog open={showToggleDialog} onOpenChange={setShowToggleDialog}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Change School Status</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to {selectedSchool?.active ? "deactivate" : "activate"} this school?
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction 
-              onClick={handleToggleStatus} 
-              className={selectedSchool?.active ? "bg-red-600 hover:bg-red-700" : "bg-green-600 hover:bg-green-700"}
-            >
-              Confirm
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+<AlertDialog open={showToggleDialog} onOpenChange={setShowToggleDialog}>
+  <AlertDialogContent className="max-w-md p-6 bg-white rounded-lg shadow-lg">
+    <AlertDialogHeader className="space-y-2">
+      <AlertDialogTitle className="text-lg font-semibold text-gray-900">
+        {selectedSchool?.active ? "Deactivate School" : "Activate School"}
+      </AlertDialogTitle>
+      <AlertDialogDescription className="text-gray-600">
+        Are you sure you want to 
+        <span className="font-medium"> {selectedSchool?.active ? "deactivate" : "activate"} </span> 
+        this school?
+      </AlertDialogDescription>
+    </AlertDialogHeader>
+    <AlertDialogFooter className="flex justify-end space-x-3">
+      <AlertDialogCancel className="px-4 py-2 border rounded-md text-gray-600 hover:bg-gray-100">
+        Cancel
+      </AlertDialogCancel>
+      <AlertDialogAction 
+        onClick={handleToggleStatus} 
+        className={`px-4 py-2 text-white rounded-md ${
+          selectedSchool?.active ? "bg-red-600 hover:bg-red-700" : "bg-green-600 hover:bg-green-700"
+        }`}
+      >
+        {selectedSchool?.active ? "Deactivate" : "Activate"}
+      </AlertDialogAction>
+    </AlertDialogFooter>
+  </AlertDialogContent>
+</AlertDialog>
+
     </div>
   )
 }

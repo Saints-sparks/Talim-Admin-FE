@@ -26,7 +26,7 @@ const NIGERIAN_STATES = [
   "Cross River", "Delta", "Ebonyi", "Edo", "Ekiti", "Enugu", "FCT", "Gombe", "Imo",
   "Jigawa", "Kaduna", "Kano", "Katsina", "Kebbi", "Kogi", "Kwara", "Lagos", "Nasarawa",
   "Niger", "Ogun", "Ondo", "Osun", "Oyo", "Plateau", "Rivers", "Sokoto", "Taraba",
-  "Yobe", "Zamfara"
+  "Yobe", "Zamfara",
 ]
 
 // File upload constants
@@ -279,191 +279,212 @@ export function SchoolRegistrationForm({ mode = 'create', initialData, schoolId 
         />
       )}
       
-      <div className="flex justify-between items-center">
-        <Button variant="outline" onClick={() => router.back()} className="mb-6">
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back
-        </Button>
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-0">
+  {/* Back Button */}
+  <Button 
+    variant="outline" 
+    onClick={() => router.back()} 
+    className="w-full md:w-auto flex items-center justify-center"
+  >
+    <ArrowLeft className="mr-2 h-4 w-4" />
+    Back
+  </Button>
 
-        <div>
-          <h1 className="text-2xl font-bold">{mode === 'edit' ? 'Edit School Information' : 'New School Information'}</h1>
-          <p className="text-muted-foreground">{mode === 'edit' ? 'Update school details' : 'Register a new school'}</p>
+  {/* Title & Description (Center-Aligned on Mobile) */}
+  <div className="text-center md:text-left">
+    <h1 className="text-md md:text-2xl font-bold">
+      {mode === 'edit' ? 'Edit School Information' : 'New School Information'}
+    </h1>
+    <p className="text-gray-500">
+      {mode === 'edit' ? 'Update school details' : 'Register a new school'}
+    </p>
+  </div>
+
+  {/* Submit Button */}
+  <Button 
+    type="submit" 
+    className="w-full md:w-auto bg-indigo-700 hover:bg-indigo-800"
+  >
+    {mode === 'edit' ? 'Save Changes' : 'Register School'}
+  </Button>
+</div>
+
+<Card>
+  <CardHeader>
+    <CardTitle>General Information</CardTitle>
+  </CardHeader>
+
+  <CardContent className="space-y-6">
+    {/* Logo Upload */}
+    <div className="flex flex-col items-center justify-center border-2 border-dashed rounded-lg p-6 max-w-[200px] mx-auto relative">
+      {previewUrl ? (
+        <div className="relative w-full aspect-square">
+          <Image
+            src={previewUrl}
+            alt="School logo preview"
+            fill
+            className="object-contain"
+          />
+          <button
+            type="button"
+            onClick={handleRemoveLogo}
+            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+          >
+            <X className="h-4 w-4" />
+          </button>
         </div>
-        
-        <Button type="submit" className="bg-indigo-700 hover:bg-indigo-800">
-          {mode === 'edit' ? 'Save Changes' : 'Register School'}
-        </Button>
+      ) : (
+        <label 
+          htmlFor="logo-upload" 
+          className="w-full h-full flex flex-col items-center justify-center cursor-pointer text-center"
+        >
+          <Upload className="mx-auto h-8 w-8 text-gray-400" />
+          <p className="text-sm">
+            Drop school's logo here or{" "}
+            <span className="text-indigo-600 hover:underline">browse</span>
+          </p>
+          <p className="text-xs text-gray-500">
+            JPEG, PNG, GIF, or WebP (max. {MAX_FILE_SIZE / 1024 / 1024}MB)
+          </p>
+        </label>
+      )}
+      <input
+        id="logo-upload"
+        ref={fileInputRef}
+        type="file"
+        accept={ACCEPTED_IMAGE_TYPES.join(',')}
+        className="hidden"
+        onChange={handleFileSelect}
+      />
+    </div>
+
+    {/* School Details */}
+    <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2">
+      <div className="space-y-2">
+        <Label htmlFor="schoolName">School Name*</Label>
+        <Input
+          id="schoolName"
+          value={formData.schoolName}
+          onChange={e => setFormData(prev => ({ ...prev, schoolName: e.target.value }))}
+          placeholder="Enter school's name"
+          required
+        />
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>General information</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          {/* Logo Upload */}
-          <div className="flex flex-col items-center justify-center border-2 border-dashed rounded-lg p-6 max-w-[200px] relative">
-            {previewUrl ? (
-              <div className="relative w-full aspect-square">
-                <Image
-                  src={previewUrl}
-                  alt="School logo preview"
-                  fill
-                  className="object-contain"
-                />
-                <button
-                  type="button"
-                  onClick={handleRemoveLogo}
-                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
-            ) : (
-              <label 
-                htmlFor="logo-upload" 
-                className="w-full h-full flex flex-col items-center justify-center cursor-pointer"
-              >
-                <div className="text-center space-y-2">
-                  <Upload className="mx-auto h-8 w-8 text-gray-400" />
-                  <div className="text-sm">
-                    Drop school's logo here or{" "}
-                    <span className="text-indigo-600 hover:underline">
-                      browse
-                    </span>
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    JPEG, PNG, GIF or WebP (max. {MAX_FILE_SIZE / 1024 / 1024}MB)
-                  </div>
-                </div>
-              </label>
-            )}
-            <input
-              id="logo-upload"
-              ref={fileInputRef}
-              type="file"
-              accept={ACCEPTED_IMAGE_TYPES.join(',')}
-              className="hidden"
-              onChange={handleFileSelect}
-            />
-          </div>
+      <div className="space-y-2">
+        <Label htmlFor="schoolPrefix">School Prefix*</Label>
+        <Input
+          id="schoolPrefix"
+          value={formData.schoolPrefix}
+          onChange={e => setFormData(prev => ({ ...prev, schoolPrefix: e.target.value }))}
+          placeholder="Enter school prefix"
+          required
+        />
+      </div>
 
-          {/* School Details */}
-          <div className="grid gap-6 md:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="schoolName">School Name*</Label>
-              <Input
-                id="schoolName"
-                value={formData.schoolName}
-                onChange={e => setFormData(prev => ({ ...prev, schoolName: e.target.value }))}
-                placeholder="Enter school's name"
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="schoolPrefix">School Prefix*</Label>
-              <Input
-                id="schoolPrefix"
-                value={formData.schoolPrefix}
-                onChange={e => setFormData(prev => ({ ...prev, schoolPrefix: e.target.value }))}
-                placeholder="Enter school prefix"
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="emailAddress">School email address*</Label>
-              <Input
-                id="emailAddress"
-                type="email"
-                value={formData.emailAddress}
-                onChange={e => setFormData(prev => ({ ...prev, emailAddress: e.target.value }))}
-                placeholder="Enter school's email address"
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="physicalAddress">Physical Address*</Label>
-              <Input
-                id="physicalAddress"
-                value={formData.physicalAddress}
-                onChange={e => setFormData(prev => ({ ...prev, physicalAddress: e.target.value }))}
-                placeholder="Enter physical address"
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="state">State*</Label>
-              <Select 
-                value={formData.state}
-                onValueChange={value => setFormData(prev => ({ ...prev, state: value }))}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select state" />
-                </SelectTrigger>
-                <SelectContent>
-                  {NIGERIAN_STATES.map(state => (
-                    <SelectItem key={state} value={state}>
-                      {state}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="space-y-2">
+        <Label htmlFor="emailAddress">School Email Address*</Label>
+        <Input
+          id="emailAddress"
+          type="email"
+          value={formData.emailAddress}
+          onChange={e => setFormData(prev => ({ ...prev, emailAddress: e.target.value }))}
+          placeholder="Enter school's email address"
+          required
+        />
+      </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Primary Contact Information</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {formData.primaryContacts.map((contact, index) => (
-            <div key={index} className="grid gap-6 md:grid-cols-2 mb-6">
-              <div className="space-y-2">
-                <Label htmlFor={`contactName${index}`}>Name*</Label>
-                <Input
-                  id={`contactName${index}`}
-                  value={contact.name}
-                  onChange={e => handlePrimaryContactChange(index, 'name', e.target.value)}
-                  placeholder="Enter contact name"
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor={`contactPhone${index}`}>Phone*</Label>
-                <Input
-                  id={`contactPhone${index}`}
-                  value={contact.phone}
-                  onChange={e => handlePrimaryContactChange(index, 'phone', e.target.value)}
-                  placeholder="Enter phone number"
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor={`contactEmail${index}`}>Email*</Label>
-                <Input
-                  id={`contactEmail${index}`}
-                  type="email"
-                  value={contact.email}
-                  onChange={e => handlePrimaryContactChange(index, 'email', e.target.value)}
-                  placeholder="Enter email address"
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor={`contactRole${index}`}>Role*</Label>
-                <Input
-                  id={`contactRole${index}`}
-                  value={contact.role}
-                  onChange={e => handlePrimaryContactChange(index, 'role', e.target.value)}
-                  placeholder="Enter role"
-                  required
-                />
-              </div>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
+      <div className="space-y-2">
+        <Label htmlFor="physicalAddress">Physical Address*</Label>
+        <Input
+          id="physicalAddress"
+          value={formData.physicalAddress}
+          onChange={e => setFormData(prev => ({ ...prev, physicalAddress: e.target.value }))}
+          placeholder="Enter physical address"
+          required
+        />
+      </div>
+
+      <div className="space-y-2 relative">
+  <Label htmlFor="state">State*</Label>
+  <Select 
+    value={formData.state}
+    onValueChange={value => setFormData(prev => ({ ...prev, state: value }))}
+  >
+    <SelectTrigger className="z-10 relative">
+      <SelectValue placeholder="Select state" />
+    </SelectTrigger>
+    <SelectContent className="absolute z-50 bg-white shadow-lg border rounded-md max-h-60 overflow-auto">
+      {NIGERIAN_STATES.map(state => (
+        <SelectItem key={state} value={state}>
+          {state}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+</div>
+
+    </div>
+  </CardContent>
+</Card>
+
+<Card>
+  <CardHeader>
+    <CardTitle>Primary Contact Information</CardTitle>
+  </CardHeader>
+  <CardContent>
+    {formData.primaryContacts.map((contact, index) => (
+      <div key={index} className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 mb-6">
+        <div className="space-y-2 max-w-lg">
+          <Label htmlFor={`contactName${index}`}>Name*</Label>
+          <Input
+            id={`contactName${index}`}
+            value={contact.name}
+            onChange={e => handlePrimaryContactChange(index, 'name', e.target.value)}
+            placeholder="Enter contact name"
+            required
+            className="w-full"
+          />
+        </div>
+        <div className="space-y-2 max-w-lg">
+          <Label htmlFor={`contactPhone${index}`}>Phone*</Label>
+          <Input
+            id={`contactPhone${index}`}
+            value={contact.phone}
+            onChange={e => handlePrimaryContactChange(index, 'phone', e.target.value)}
+            placeholder="Enter phone number"
+            required
+            className="w-full"
+          />
+        </div>
+        <div className="space-y-2 max-w-lg">
+          <Label htmlFor={`contactEmail${index}`}>Email*</Label>
+          <Input
+            id={`contactEmail${index}`}
+            type="email"
+            value={contact.email}
+            onChange={e => handlePrimaryContactChange(index, 'email', e.target.value)}
+            placeholder="Enter email address"
+            required
+            className="w-full"
+          />
+        </div>
+        <div className="space-y-2 max-w-lg">
+          <Label htmlFor={`contactRole${index}`}>Role*</Label>
+          <Input
+            id={`contactRole${index}`}
+            value={contact.role}
+            onChange={e => handlePrimaryContactChange(index, 'role', e.target.value)}
+            placeholder="Enter role"
+            required
+            className="w-full"
+          />
+        </div>
+      </div>
+    ))}
+  </CardContent>
+</Card>
+
     </form>
   )
 }

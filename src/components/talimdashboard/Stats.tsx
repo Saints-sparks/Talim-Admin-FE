@@ -1,46 +1,42 @@
-"use client";
+import { SchoolIcon } from "lucide-react";
 
-import React from "react";
-import { statsData } from "@/data/StatsData";
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
-import { ArrowUpIcon, ArrowDownIcon, MinusIcon } from "@heroicons/react/24/solid";
+interface StatsProps {
+  totalSchools: number;
+  totalSchoolsIncrease: number;
+  activeNow: number;
+  activeIncrease: number;
+}
 
-const getColor = (trend: string) => {
-  if (trend === "up") return "text-green-600";
-  if (trend === "down") return "text-red-600";
-  return "text-gray-500";
-};
-
-const Stats = () => {
+const Stats = ({ totalSchools, totalSchoolsIncrease, activeNow, activeIncrease }: StatsProps) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-      {statsData.map((stat, index) => (
-        <div key={index} className="bg-white shadow-md rounded-lg p-4 flex justify-between items-center">
-          {/* Left Side - Text Data */}
-          <div className="flex flex-col">
-            <h3 className="text-lg font-medium text-gray-600 py-[5px]">{stat.title}</h3>
-            <span className="text-3xl text-black font-semibold py-[5px]">{stat.count}</span>
-            <span className={`flex items-center text-sm font-medium py-[5px] ${getColor(stat.trend)}`}>
-              {stat.trend === "up" && <ArrowUpIcon className="h-5 w-5 mr-1" />}
-              {stat.trend === "down" && <ArrowDownIcon className="h-5 w-5 mr-1" />}
-              {stat.trend === "neutral" && <MinusIcon className="h-5 w-5 mr-1" />}
-              {Math.abs(stat.change)}% vs last month
-            </span>
-          </div>
-
-          {/* Right Side - Line Graph */}
-          <div className="w-32 h-16">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={stat.dataPoints.map((value, i) => ({ index: i, value }))}>
-                <XAxis dataKey="index" hide />
-                <YAxis hide />
-                <Tooltip />
-                <Line type="monotone" dataKey="value" stroke={stat.trend === "up" ? "green" : "red"} strokeWidth={2} dot={false} />
-              </LineChart>
-            </ResponsiveContainer>
+    <div className="grid gap-6 md:grid-cols-2">
+      {/* Total Schools */}
+      <div className="rounded-lg border bg-gradient-to-br from-blue-50 to-indigo-50 p-6 shadow-sm">
+        <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <h3 className="tracking-tight text-sm font-medium text-gray-800">Total Schools</h3>
+          <SchoolIcon className="h-5 w-5 text-blue-600" />
+        </div>
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="text-3xl font-bold text-blue-600">{totalSchools}</div>
+            <p className="text-xs text-blue-600/80">+{totalSchoolsIncrease} from last month</p>
           </div>
         </div>
-      ))}
+      </div>
+
+      {/* Active Schools */}
+      <div className="rounded-lg border bg-gradient-to-br from-green-50 to-emerald-50 p-6 shadow-sm">
+        <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <h3 className="tracking-tight text-sm font-medium text-gray-800">Active Schools</h3>
+          <SchoolIcon className="h-5 w-5 text-green-600" />
+        </div>
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="text-3xl font-bold text-green-600">{activeNow}</div>
+            <p className="text-xs text-green-600/80">+{activeIncrease} from last month</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
