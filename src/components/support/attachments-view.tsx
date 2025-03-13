@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -72,6 +72,20 @@ const ITEMS_PER_PAGE = 5
 export function AttachmentsView() {
   const [searchQuery, setSearchQuery] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
+
+const handleUploadClick = () => {
+  fileInputRef.current?.click()
+}
+
+const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const files = event.target.files
+  if (!files) return
+
+  for (const file of files) {
+    console.log("Uploading:", file.name) // Handle file upload logic here
+  }
+}
 
   const getFileIcon = (type: Attachment["type"]) => {
     switch (type) {
@@ -124,10 +138,18 @@ export function AttachmentsView() {
               <Download className="h-4 w-4" />
               Download all
             </Button>
-            <Button className="gap-2">
-              <Upload className="h-4 w-4" />
-              Upload
-            </Button>
+            <Button className="gap-2" onClick={handleUploadClick}>
+  <Upload className="h-4 w-4" />
+  Upload
+</Button>
+
+<input
+  type="file"
+  ref={fileInputRef}
+  multiple
+  className="hidden"
+  onChange={handleFileUpload}
+/>
           </div>
         </div>
 

@@ -24,7 +24,7 @@ const navItems: NavItem[] = [
   },
   {
     title: "School management",
-    href: "/talimadmindashboard/schools",
+    href: "/talimschool",
     icon: School,
   },
   {
@@ -50,7 +50,7 @@ interface SidebarProps {
 
 export default function Sidebartalim({ className }: SidebarProps) {
   const router = useRouter();
-  const pathname = usePathname(); // ✅ Get current route
+  const pathname = usePathname(); 
   const [isOpen, setIsOpen] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const { setIsNavigating } = useNavigationLoading();
