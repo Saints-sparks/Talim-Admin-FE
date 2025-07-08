@@ -19,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { API_BASE_URL } from "@/app/lib/api/config"
 
 // Nigerian states
 const NIGERIAN_STATES = [
@@ -186,7 +187,7 @@ export function SchoolRegistrationForm({ mode = 'create', initialData, schoolId 
         reject(new Error('Network error occurred'));
       };
 
-      xhr.open('POST', 'http://localhost:5000/upload/image');
+      xhr.open('POST', `${API_BASE_URL}/upload/image`);
       xhr.send(formData);
     });
   };
@@ -242,7 +243,7 @@ export function SchoolRegistrationForm({ mode = 'create', initialData, schoolId 
         response = await schoolService.updateSchool(schoolId, payload);
         toast.success('School updated successfully!');
       } else {
-        response = await fetch('http://localhost:5000/schools/create', {
+        response = await fetch(`${API_BASE_URL}/schools/create`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
