@@ -1,34 +1,35 @@
-"use client";
-import { useState } from "react";
-import { Pencil } from "lucide-react";
-import PersonalInfo from "@/components/setting/PersonalInfo";
-import RecentActivity from "@/components/setting/RecentActivity";
-import { Button } from "@/components/ui/button";
-import ProfilePicture from "@/components/setting/profilePicture";
+'use client';
 
-const ProfilePage = () => {
-  const [isEditing, setIsEditing] = useState(false);
+import ProfilePicture from '@/components/setting/ProfilePicture';
+import PersonalInfo from '@/components/setting/PersonalInfo';
+import RecentActivity from '@/components/setting/RecentActivity';
 
+export default function ProfilePage() {
   return (
-    <div className="relative p-6 space-y-6">
-      {/* Profile Picture */}
-      <ProfilePicture />
-      
-      {/* Pass `isEditing` to enable editing mode */}
-      <PersonalInfo isEditing={isEditing} />  
-      
-      <RecentActivity />
+    <div className="min-h-screen bg-slate-50">
+      {/* Hero banner */}
+      <div className="h-36 bg-gradient-to-r from-indigo-600 via-indigo-500 to-violet-500" />
 
-      {/* Floating Edit Button */}
-      <Button
-        onClick={() => setIsEditing((prev) => !prev)}
-        className="fixed bottom-6 right-6 flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-full shadow-lg hover:bg-indigo-700 transition"
-      >
-        <Pencil className="w-4 h-4" />
-        {isEditing ? "Done" : "Edit"}
-      </Button>
+      {/* Page body */}
+      <div className="mx-auto max-w-5xl px-4 pb-12 sm:px-6 lg:px-8">
+        {/* Profile header card — overlaps the banner */}
+        <div className="-mt-14 mb-8 rounded-2xl border border-slate-100 bg-white px-6 py-6 shadow-sm">
+          <ProfilePicture />
+        </div>
+
+        {/* Two-column grid on wide screens */}
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+          {/* Personal info — wider column */}
+          <div className="lg:col-span-2">
+            <PersonalInfo />
+          </div>
+
+          {/* Activity feed — narrower column */}
+          <div className="lg:col-span-1">
+            <RecentActivity />
+          </div>
+        </div>
+      </div>
     </div>
   );
-};
-
-export default ProfilePage;
+}
