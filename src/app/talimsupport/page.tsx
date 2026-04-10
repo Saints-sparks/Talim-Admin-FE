@@ -7,10 +7,11 @@ import { AttachmentsView } from "@/components/support/attachments-view"
 
 export default function SupportPage() {
   return (
-    <div className="container mx-auto py-6 space-y-6">
+    <div className="min-h-screen bg-slate-50 px-6 py-8 space-y-6">
       {/* Page Header */}
-      <header className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-2xl font-semibold">Tickets</h1>
+      <header className="flex flex-col gap-1">
+        <h1 className="text-2xl font-bold text-slate-900">Support</h1>
+        <p className="text-sm text-slate-500">Manage support tickets submitted by schools</p>
       </header>
 
       {/* Tabs Section */}
