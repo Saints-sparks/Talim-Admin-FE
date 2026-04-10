@@ -15,4 +15,8 @@ export const API_ENDPOINTS = {
     `${API_BASE_URL}/schools/${schoolId}/status`,
 
   NOTIFICATIONS: `${API_BASE_URL}/notifications`,
+
+  PROFILE_UPDATE: `${API_BASE_URL}/auth/profile/update/`,
+  PROFILE_AVATAR: `${API_BASE_URL}/auth/profile/avatar`,
+  PROFILE_BY_ID: (userId: string) => `${API_BASE_URL}/auth/profile/${userId}`,
 } as const;
