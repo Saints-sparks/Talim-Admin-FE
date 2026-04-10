@@ -40,7 +40,7 @@ const getFallbackUserFromToken = (token: string): User | null => {
 
 export const authService = {
   async login(credentials: LoginCredentials): Promise<{ accessToken: string; user: User }> {
-    const response = await apiRequest<AuthResponse>(API_ENDPOINTS.LOGIN, {
+    const response = await apiRequest<AuthResponse>(API_ENDPOINTS.ADMIN_LOGIN, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ export const authService = {
       body: JSON.stringify({
         ...credentials,
         deviceToken: credentials.deviceToken || getDeviceToken(),
-        platform: credentials.platform || 'web',
+        platform: credentials.platform || 'admin-web',
       }),
       skipAuth: true,
     });

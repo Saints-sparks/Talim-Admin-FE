@@ -14,6 +14,13 @@ export const API_ENDPOINTS = {
   SCHOOL_STATUS: (schoolId: string) =>
     `${API_BASE_URL}/schools/${schoolId}/status`,
 
+  ADMIN_LOGIN: `${API_BASE_URL}/auth/admin-login`,
+  ACTIVITY_LOGS: `${API_BASE_URL}/auth/activity-logs`,
+
+  COMPLAINTS: `${API_BASE_URL}/complaints`,
+  COMPLAINT_BY_ID: (id: string) => `${API_BASE_URL}/complaints/${id}`,
+  COMPLAINT_STATUS: (id: string) => `${API_BASE_URL}/complaints/${id}/status`,
+
   NOTIFICATIONS: `${API_BASE_URL}/notifications`,
 
   PROFILE_UPDATE: `${API_BASE_URL}/auth/profile/update/`,
