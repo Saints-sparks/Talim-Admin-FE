@@ -1,14 +1,10 @@
-"use client";
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+export default async function Home() {
+  const cookieStore = await cookies();
+  const hasAccessToken = Boolean(cookieStore.get('access_token')?.value);
 
-export default function Home() {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.replace("/talimadmindashboard");
-  }, [router]);
-
-  return null; // Prevents any other content from rendering
+  redirect(hasAccessToken ? '/talimadmindashboard' : '/talimadminlogin');
 }
+
