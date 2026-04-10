@@ -21,6 +21,7 @@ interface AuthContextType {
   login: (credentials: LoginCredentials) => Promise<void>;
   logout: () => Promise<void>;
   checkAuth: () => Promise<boolean>;
+  updateUser: (patch: Partial<User>) => void;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -30,6 +31,7 @@ const AuthContext = createContext<AuthContextType>({
   login: async () => undefined,
   logout: async () => undefined,
   checkAuth: async () => false,
+  updateUser: () => undefined,
 });
 
 export const useAuthContext = () => useContext(AuthContext);
@@ -104,6 +106,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     router.replace('/talimadminlogin');
   };
 
+  const updateUser = (patch: Partial<User>): void => {
+    setUser((prev) => {
+      if (!prev) return prev;
+      const updated = { ...prev, ...patch };
+      setStoredUser(updated);
+      return updated;
+    });
+  };
+
   useEffect(() => {
     void checkAuth();
   }, []);
@@ -130,6 +141,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         login,
         logout,
         checkAuth,
+        updateUser,
       }}
     >
       {children}
