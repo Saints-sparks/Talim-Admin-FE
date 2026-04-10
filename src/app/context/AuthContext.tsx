@@ -2,13 +2,24 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import nookies from 'nookies';
-import { User } from '../types/auth';
+import { authService } from '@/app/services/auth.service';
+import { refreshAccessToken } from '@/app/lib/api/client';
+import { AUTH_SESSION_EXPIRED_EVENT } from '@/app/lib/auth/events';
+import {
+  clearAuthSession,
+  getAccessToken,
+  getStoredUser,
+  setStoredUser,
+} from '@/app/lib/auth/session';
+import { isTokenExpired } from '@/app/lib/auth/jwt';
+import { LoginCredentials, User } from '../types/auth';
 
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  login: (credentials: LoginCredentials) => Promise<void>;
+  logout: () => Promise<void>;
   checkAuth: () => Promise<boolean>;
 }
 
@@ -16,6 +27,8 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   isAuthenticated: false,
   isLoading: true,
+  login: async () => undefined,
+  logout: async () => undefined,
   checkAuth: async () => false,
 });
 
@@ -27,29 +40,48 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  const checkAuth = async () => {
+  const checkAuth = async (): Promise<boolean> => {
     try {
-      const cookies = nookies.get(null);
-      const accessToken = cookies.access_token;
-      
+      let accessToken = getAccessToken();
+
       if (!accessToken) {
+        clearAuthSession();
         setIsAuthenticated(false);
         setUser(null);
         return false;
       }
 
-      // Get user from localStorage
-      const userStr = localStorage.getItem('user');
-      if (userStr) {
-        const userData = JSON.parse(userStr);
-        setUser(userData);
+      if (isTokenExpired(accessToken)) {
+        const refreshedToken = await refreshAccessToken();
+        if (!refreshedToken) {
+          setIsAuthenticated(false);
+          setUser(null);
+          return false;
+        }
+        accessToken = refreshedToken;
+      }
+
+      const cachedUser = getStoredUser();
+      if (cachedUser) {
+        setUser(cachedUser);
         setIsAuthenticated(true);
         return true;
       }
 
+      const currentUser = await authService.introspect(accessToken);
+      if (currentUser) {
+        setStoredUser(currentUser);
+        setUser(currentUser);
+        setIsAuthenticated(true);
+        return true;
+      }
+
+      clearAuthSession();
+      setUser(null);
+      setIsAuthenticated(false);
       return false;
-    } catch (error) {
-      console.error('Auth check error:', error);
+    } catch {
+      clearAuthSession();
       setIsAuthenticated(false);
       setUser(null);
       return false;
@@ -58,13 +90,49 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const login = async (credentials: LoginCredentials): Promise<void> => {
+    const { user: loggedInUser } = await authService.login(credentials);
+    setStoredUser(loggedInUser);
+    setUser(loggedInUser);
+    setIsAuthenticated(true);
+  };
+
+  const logout = async (): Promise<void> => {
+    await authService.logout();
+    setUser(null);
+    setIsAuthenticated(false);
+    router.replace('/talimadminlogin');
+  };
+
   useEffect(() => {
-    checkAuth();
+    void checkAuth();
   }, []);
 
+  useEffect(() => {
+    const handleSessionExpired = () => {
+      setUser(null);
+      setIsAuthenticated(false);
+      router.replace('/talimadminlogin');
+    };
+
+    window.addEventListener(AUTH_SESSION_EXPIRED_EVENT, handleSessionExpired);
+    return () => {
+      window.removeEventListener(AUTH_SESSION_EXPIRED_EVENT, handleSessionExpired);
+    };
+  }, [router]);
+
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, isLoading, checkAuth }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isAuthenticated,
+        isLoading,
+        login,
+        logout,
+        checkAuth,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
-} 
+}
