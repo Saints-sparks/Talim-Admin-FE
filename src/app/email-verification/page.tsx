@@ -66,7 +66,7 @@ export default function EmailVerification() {
                 placeholder="Enter your email"
                 value={email}
                 onChange={handleEmailChange}
-                className="mt-1 w-[100%] px-3 py-2 rounded-lg shadow-sm text-gray-800 transition-all duration-200 hover:ring-2 hover:ring-indigo-400 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                className="mt-1 w-[100%] px-3 py-2 rounded-lg shadow-sm text-gray-800 transition-all duration-200 hover:ring-2 hover:ring-[#003366] focus:ring-2 focus:ring-[#003366] focus:outline-none"
               />
             </div>
             <div>
@@ -80,7 +80,7 @@ export default function EmailVerification() {
                 placeholder="Enter your unique Id"
                 value={uniqueId}
                 onChange={handleUniqueIdChange}
-                className="mt-1 w-[100%] px-3 py-2 rounded-lg shadow-sm text-gray-800 transition-all duration-200 hover:ring-2 hover:ring-indigo-400 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                className="mt-1 w-[100%] px-3 py-2 rounded-lg shadow-sm text-gray-800 transition-all duration-200 hover:ring-2 hover:ring-[#003366] focus:ring-2 focus:ring-[#003366] focus:outline-none"
               />
             </div>
             <button
@@ -98,7 +98,7 @@ export default function EmailVerification() {
                 key={index}
                 onClick={() => handleDotClick(index)}
                 className={`h-2 w-2 mx-1 rounded-full cursor-pointer ${
-                  currentPage === index ? 'bg-indigo-500' : 'bg-gray-300'
+                  currentPage === index ? 'bg-[#EAF2FB]0' : 'bg-gray-300'
                 }`}
               ></span>
             ))}

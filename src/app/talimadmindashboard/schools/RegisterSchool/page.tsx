@@ -21,7 +21,7 @@ export default function RegisterSchool() {
                   <h1 className="text-lg text-black font-bold">New School Information</h1>
                   <p className="text-gray-500 text-sm">Edit school information here</p>
                 </div>
-                <Button className="bg-indigo-800 text-white">
+                <Button className="bg-[#002244] text-white">
           + Add a School
         </Button>
               </div>

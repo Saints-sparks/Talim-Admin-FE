@@ -77,7 +77,7 @@ function ViewSchoolContent({ id }: ViewSchoolProps) {
         
         <Button 
           onClick={handleEditClick}
-          className="bg-indigo-700 hover:bg-indigo-800"
+          className="bg-[#002244] hover:bg-[#002244]"
         >
           Edit School
         </Button>

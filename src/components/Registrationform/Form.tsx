@@ -304,7 +304,7 @@ export function SchoolRegistrationForm({ mode = 'create', initialData, schoolId 
   {/* Submit Button */}
   <Button 
     type="submit" 
-    className="w-full md:w-auto bg-indigo-700 hover:bg-indigo-800"
+    className="w-full md:w-auto bg-[#002244] hover:bg-[#002244]"
   >
     {mode === 'edit' ? 'Save Changes' : 'Register School'}
   </Button>
@@ -342,7 +342,7 @@ export function SchoolRegistrationForm({ mode = 'create', initialData, schoolId 
           <Upload className="mx-auto h-8 w-8 text-gray-400" />
           <p className="text-sm">
             Drop school's logo here or{" "}
-            <span className="text-indigo-600 hover:underline">browse</span>
+            <span className="text-[#003366] hover:underline">browse</span>
           </p>
           <p className="text-xs text-gray-500">
             JPEG, PNG, GIF, or WebP (max. {MAX_FILE_SIZE / 1024 / 1024}MB)
