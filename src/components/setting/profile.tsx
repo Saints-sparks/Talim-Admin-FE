@@ -75,7 +75,7 @@ export function ProfilePage() {
           <div className="flex flex-wrap gap-3">
             <Button
               variant="default"
-              className="bg-indigo-700 hover:bg-indigo-800"
+              className="bg-[#002244] hover:bg-[#002244]"
               onClick={() => document.getElementById("image-upload")?.click()}
             >
               Change Picture
@@ -201,9 +201,9 @@ export function ProfilePage() {
             <div className="space-y-6">
               {recentActivity.map((activity, index) => (
                 <div key={index} className="relative pl-8">
-                  <div className="absolute left-2.5 top-2 w-2 h-2 rounded-full bg-indigo-600 -translate-x-1/2" />
+                  <div className="absolute left-2.5 top-2 w-2 h-2 rounded-full bg-[#003366] -translate-x-1/2" />
                   <div className="space-y-1">
-                    <p className="font-medium text-indigo-600">{activity.date}</p>
+                    <p className="font-medium text-[#003366]">{activity.date}</p>
                     <div className="flex items-center gap-2 text-gray-600">
                       <MapPin className="h-4 w-4" />
                       {activity.location}

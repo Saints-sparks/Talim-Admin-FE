@@ -55,7 +55,7 @@ const Field = ({
   readOnly?: boolean;
 }) => (
   <div className="flex flex-col gap-1.5">
-    <Label className="flex items-center gap-1.5 text-xs font-medium text-slate-500 uppercase tracking-wide">
+    <Label className="flex items-center gap-1.5 text-xs font-medium text-[#6F6F6F] uppercase tracking-wide">
       <Icon className="h-3.5 w-3.5" />
       {label}
     </Label>
@@ -64,12 +64,12 @@ const Field = ({
         <Input
           {...register(name)}
           type={type}
-          className="h-9 text-sm border-slate-200 focus:border-indigo-400 focus:ring-indigo-400"
+          className="h-9 text-sm border-[#F1F1F1] bg-[#F8F8F8] focus:border-[#003366] focus:ring-[#003366]"
         />
         {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
       </div>
     ) : (
-      <p className="text-sm font-medium text-slate-800">{value || '—'}</p>
+      <p className="text-sm font-semibold text-[#030E18]">{value || '—'}</p>
     )}
   </div>
 );
@@ -131,18 +131,18 @@ export default function PersonalInfo() {
     : null;
 
   return (
-    <div className="rounded-xl border border-slate-100 bg-white shadow-sm">
+    <div className="rounded-xl border border-[#F1F1F1] bg-white">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-slate-100 px-6 py-4">
+      <div className="flex items-center justify-between border-b border-[#F1F1F1] px-6 py-4">
         <div>
-          <h3 className="text-base font-semibold text-slate-900">Personal Information</h3>
-          <p className="text-xs text-slate-400 mt-0.5">Manage your account details</p>
+          <h3 className="text-base font-semibold text-[#030E18]">Personal Information</h3>
+          <p className="text-xs text-[#6F6F6F] mt-0.5">Manage your account details</p>
         </div>
         {!isEditing ? (
           <Button
             size="sm"
             variant="outline"
-            className="gap-1.5 text-xs border-indigo-200 text-indigo-700 hover:bg-indigo-50"
+            className="gap-1.5 text-xs border-[#D7E6F6] text-[#003366] hover:bg-[#EAF2FB]"
             onClick={() => setIsEditing(true)}
           >
             <Pencil className="h-3.5 w-3.5" />
@@ -153,7 +153,7 @@ export default function PersonalInfo() {
             <Button
               size="sm"
               variant="ghost"
-              className="gap-1 text-xs text-slate-500"
+              className="gap-1 text-xs text-[#6F6F6F] hover:text-[#030E18]"
               onClick={handleCancel}
               disabled={isSaving}
             >
@@ -162,7 +162,7 @@ export default function PersonalInfo() {
             </Button>
             <Button
               size="sm"
-              className="gap-1.5 text-xs bg-indigo-600 hover:bg-indigo-700"
+              className="gap-1.5 text-xs bg-[#003366] hover:bg-[#002244] text-white"
               onClick={handleSubmit(onSubmit)}
               disabled={isSaving || !isDirty}
             >
@@ -216,35 +216,35 @@ export default function PersonalInfo() {
           type="tel"
         />
         <div className="flex flex-col gap-1.5">
-          <Label className="flex items-center gap-1.5 text-xs font-medium text-slate-500 uppercase tracking-wide">
+          <Label className="flex items-center gap-1.5 text-xs font-medium text-[#6F6F6F] uppercase tracking-wide">
             <Briefcase className="h-3.5 w-3.5" />
             Role
           </Label>
           <div className="flex items-center gap-2">
-            <Badge className="bg-indigo-100 text-indigo-700 hover:bg-indigo-100 capitalize font-medium text-xs">
+            <Badge className="bg-[#EAF2FB] text-[#003366] border-0 capitalize font-medium text-xs">
               {user?.role?.replace(/_/g, ' ') ?? 'Administrator'}
             </Badge>
           </div>
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label className="flex items-center gap-1.5 text-xs font-medium text-slate-500 uppercase tracking-wide">
+          <Label className="flex items-center gap-1.5 text-xs font-medium text-[#6F6F6F] uppercase tracking-wide">
             <CheckCircle2 className="h-3.5 w-3.5" />
             Account Status
           </Label>
           <div className="flex items-center gap-2">
             {user?.isEmailVerified ? (
-              <Badge className="gap-1 bg-green-100 text-green-700 hover:bg-green-100 font-medium text-xs">
+              <Badge className="gap-1 bg-emerald-50 text-emerald-700 border-0 font-medium text-xs">
                 <CheckCircle2 className="h-3 w-3" />
                 Verified
               </Badge>
             ) : (
-              <Badge className="gap-1 bg-amber-100 text-amber-700 hover:bg-amber-100 font-medium text-xs">
+              <Badge className="gap-1 bg-amber-50 text-amber-700 border-0 font-medium text-xs">
                 <XCircle className="h-3 w-3" />
                 Unverified
               </Badge>
             )}
             {user?.isActive && (
-              <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100 font-medium text-xs">
+              <Badge className="bg-emerald-50 text-emerald-700 border-0 font-medium text-xs">
                 Active
               </Badge>
             )}
@@ -252,11 +252,11 @@ export default function PersonalInfo() {
         </div>
         {joinedDate && (
           <div className="flex flex-col gap-1.5 sm:col-span-2">
-            <Label className="flex items-center gap-1.5 text-xs font-medium text-slate-500 uppercase tracking-wide">
+            <Label className="flex items-center gap-1.5 text-xs font-medium text-[#6F6F6F] uppercase tracking-wide">
               <Calendar className="h-3.5 w-3.5" />
               Member Since
             </Label>
-            <p className="text-sm font-medium text-slate-800">{joinedDate}</p>
+            <p className="text-sm font-semibold text-[#030E18]">{joinedDate}</p>
           </div>
         )}
       </div>

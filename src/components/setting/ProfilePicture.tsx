@@ -77,9 +77,9 @@ export default function ProfilePicture() {
     <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6">
       {/* Avatar */}
       <div className="relative shrink-0">
-        <Avatar className="h-28 w-28 ring-4 ring-white shadow-lg">
+        <Avatar className="h-28 w-28 ring-4 ring-white shadow-md">
           <AvatarImage src={currentAvatar ?? undefined} alt="Profile picture" />
-          <AvatarFallback className="bg-indigo-100 text-indigo-700 text-2xl font-semibold">
+          <AvatarFallback className="bg-[#EAF2FB] text-[#003366] text-2xl font-bold">
             {initials}
           </AvatarFallback>
         </Avatar>
@@ -88,7 +88,7 @@ export default function ProfilePicture() {
         <button
           onClick={() => fileRef.current?.click()}
           disabled={isLoading}
-          className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 text-white shadow-md hover:bg-indigo-700 transition disabled:opacity-60"
+          className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full bg-[#003366] text-white shadow-md hover:bg-[#002244] transition-colors disabled:opacity-60"
           aria-label="Change photo"
         >
           {isPending ? (
@@ -101,19 +101,19 @@ export default function ProfilePicture() {
 
       {/* Info + actions */}
       <div className="flex flex-col gap-1 text-center sm:text-left">
-        <h2 className="text-xl font-semibold text-slate-900">
+        <h2 className="text-xl font-bold text-[#030E18]">
           {user?.firstName && user?.lastName
             ? `${user.firstName} ${user.lastName}`
             : user?.email ?? 'Talim Admin'}
         </h2>
-        <p className="text-sm text-slate-500 capitalize">{user?.role?.replace('_', ' ') ?? 'Administrator'}</p>
-        <p className="text-xs text-slate-400">{user?.email}</p>
+        <p className="text-sm text-[#6F6F6F] capitalize">{user?.role?.replace('_', ' ') ?? 'Administrator'}</p>
+        <p className="text-xs text-[#878787]">{user?.email}</p>
 
         <div className="flex items-center gap-2 mt-3">
           <Button
             size="sm"
             variant="outline"
-            className="gap-1.5 text-xs border-indigo-200 text-indigo-700 hover:bg-indigo-50"
+            className="gap-1.5 text-xs border-[#D7E6F6] text-[#003366] hover:bg-[#EAF2FB] hover:border-[#D7E6F6]"
             onClick={() => fileRef.current?.click()}
             disabled={isLoading}
           >
@@ -139,7 +139,7 @@ export default function ProfilePicture() {
           )}
         </div>
 
-        <p className="text-xs text-slate-400 mt-1">JPG, PNG or GIF · max 5 MB</p>
+        <p className="text-xs text-[#878787] mt-1">JPG, PNG or GIF · max 5 MB</p>
       </div>
 
       <input
