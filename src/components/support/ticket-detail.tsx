@@ -64,8 +64,8 @@ export function TicketDetail({ complaint, isOpen, onClose, onStatusChange }: Tic
           {/* Header */}
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-center gap-3">
-              <Avatar className="h-10 w-10 bg-indigo-100 shrink-0">
-                <AvatarFallback className="text-indigo-700 text-sm font-semibold">
+              <Avatar className="h-10 w-10 bg-[#EAF2FB] shrink-0">
+                <AvatarFallback className="text-[#003366] text-sm font-semibold">
                   {getInitials(schoolName)}
                 </AvatarFallback>
               </Avatar>
@@ -146,7 +146,7 @@ export function TicketDetail({ complaint, isOpen, onClose, onStatusChange }: Tic
                 href={complaint.attachment}
                 target="_blank"
                 rel="noreferrer"
-                className="text-sm text-indigo-600 hover:underline truncate"
+                className="text-sm text-[#003366] hover:underline truncate"
               >
                 View attachment
               </a>

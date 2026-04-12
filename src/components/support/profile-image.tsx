@@ -40,7 +40,7 @@ export function ProfileImage({ name, image, onImageChange }: ProfileImageProps) 
       <div className="flex gap-2">
         <Button
           variant="default"
-          className="bg-indigo-700 hover:bg-indigo-600"
+          className="bg-[#002244] hover:bg-[#003366]"
           onClick={() => setIsOpen(true)}
         >
           Change picture

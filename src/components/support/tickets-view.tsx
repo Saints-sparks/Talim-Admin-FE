@@ -45,9 +45,9 @@ const getInitials = (name: string): string =>
     .slice(0, 2);
 
 const statusColors: Record<ComplaintStatus, string> = {
-  Pending: 'bg-amber-100 text-amber-700',
-  'In Progress': 'bg-blue-100 text-blue-700',
-  Resolved: 'bg-emerald-100 text-emerald-700',
+  Pending:      'bg-amber-50 text-amber-700',
+  'In Progress': 'bg-[#EAF2FB] text-[#003366]',
+  Resolved:     'bg-emerald-50 text-emerald-700',
 };
 
 const ITEMS_PER_PAGE = 10;
@@ -138,8 +138,8 @@ export function TicketsView() {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center py-24 gap-3">
-        <Loader2 className="h-8 w-8 animate-spin text-indigo-400" />
-        <p className="text-sm text-slate-500">Loading support tickets…</p>
+        <Loader2 className="h-8 w-8 animate-spin text-[#003366]" />
+        <p className="text-sm text-[#6F6F6F]">Loading support tickets…</p>
       </div>
     );
   }
@@ -148,8 +148,8 @@ export function TicketsView() {
     return (
       <div className="flex flex-col items-center justify-center py-24 gap-4">
         <AlertTriangle className="h-10 w-10 text-amber-400" />
-        <p className="text-sm text-slate-600">{error}</p>
-        <Button variant="outline" size="sm" onClick={fetchComplaints} className="gap-1.5">
+        <p className="text-sm text-[#6F6F6F]">{error}</p>
+        <Button variant="outline" size="sm" onClick={fetchComplaints} className="gap-1.5 border-[#F1F1F1] text-[#030E18] text-xs">
           <RefreshCw className="h-3.5 w-3.5" />
           Retry
         </Button>
@@ -166,13 +166,13 @@ export function TicketsView() {
         <div className="flex items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="gap-2 border-slate-200 text-slate-700">
+              <Button variant="outline" size="sm" className="gap-2 border-[#F1F1F1] text-[#030E18] hover:border-[#D7E6F6] text-xs">
                 <Filter className="h-3.5 w-3.5" />
                 Filter
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-48">
-              <DropdownMenuLabel className="text-xs">Status</DropdownMenuLabel>
+              <DropdownMenuLabel className="text-xs text-[#6F6F6F]">Status</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {(['Pending', 'In Progress', 'Resolved'] as ComplaintStatus[]).map((s) => (
                 <DropdownMenuCheckboxItem
@@ -189,7 +189,7 @@ export function TicketsView() {
           <Button
             variant="ghost"
             size="sm"
-            className="gap-1.5 text-slate-500 hover:text-slate-700"
+            className="gap-1.5 text-xs text-[#6F6F6F] hover:text-[#030E18]"
             onClick={fetchComplaints}
             disabled={isLoading}
           >
@@ -199,75 +199,75 @@ export function TicketsView() {
         </div>
 
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#878787]" />
           <Input
             placeholder="Search tickets…"
             value={searchQuery}
             onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
-            className="h-9 w-64 pl-9 text-sm border-slate-200"
+            className="h-9 w-64 pl-9 text-sm border-[#F1F1F1] bg-white focus:border-[#003366]"
           />
         </div>
       </div>
 
       {/* Count */}
       <div className="flex items-center gap-2">
-        <span className="text-sm font-medium text-slate-700">Tickets</span>
-        <span className="rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-semibold text-indigo-700">
+        <span className="text-sm font-semibold text-[#030E18]">Tickets</span>
+        <span className="rounded-full bg-[#EAF2FB] px-2.5 py-0.5 text-xs font-semibold text-[#003366]">
           {filtered.length}
         </span>
       </div>
 
       {/* Table */}
       {filtered.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 py-16 gap-3">
-          <TicketX className="h-10 w-10 text-slate-300" />
-          <p className="text-sm font-medium text-slate-500">No tickets found</p>
-          <p className="text-xs text-slate-400">
+        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-[#F1F1F1] bg-white py-16 gap-3">
+          <TicketX className="h-10 w-10 text-[#D7E6F6]" />
+          <p className="text-sm font-semibold text-[#6F6F6F]">No tickets found</p>
+          <p className="text-xs text-[#878787]">
             {searchQuery ? 'Try a different search term.' : 'All tickets match the applied filters.'}
           </p>
         </div>
       ) : (
-        <div className="rounded-xl border border-dashed border-slate-200 overflow-hidden">
+        <div className="rounded-xl border border-[#F1F1F1] bg-white overflow-hidden">
           <Table>
             <TableHeader>
-              <TableRow className="border-b border-dashed bg-slate-50/60">
+              <TableRow className="border-b border-[#F1F1F1] bg-[#F8F8F8]">
                 <TableHead className="w-10"><Checkbox /></TableHead>
-                <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wide">School</TableHead>
-                <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wide hidden md:table-cell">Subject</TableHead>
-                <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Status</TableHead>
-                <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wide hidden lg:table-cell">Date</TableHead>
-                <TableHead className="w-24 text-xs font-semibold text-slate-500 uppercase tracking-wide">Actions</TableHead>
+                <TableHead className="text-xs font-semibold text-[#6F6F6F] uppercase tracking-wide">School</TableHead>
+                <TableHead className="text-xs font-semibold text-[#6F6F6F] uppercase tracking-wide hidden md:table-cell">Subject</TableHead>
+                <TableHead className="text-xs font-semibold text-[#6F6F6F] uppercase tracking-wide">Status</TableHead>
+                <TableHead className="text-xs font-semibold text-[#6F6F6F] uppercase tracking-wide hidden lg:table-cell">Date</TableHead>
+                <TableHead className="w-24 text-xs font-semibold text-[#6F6F6F] uppercase tracking-wide">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {paginated.map((c) => {
                 const schoolName = getSchoolName(c);
                 return (
-                  <TableRow key={c._id} className="border-b border-dashed hover:bg-slate-50/40">
+                  <TableRow key={c._id} className="border-b border-[#F8F8F8] hover:bg-[#F8F8F8] transition-colors">
                     <TableCell><Checkbox /></TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2.5">
-                        <Avatar className="h-8 w-8 bg-indigo-100 shrink-0">
-                          <AvatarFallback className="text-xs text-indigo-700 font-semibold">
+                        <Avatar className="h-8 w-8 shrink-0">
+                          <AvatarFallback className="text-xs bg-[#EAF2FB] text-[#003366] font-bold">
                             {getInitials(schoolName)}
                           </AvatarFallback>
                         </Avatar>
                         <div className="min-w-0">
-                          <p className="text-sm font-medium text-slate-800 truncate max-w-[160px]">{schoolName}</p>
-                          <p className="text-xs text-slate-400 truncate max-w-[160px]">{getSchoolEmail(c)}</p>
+                          <p className="text-sm font-semibold text-[#030E18] truncate max-w-[160px]">{schoolName}</p>
+                          <p className="text-xs text-[#878787] truncate max-w-[160px]">{getSchoolEmail(c)}</p>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell className="hidden md:table-cell">
-                      <p className="text-sm text-slate-700 truncate max-w-[220px]">{c.subject}</p>
-                      <p className="text-xs text-slate-400">#{c.ticket}</p>
+                      <p className="text-sm text-[#030E18] truncate max-w-[220px]">{c.subject}</p>
+                      <p className="text-xs text-[#878787]">#{c.ticket}</p>
                     </TableCell>
                     <TableCell>
                       <Badge className={`text-xs font-medium border-0 ${statusColors[c.status]}`}>
                         {c.status}
                       </Badge>
                     </TableCell>
-                    <TableCell className="hidden lg:table-cell text-xs text-slate-500">
+                    <TableCell className="hidden lg:table-cell text-xs text-[#6F6F6F]">
                       {new Date(c.createdAt).toLocaleDateString('en-GB', {
                         day: 'numeric', month: 'short', year: 'numeric',
                       })}
@@ -277,7 +277,7 @@ export function TicketsView() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8 hover:bg-indigo-50 hover:text-indigo-600"
+                          className="h-8 w-8 text-[#6F6F6F] hover:bg-[#EAF2FB] hover:text-[#003366]"
                           onClick={() => setSelectedComplaint(c)}
                         >
                           <Eye className="h-4 w-4" />
@@ -285,7 +285,7 @@ export function TicketsView() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8 hover:bg-red-50 hover:text-red-500"
+                          className="h-8 w-8 text-[#6F6F6F] hover:bg-red-50 hover:text-red-500"
                           onClick={() => setComplaintToDelete(c)}
                         >
                           <Trash2 className="h-4 w-4" />
@@ -308,7 +308,7 @@ export function TicketsView() {
             size="sm"
             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
             disabled={currentPage === 1}
-            className="border-slate-200 text-slate-600 text-xs"
+            className="border-[#F1F1F1] text-[#030E18] hover:border-[#D7E6F6] text-xs disabled:opacity-40"
           >
             Previous
           </Button>
@@ -316,8 +316,12 @@ export function TicketsView() {
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
               <Button
                 key={p}
-                variant={currentPage === p ? 'secondary' : 'ghost'}
-                className={`h-8 w-8 p-0 text-xs ${currentPage === p ? 'bg-indigo-100 text-indigo-700' : ''}`}
+                variant="ghost"
+                className={`h-8 w-8 p-0 text-xs rounded-lg ${
+                  currentPage === p
+                    ? 'bg-[#EAF2FB] text-[#003366] font-semibold'
+                    : 'text-[#6F6F6F] hover:bg-[#F8F8F8]'
+                }`}
                 onClick={() => setCurrentPage(p)}
               >
                 {p}
@@ -329,7 +333,7 @@ export function TicketsView() {
             size="sm"
             onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
             disabled={currentPage === totalPages}
-            className="border-slate-200 text-slate-600 text-xs"
+            className="border-[#F1F1F1] text-[#030E18] hover:border-[#D7E6F6] text-xs disabled:opacity-40"
           >
             Next
           </Button>
