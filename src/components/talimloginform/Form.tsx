@@ -63,23 +63,23 @@ export function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen grid lg:grid-cols-2">
+    <div className="min-h-screen grid lg:grid-cols-2 bg-white">
       {/* ── Left panel ── */}
-      <div className="flex flex-col justify-center px-8 py-12 sm:px-16">
+      <div className="flex flex-col justify-center px-8 py-12 sm:px-16 bg-white">
         <div className="mx-auto w-full max-w-sm">
           {/* Logo */}
           <div className="mb-10 flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-600 text-white font-bold text-lg">T</div>
-            <span className="text-xl font-bold text-slate-900">Talim</span>
-            <span className="ml-1 rounded-full bg-indigo-50 px-2 py-0.5 text-xs font-semibold text-indigo-600">Admin</span>
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#003366] text-white font-bold text-lg shrink-0">T</div>
+            <span className="text-xl font-bold text-[#030E18]">Talim</span>
+            <span className="ml-1 rounded-full bg-[#EAF2FB] px-2.5 py-0.5 text-xs font-semibold text-[#003366]">Admin</span>
           </div>
 
-          <h1 className="text-2xl font-bold text-slate-900">Welcome back</h1>
-          <p className="mt-1 text-sm text-slate-500">Sign in to the Talim administrator portal</p>
+          <h1 className="text-2xl font-bold text-[#030E18]">Welcome back</h1>
+          <p className="mt-1 text-sm text-[#6F6F6F]">Sign in to the Talim administrator portal</p>
 
           {/* RBAC blocked banner */}
           {loginError?.kind === 'access_denied' && (
-            <div className="mt-6 rounded-xl border border-red-200 bg-red-50 p-4">
+            <div className="mt-6 rounded-xl border border-red-100 bg-red-50 p-4">
               <div className="flex items-start gap-3">
                 <ShieldAlert className="mt-0.5 h-5 w-5 shrink-0 text-red-600" />
                 <div>
@@ -96,7 +96,7 @@ export function LoginForm() {
 
           {/* Invalid credentials banner */}
           {loginError?.kind === 'invalid_credentials' && (
-            <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-4">
+            <div className="mt-6 rounded-xl border border-amber-100 bg-amber-50 p-4">
               <div className="flex items-start gap-3">
                 <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
                 <p className="text-sm text-amber-700">
@@ -108,10 +108,10 @@ export function LoginForm() {
 
           {/* Unknown error banner */}
           {loginError?.kind === 'unknown' && (
-            <div className="mt-6 rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <div className="mt-6 rounded-xl border border-[#F1F1F1] bg-[#F8F8F8] p-4">
               <div className="flex items-start gap-3">
-                <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-slate-500" />
-                <p className="text-sm text-slate-600">{loginError.message}</p>
+                <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-[#6F6F6F]" />
+                <p className="text-sm text-[#6F6F6F]">{loginError.message}</p>
               </div>
             </div>
           )}
@@ -119,7 +119,7 @@ export function LoginForm() {
           <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-5" noValidate>
             {/* Email */}
             <div className="space-y-1.5">
-              <Label htmlFor="email" className="text-sm font-medium text-slate-700">Email</Label>
+              <Label htmlFor="email" className="text-sm font-medium text-[#030E18]">Email address</Label>
               <Input
                 id="email"
                 type="email"
@@ -127,7 +127,7 @@ export function LoginForm() {
                 autoComplete="email"
                 disabled={isSubmitting}
                 {...register('email')}
-                className="h-10 border-slate-200 focus:border-indigo-400 focus:ring-indigo-400"
+                className="h-10 border-[#F1F1F1] bg-[#F8F8F8] focus:border-[#003366] focus:ring-[#003366]"
               />
               {errors.email && (
                 <p className="text-xs text-red-500">{errors.email.message}</p>
@@ -136,7 +136,7 @@ export function LoginForm() {
 
             {/* Password */}
             <div className="space-y-1.5">
-              <Label htmlFor="password" className="text-sm font-medium text-slate-700">Password</Label>
+              <Label htmlFor="password" className="text-sm font-medium text-[#030E18]">Password</Label>
               <div className="relative">
                 <Input
                   id="password"
@@ -145,12 +145,12 @@ export function LoginForm() {
                   autoComplete="current-password"
                   disabled={isSubmitting}
                   {...register('password')}
-                  className="h-10 border-slate-200 pr-10 focus:border-indigo-400 focus:ring-indigo-400"
+                  className="h-10 border-[#F1F1F1] bg-[#F8F8F8] pr-10 focus:border-[#003366] focus:ring-[#003366]"
                 />
                 <button
                   type="button"
                   tabIndex={-1}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#878787] hover:text-[#030E18]"
                   onClick={() => setShowPassword((v) => !v)}
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -164,7 +164,7 @@ export function LoginForm() {
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="w-full h-10 bg-indigo-600 hover:bg-indigo-700 text-sm font-medium"
+              className="w-full h-11 bg-[#003366] hover:bg-[#002244] text-sm font-semibold text-white"
             >
               {isSubmitting ? (
                 <span className="flex items-center gap-2">
@@ -177,16 +177,16 @@ export function LoginForm() {
             </Button>
           </form>
 
-          <p className="mt-10 text-center text-xs text-slate-400">
+          <p className="mt-10 text-center text-xs text-[#878787]">
             © Talim {new Date().getFullYear()} ·{' '}
-            <a href="mailto:help@talim.com" className="hover:underline">help@talim.com</a>
+            <a href="mailto:help@talim.com" className="hover:underline text-[#003366]">help@talim.com</a>
           </p>
         </div>
       </div>
 
       {/* ── Right panel ── */}
-      <div className="hidden lg:flex flex-col items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-violet-50 p-12">
-        <div className="relative w-full max-w-md aspect-square">
+      <div className="hidden lg:flex flex-col items-center justify-center bg-[#003366] p-12">
+        <div className="relative w-full max-w-md aspect-square opacity-90">
           <Image
             src={loginIllustration}
             alt="Talim Admin portal illustration"
@@ -196,10 +196,16 @@ export function LoginForm() {
           />
         </div>
         <div className="mt-8 text-center">
-          <p className="text-lg font-semibold text-slate-800">Talim Administrator Portal</p>
-          <p className="mt-1 text-sm text-slate-500 max-w-xs">
-            Manage schools, users, and platform settings from one place.
+          <p className="text-xl font-bold text-white">Talim Administrator Portal</p>
+          <p className="mt-2 text-sm text-white/70 max-w-xs leading-relaxed">
+            Manage schools, users, and platform settings from one central place.
           </p>
+        </div>
+        {/* Decorative dots */}
+        <div className="mt-10 flex gap-2">
+          <div className="h-2 w-8 rounded-full bg-white/60" />
+          <div className="h-2 w-2 rounded-full bg-white/30" />
+          <div className="h-2 w-2 rounded-full bg-white/30" />
         </div>
       </div>
     </div>
