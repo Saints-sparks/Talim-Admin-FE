@@ -14,41 +14,23 @@ const DashboardHeader = ({ isSidebarOpen }: DashboardHeaderProps) => {
   };
 
   return (
-    <div
-      className={`flex-1 lg:ml-0 transition-all ${
-        isSidebarOpen ? "backdrop-blur-md" : ""
-      }`}
-    >
-      <header
-        className={`sticky top-0 z-30 border-b bg-white shadow-sm transition-all ${
-          isSidebarOpen ? "backdrop-blur-md" : ""
-        }`}
-      >
-        <div className="flex h-16 items-center justify-between px-4 sm:px-6">
-          {/* Title */}
-          <h1
-            className={`text-base sm:text-lg font-bold text-gray-800 transition-opacity ${
-              isSidebarOpen ? "opacity-50" : "opacity-100"
-            }`}
-          >
-            School Overview
-          </h1>
-
-          {/* Button */}
-          <Button
-            className={`bg-indigo-600 hover:bg-indigo-700 text-xs sm:text-sm px-3 sm:px-4 py-2 transition-all flex items-center gap-1 ${
-              isSidebarOpen ? "opacity-50 pointer-events-none" : ""
-            }`}
-            variant="default"
-            onClick={handleRegisterClick}
-          >
-            <Plus className="h-4 w-4" />
-            <span className="hidden sm:inline">Register New School</span>
-            <span className="sm:hidden">New School</span>
-          </Button>
+    <header className="sticky top-0 z-30 border-b border-[#F1F1F1] bg-white">
+      <div className="flex h-16 items-center justify-between px-6">
+        <div>
+          <h1 className="text-base font-bold text-[#030E18]">School Overview</h1>
+          <p className="text-xs text-[#6F6F6F]">Manage all registered schools</p>
         </div>
-      </header>
-    </div>
+
+        <Button
+          className="bg-[#003366] hover:bg-[#002244] text-white text-xs sm:text-sm px-3 sm:px-4 py-2 flex items-center gap-1.5"
+          onClick={handleRegisterClick}
+        >
+          <Plus className="h-4 w-4" />
+          <span className="hidden sm:inline">Register New School</span>
+          <span className="sm:hidden">New School</span>
+        </Button>
+      </div>
+    </header>
   );
 };
 

@@ -9,33 +9,33 @@ interface StatsProps {
 
 const Stats = ({ totalSchools, totalSchoolsIncrease, activeNow, activeIncrease }: StatsProps) => {
   return (
-    <div className="grid gap-6 md:grid-cols-2">
+    <div className="grid gap-4 md:grid-cols-2">
       {/* Total Schools */}
-      <div className="rounded-lg border bg-gradient-to-br from-blue-50 to-indigo-50 p-6 shadow-sm">
-        <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <h3 className="tracking-tight text-sm font-medium text-gray-800">Total Schools</h3>
-          <SchoolIcon className="h-5 w-5 text-blue-600" />
-        </div>
-        <div className="flex items-center justify-between">
-          <div>
-            <div className="text-3xl font-bold text-blue-600">{totalSchools}</div>
-            <p className="text-xs text-blue-600/80">+{totalSchoolsIncrease} from last month</p>
+      <div className="rounded-xl border border-[#F1F1F1] bg-white p-6">
+        <div className="flex items-center justify-between mb-4">
+          <p className="text-sm font-medium text-[#6F6F6F]">Total Schools</p>
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#EAF2FB]">
+            <SchoolIcon className="h-4 w-4 text-[#003366]" />
           </div>
         </div>
+        <div className="text-3xl font-bold text-[#030E18]">{totalSchools}</div>
+        <p className="mt-1 text-xs text-[#6F6F6F]">
+          <span className="text-emerald-600 font-medium">+{totalSchoolsIncrease}</span> from last month
+        </p>
       </div>
 
       {/* Active Schools */}
-      <div className="rounded-lg border bg-gradient-to-br from-green-50 to-emerald-50 p-6 shadow-sm">
-        <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <h3 className="tracking-tight text-sm font-medium text-gray-800">Active Schools</h3>
-          <SchoolIcon className="h-5 w-5 text-green-600" />
-        </div>
-        <div className="flex items-center justify-between">
-          <div>
-            <div className="text-3xl font-bold text-green-600">{activeNow}</div>
-            <p className="text-xs text-green-600/80">+{activeIncrease} from last month</p>
+      <div className="rounded-xl border border-[#F1F1F1] bg-white p-6">
+        <div className="flex items-center justify-between mb-4">
+          <p className="text-sm font-medium text-[#6F6F6F]">Active Schools</p>
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50">
+            <SchoolIcon className="h-4 w-4 text-emerald-600" />
           </div>
         </div>
+        <div className="text-3xl font-bold text-[#030E18]">{activeNow}</div>
+        <p className="mt-1 text-xs text-[#6F6F6F]">
+          <span className="text-emerald-600 font-medium">+{activeIncrease}</span> from last month
+        </p>
       </div>
     </div>
   );

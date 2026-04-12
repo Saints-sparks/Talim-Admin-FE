@@ -22,20 +22,19 @@ const SchoolCard = ({ school, onClick }: SchoolCardProps) => {
   return (
     <div
       key={school._id}
-      className="flex flex-col p-4 sm:p-6 rounded-lg border bg-white shadow-sm hover:shadow-lg transition-all cursor-pointer group"
+      className="flex flex-col p-5 rounded-xl border border-[#F1F1F1] bg-white hover:border-[#D7E6F6] hover:shadow-md transition-all cursor-pointer group"
       onClick={() => onClick(school._id)}
     >
       {/* Header: Prefix & Status Badge */}
       <div className="flex items-center justify-between mb-4">
-        <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-indigo-100 flex items-center justify-center group-hover:bg-indigo-200 transition-colors">
-          <span className="text-indigo-600 font-bold">{school.schoolPrefix}</span>
+        <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-[#EAF2FB] flex items-center justify-center group-hover:bg-[#D7E6F6] transition-colors">
+          <span className="text-[#003366] font-bold text-sm">{school.schoolPrefix}</span>
         </div>
         <Badge
-          variant={school.active ? "default" : "destructive"}
           className={
             school.active
-              ? "bg-green-100 text-green-800 hover:bg-green-200"
-              : "bg-red-100 text-red-800 hover:bg-red-200"
+              ? "bg-emerald-50 text-emerald-700 border-0 text-xs font-medium"
+              : "bg-red-50 text-red-700 border-0 text-xs font-medium"
           }
         >
           {school.active ? "Active" : "Inactive"}
@@ -44,24 +43,22 @@ const SchoolCard = ({ school, onClick }: SchoolCardProps) => {
 
       {/* School Details */}
       <div className="space-y-3">
-        {/* Name & Email (Handles Text Overflow) */}
         <div>
-          <h3 className="text-lg font-semibold text-gray-900 truncate">{school.name}</h3>
-          <p className="text-sm sm:text-base text-gray-500 truncate">{school.email}</p>
+          <h3 className="text-base font-semibold text-[#030E18] truncate">{school.name}</h3>
+          <p className="text-sm text-[#6F6F6F] truncate">{school.email}</p>
         </div>
 
-        {/* Location & Contact */}
-        <div className="pt-2 border-t">
-          <div className="flex items-center gap-1 text-sm text-gray-600">
+        <div className="pt-3 border-t border-[#F1F1F1]">
+          <div className="flex items-center gap-1 text-sm text-[#6F6F6F]">
             <span className="font-medium">{school.location.state}</span>
-            <span>•</span>
+            <span>·</span>
             <span>{school.location.country}</span>
           </div>
           {school.primaryContacts[0] && (
-            <p className="text-sm text-gray-600 mt-1 truncate">
+            <p className="text-xs text-[#6F6F6F] mt-1 truncate">
               {school.primaryContacts[0].name}
-              <span className="text-gray-400"> • </span>
-              <span className="text-gray-500">{school.primaryContacts[0].role}</span>
+              <span className="text-[#878787]"> · </span>
+              <span>{school.primaryContacts[0].role}</span>
             </p>
           )}
         </div>

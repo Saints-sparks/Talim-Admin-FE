@@ -74,25 +74,25 @@ export default function Page() {
   };
 
   const EmptyState = () => (
-    <div className="flex flex-col items-center justify-center py-12 px-4">
+    <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-[#F1F1F1] bg-white py-16 px-4">
       {error ? (
         <>
-          <WifiOff className="h-16 w-16 text-gray-400 mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Oops! We're not online</h3>
-          <p className="text-gray-500 text-center max-w-sm mb-4">{error}</p>
-          <Button onClick={handleRetry} variant="outline" className="mb-4">
+          <WifiOff className="h-12 w-12 text-[#878787] mb-4" />
+          <h3 className="text-base font-semibold text-[#030E18] mb-1">Connection error</h3>
+          <p className="text-sm text-[#6F6F6F] text-center max-w-sm mb-5">{error}</p>
+          <Button onClick={handleRetry} variant="outline" className="border-[#F1F1F1] text-[#030E18] hover:border-[#D7E6F6] text-xs">
             Try Again
           </Button>
         </>
       ) : !schools.length ? (
         <>
-          <SchoolIcon className="h-16 w-16 text-gray-400 mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No schools found</h3>
-          <p className="text-gray-500 text-center max-w-sm mb-4">
+          <SchoolIcon className="h-12 w-12 text-[#878787] mb-4" />
+          <h3 className="text-base font-semibold text-[#030E18] mb-1">No schools found</h3>
+          <p className="text-sm text-[#6F6F6F] text-center max-w-sm mb-5">
             {searchTerm ? "No schools match your search criteria." : "Get started by adding your first school to the system."}
           </p>
-          <Button onClick={handleRegisterClick} className="bg-indigo-600 hover:bg-indigo-700">
-            <Plus className="mr-2 h-4 w-4" />
+          <Button onClick={handleRegisterClick} className="bg-[#003366] hover:bg-[#002244] text-white text-xs gap-1.5">
+            <Plus className="h-4 w-4" />
             Add a school
           </Button>
         </>
@@ -101,41 +101,40 @@ export default function Page() {
   );
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-[#F8F8F8]">
       <LoadingModal isOpen={isLoading} message="Loading schools..." />
-      {/* Main Content */}
-       <div className="flex-1 lg:ml-0">
-
-       <DashboardHeader isSidebarOpen={isSidebarOpen} />
+      <div className="flex-1">
+        <DashboardHeader isSidebarOpen={isSidebarOpen} />
 
         <main className="p-6">
-          
-          <div className="grid gap-6">
-           {/* Stats */}
-{!error && <Stats 
-  totalSchools={stats.totalSchools} 
-  totalSchoolsIncrease={stats.totalSchoolsIncrease} 
-  activeNow={stats.activeNow} 
-  activeIncrease={stats.activeIncrease} 
-/>}
+          <div className="grid gap-5">
+            {/* Stats */}
+            {!error && (
+              <Stats
+                totalSchools={stats.totalSchools}
+                totalSchoolsIncrease={stats.totalSchoolsIncrease}
+                activeNow={stats.activeNow}
+                activeIncrease={stats.activeIncrease}
+              />
+            )}
 
             {/* Filters */}
             {!error && (
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex flex-wrap items-center gap-2">
-                  <Button variant="outline" size="sm" className="gap-2 text-gray-700">
-                    <Filter className="h-4 w-4" />
+                  <Button variant="outline" size="sm" className="gap-2 text-[#030E18] border-[#F1F1F1] hover:border-[#D7E6F6] text-xs">
+                    <Filter className="h-3.5 w-3.5" />
                     Filters
                   </Button>
-                  <Badge variant="secondary" className="bg-indigo-100 text-indigo-700 hover:bg-indigo-200">
+                  <Badge className="bg-[#EAF2FB] text-[#003366] border-0 text-xs font-medium px-2.5">
                     All Schools
                   </Badge>
                 </div>
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#878787]" />
                   <Input
                     placeholder="Search schools..."
-                    className="w-full pl-9 sm:w-[300px] border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                    className="w-full pl-9 sm:w-[280px] border-[#F1F1F1] bg-white focus:border-[#003366] focus:ring-[#003366] text-sm"
                     value={searchTerm}
                     onChange={handleSearch}
                   />
@@ -146,40 +145,41 @@ export default function Page() {
             {/* Empty State or Error */}
             {(error || !schools.length) && <EmptyState />}
 
-          {/* School Cards */}
-{!error && schools.length > 0 && (
-  <>
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {schools.map((school) => (
-        <SchoolCard key={school._id} school={school} onClick={handleSchoolClick} />
-      ))}
-    </div>
+            {/* School Cards */}
+            {!error && schools.length > 0 && (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {schools.map((school) => (
+                    <SchoolCard key={school._id} school={school} onClick={handleSchoolClick} />
+                  ))}
+                </div>
 
-             {/* Pagination */}
-<div className="flex flex-col sm:flex-row items-center justify-center sm:justify-between mt-6 gap-3">
-  <Button
-    variant="outline"
-    onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-    disabled={currentPage === 1}
-    className="px-4 py-2 text-xs border-gray-300 text-gray-700 hover:bg-gray-100 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-  >
-    Previous
-  </Button>
+                {/* Pagination */}
+                <div className="flex items-center justify-between mt-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                    disabled={currentPage === 1}
+                    className="text-xs border-[#F1F1F1] text-[#030E18] hover:border-[#D7E6F6] disabled:opacity-40"
+                  >
+                    Previous
+                  </Button>
 
-  <span className="text-xs text-gray-700 font-medium bg-gray-100 px-3 py-1 rounded-md">
-    Page {currentPage} of {totalPages}
-  </span>
+                  <span className="text-xs text-[#6F6F6F] font-medium bg-white border border-[#F1F1F1] px-3 py-1.5 rounded-lg">
+                    Page {currentPage} of {totalPages}
+                  </span>
 
-  <Button
-    variant="outline"
-    onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
-    disabled={currentPage === totalPages}
-    className="px-4 py-2 border-gray-300 text-xs text-gray-700 hover:bg-gray-100 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-  >
-    Next
-  </Button>
-</div>
-
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                    disabled={currentPage === totalPages}
+                    className="text-xs border-[#F1F1F1] text-[#030E18] hover:border-[#D7E6F6] disabled:opacity-40"
+                  >
+                    Next
+                  </Button>
+                </div>
               </>
             )}
           </div>
