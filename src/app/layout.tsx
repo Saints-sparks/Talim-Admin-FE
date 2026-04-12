@@ -1,5 +1,5 @@
 import localFont from 'next/font/local';
-import { Poppins } from 'next/font/google';
+import { Manrope } from 'next/font/google';
 import './globals.css';
 import { AppProviders } from '@/app/providers';
 import AppShell from '@/components/layout/AppShell';
@@ -16,17 +16,17 @@ const geistMono = localFont({
   weight: '100 900',
 });
 
-const poppins = Poppins({
+const manrope = Manrope({
   subsets: ['latin'],
-  variable: '--font-poppins',
-  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-manrope',
+  weight: ['400', '500', '600', '700', '800'],
 });
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} antialiased text-black`}
+        className={`${geistSans.variable} ${geistMono.variable} ${manrope.variable} antialiased text-[#030E18]`}
       >
         <AppProviders>
           <AppShell>{children}</AppShell>
