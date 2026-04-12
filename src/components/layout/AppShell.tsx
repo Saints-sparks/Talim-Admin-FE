@@ -38,18 +38,18 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   if (shouldProtectRoute && isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50">
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-indigo-600" />
+      <div className="flex min-h-screen items-center justify-center bg-[#F8F8F8]">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#F1F1F1] border-t-[#003366]" />
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
-      {showSidebar ? (
-        <Sidebartalim className="fixed inset-y-0 left-0 z-40 w-64 border-r border-slate-200 bg-white" />
-      ) : null}
-      <main className={showSidebar ? 'flex-1 pl-64' : 'flex-1'}>{children}</main>
+    <div className="flex min-h-screen bg-[#F8F8F8]">
+      {showSidebar && (
+        <Sidebartalim className="fixed inset-y-0 left-0 z-40 w-[280px] border-r border-[#F1F1F1] bg-[#FBFBFB]" />
+      )}
+      <main className={showSidebar ? 'flex-1 pl-[280px]' : 'flex-1'}>{children}</main>
     </div>
   );
 }

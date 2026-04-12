@@ -4,7 +4,6 @@ import { cn } from '../../app/lib/utils';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
 import {
   Book,
   LayoutDashboard,
@@ -12,9 +11,10 @@ import {
   Bell,
   HelpCircle,
   Settings,
-  ChevronRight,
   LogOut,
   Loader2,
+  ChevronLeft,
+  Shield,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useAuthContext } from '@/app/context/AuthContext';
@@ -27,11 +27,11 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { title: 'Dashboard', href: '/talimadmindashboard', icon: LayoutDashboard },
-  { title: 'School management', href: '/talimschool', icon: School },
-  { title: 'Announcements', href: '/talimadmindashboard/talimannouncement', icon: Bell },
-  { title: 'Support', href: '/talimsupport', icon: HelpCircle },
-  { title: 'Settings', href: '/talimadmindashboard/talimsetting', icon: Settings },
+  { title: 'Dashboard',         href: '/talimadmindashboard',                   icon: LayoutDashboard },
+  { title: 'School Management', href: '/talimschool',                           icon: School          },
+  { title: 'Announcements',     href: '/talimadmindashboard/talimannouncement', icon: Bell            },
+  { title: 'Support',           href: '/talimsupport',                          icon: HelpCircle      },
+  { title: 'Settings',          href: '/talimadmindashboard/talimsetting',      icon: Settings        },
 ];
 
 const getInitials = (first?: string, last?: string, email?: string) => {
@@ -77,102 +77,126 @@ export default function Sidebartalim({ className }: SidebarProps) {
       {/* Mobile overlay */}
       <div
         className={cn(
-          'fixed inset-0 z-40 bg-background/80 backdrop-blur-sm lg:hidden',
+          'fixed inset-0 z-40 bg-black/30 backdrop-blur-sm lg:hidden',
           isOpen ? 'block' : 'hidden',
         )}
         onClick={() => setIsOpen(false)}
       />
 
       {/* Mobile toggle */}
-      <Button
-        variant="outline"
-        size="icon"
-        className="fixed left-4 top-4 z-50 lg:hidden"
+      <button
+        className="fixed left-4 top-4 z-50 lg:hidden flex h-9 w-9 items-center justify-center rounded-lg border border-[#D7E6F6] bg-white text-[#003366] shadow-sm"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <ChevronRight className={cn('h-4 w-4 transition-transform', isOpen && 'rotate-180')} />
-      </Button>
+        <ChevronLeft className={cn('h-4 w-4 transition-transform', !isOpen && 'rotate-180')} />
+      </button>
 
       {/* Sidebar */}
       <div
         className={cn(
-          'fixed inset-y-0 left-0 z-40 w-64 transform border-r bg-white transition-transform duration-200 ease-in-out lg:translate-x-0',
+          'fixed inset-y-0 left-0 z-40 w-[280px] transform transition-transform duration-200 ease-in-out lg:translate-x-0',
+          'bg-[#FBFBFB] border-r border-[#F1F1F1] flex flex-col justify-between overflow-y-auto',
           isOpen ? 'translate-x-0' : '-translate-x-full',
           className,
         )}
       >
-        {/* Logo */}
-        <div className="flex h-16 items-center gap-2 border-b px-6">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600">
-            <Book className="h-4 w-4 text-white" />
+        {/* ── Top section ── */}
+        <div>
+          {/* Logo row */}
+          <div className="flex items-center gap-2 px-5 py-4">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#003366] shrink-0">
+              <Book className="h-5 w-5 text-white" />
+            </div>
+            <span className="text-lg font-bold text-[#030E18]">Talim</span>
+            <span className="ml-1 rounded-full bg-[#EAF2FB] px-2.5 py-0.5 text-xs font-semibold text-[#003366]">
+              Admin
+            </span>
           </div>
-          <span className="text-base font-bold text-slate-900">Talim</span>
-          <span className="ml-auto text-xs font-medium text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full">Admin</span>
+
+          {/* Divider */}
+          <div className="border-b-2 border-[#F1F1F1] mb-4" />
+
+          {/* Platform card */}
+          <div className="mx-4 mb-5 flex items-center gap-3 rounded-xl border border-[#F1F1F1] bg-white px-3 py-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#003366]">
+              <Shield className="h-4 w-4 text-white" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-[#030E18]">Platform Admin</p>
+              <p className="text-xs text-[#6F6F6F] truncate">Super Administrator</p>
+            </div>
+          </div>
+
+          {/* Nav */}
+          <nav className="px-3">
+            <ul className="space-y-0.5">
+              {navItems.map((item) => {
+                const isActive =
+                  item.href === '/talimadmindashboard'
+                    ? pathname === item.href
+                    : pathname === item.href || pathname.startsWith(`${item.href}/`);
+                return (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      onClick={() => setIsNavigating(true)}
+                      className={cn(
+                        'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors',
+                        isActive
+                          ? 'bg-[#003366]/[0.12] text-[#003366]'
+                          : 'text-[#6F6F6F] hover:bg-gray-100 hover:text-[#030E18]',
+                      )}
+                    >
+                      <item.icon
+                        className={cn(
+                          'h-5 w-5 shrink-0',
+                          isActive ? 'text-[#003366]' : 'text-[#878787]',
+                        )}
+                      />
+                      {item.title}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
         </div>
 
-        {/* Nav + user */}
-        <div className="flex h-[calc(100vh-4rem)] flex-col justify-between overflow-y-auto">
-          <nav className="space-y-0.5 p-3 pt-4">
-            {navItems.map((item) => {
-              const isActive =
-                item.href === '/talimadmindashboard'
-                  ? pathname === item.href
-                  : pathname === item.href || pathname.startsWith(`${item.href}/`);
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setIsNavigating(true)}
-                  className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors',
-                    isActive
-                      ? 'bg-indigo-50 text-indigo-700 font-semibold'
-                      : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900',
-                  )}
-                >
-                  <item.icon
-                    className={cn('h-4 w-4', isActive ? 'text-indigo-600' : 'text-slate-400')}
-                  />
-                  {item.title}
-                  {isActive && (
-                    <div className="ml-auto h-1.5 w-1.5 rounded-full bg-indigo-600" />
-                  )}
-                </Link>
-              );
-            })}
-          </nav>
+        {/* ── Bottom user section ── */}
+        <div>
+          <div className="border-t-2 border-[#F1F1F1] mb-3" />
 
-          {/* User section */}
-          <div className="border-t p-4">
+          <div className="px-4 pb-4 space-y-0.5">
+            {/* User card */}
             <Link
               href="/talimadmindashboard/talimsetting"
-              className="flex items-center gap-3 rounded-lg p-2 hover:bg-slate-50 transition-colors"
+              className="flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-gray-100 transition-colors"
             >
-              <Avatar className="h-9 w-9 ring-2 ring-indigo-100">
+              <Avatar className="h-9 w-9 ring-2 ring-[#D7E6F6] shrink-0">
                 <AvatarImage src={user?.userAvatar ?? undefined} alt={displayName} />
-                <AvatarFallback className="bg-indigo-100 text-indigo-700 text-xs font-semibold">
+                <AvatarFallback className="bg-[#EAF2FB] text-[#003366] text-xs font-bold">
                   {initials}
                 </AvatarFallback>
               </Avatar>
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-semibold text-slate-900">{displayName}</p>
-                <p className="truncate text-xs text-slate-500">{user?.email}</p>
+                <p className="truncate text-sm font-semibold text-[#030E18]">{displayName}</p>
+                <p className="truncate text-xs text-[#6F6F6F]">{user?.email}</p>
               </div>
             </Link>
 
-            <Button
-              variant="ghost"
-              className="mt-2 w-full justify-start gap-2 text-red-500 hover:bg-red-50 hover:text-red-600 text-sm"
+            {/* Logout */}
+            <button
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-[#6F6F6F] hover:bg-gray-100 hover:text-red-500 transition-colors disabled:opacity-50"
               onClick={handleLogout}
               disabled={isLoggingOut}
             >
               {isLoggingOut ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
+                <Loader2 className="h-5 w-5 animate-spin shrink-0" />
               ) : (
-                <LogOut className="h-4 w-4" />
+                <LogOut className="h-5 w-5 shrink-0" />
               )}
-              {isLoggingOut ? 'Logging out…' : 'Logout'}
-            </Button>
+              {isLoggingOut ? 'Logging out…' : 'Logout Account'}
+            </button>
           </div>
         </div>
       </div>
