@@ -20,7 +20,7 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { toast } from "sonner"
 import { Eye, Filter, MoreVertical, Plus, School as SchoolIcon, Search, WifiOff } from "lucide-react"
-import { School, schoolService } from "@/app/services/school.service"
+import { School, SchoolDeletionResult, schoolService } from "@/app/services/school.service"
 import { LoadingModal } from "@/components/ui/loading-modal"
 import { useDebounce } from "@/hooks/use-debounce"
 
@@ -33,6 +33,8 @@ export function SchoolManagement() {
   const [selectedSchool, setSelectedSchool] = useState<School | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [deletionResult, setDeletionResult] = useState<SchoolDeletionResult | null>(null)
   const [schools, setSchools] = useState<School[]>([])
   const [totalPages, setTotalPages] = useState(1)
   const [totalSchools, setTotalSchools] = useState(0)
@@ -107,11 +109,28 @@ export function SchoolManagement() {
   }
 
   const handleDelete = async () => {
-    if (selectedSchool) {
+    if (!selectedSchool) return
+
+    try {
+      setIsDeleting(true)
+      const result = await schoolService.deleteSchool(selectedSchool._id)
+      setDeletionResult(result)
+
+      // Remove from list immediately
+      setSchools(prev => prev.filter(s => s._id !== selectedSchool._id))
+      setTotalSchools(prev => prev - 1)
+
+      toast.success(`"${selectedSchool.name}" deleted`, {
+        description: result.summary.message,
+        duration: 6000,
+      })
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to delete school'
+      toast.error('Delete failed', { description: message })
+    } finally {
+      setIsDeleting(false)
       setShowDeleteDialog(false)
       setSelectedSchool(null)
-      // Refresh the schools list
-      fetchSchools(currentPage, searchTerm)
     }
   }
 
@@ -141,7 +160,7 @@ export function SchoolManagement() {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      <LoadingModal isOpen={isLoading || isUpdatingStatus} message={isUpdatingStatus ? "Updating school status..." : "Loading schools..."} />
+      <LoadingModal isOpen={isLoading || isUpdatingStatus || isDeleting} message={isDeleting ? "Deleting school and cleaning up accounts..." : isUpdatingStatus ? "Updating school status..." : "Loading schools..."} />
       
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1 className="text-2xl font-bold">Schools</h1>
@@ -292,25 +311,45 @@ export function SchoolManagement() {
       </div>
 
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-  <AlertDialogContent className="max-w-md p-6 bg-white rounded-lg shadow-lg">
-    <AlertDialogHeader className="space-y-2">
+  <AlertDialogContent className="max-w-lg p-6 bg-white rounded-lg shadow-lg">
+    <AlertDialogHeader className="space-y-3">
       <AlertDialogTitle className="text-lg font-semibold text-gray-900">
-        Delete School
+        Delete &quot;{selectedSchool?.name}&quot;?
       </AlertDialogTitle>
-      <AlertDialogDescription className="text-gray-600">
-        Are you sure you want to remove this school? <br />
-        <span className="font-medium">This action cannot be undone.</span>
+      <AlertDialogDescription asChild>
+        <div className="space-y-3 text-sm text-gray-600">
+          <p>This will permanently remove the school. Here is what happens:</p>
+          <ul className="space-y-1.5 list-none">
+            <li className="flex items-start gap-2">
+              <span className="mt-0.5 text-red-500 font-bold">✕</span>
+              <span><strong>School admin account deleted</strong> — their email becomes available for re-registration</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="mt-0.5 text-yellow-500 font-bold">⚠</span>
+              <span><strong>Teachers, parents &amp; students deactivated</strong> — accounts suspended, all data preserved</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="mt-0.5 text-green-600 font-bold">✓</span>
+              <span><strong>Student records kept</strong> — grades, attendance &amp; history are safe</span>
+            </li>
+          </ul>
+          <p className="text-red-600 font-medium">This action cannot be undone from the UI.</p>
+        </div>
       </AlertDialogDescription>
     </AlertDialogHeader>
-    <AlertDialogFooter className="flex justify-end space-x-3">
-      <AlertDialogCancel className="px-4 py-2 border rounded-md text-gray-600 hover:bg-gray-100">
+    <AlertDialogFooter className="flex justify-end space-x-3 pt-2">
+      <AlertDialogCancel
+        disabled={isDeleting}
+        className="px-4 py-2 border rounded-md text-gray-600 hover:bg-gray-100"
+      >
         Cancel
       </AlertDialogCancel>
-      <AlertDialogAction 
-        onClick={handleDelete} 
-        className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+      <AlertDialogAction
+        onClick={handleDelete}
+        disabled={isDeleting}
+        className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 disabled:opacity-50"
       >
-        Delete
+        {isDeleting ? 'Deleting...' : 'Yes, delete school'}
       </AlertDialogAction>
     </AlertDialogFooter>
   </AlertDialogContent>

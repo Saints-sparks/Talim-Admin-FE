@@ -14,12 +14,23 @@ export interface School {
   logo?: string;
   createdAt: string;
   updatedAt: string;
+  isDeleted?: boolean;
+  deletedAt?: string | null;
   primaryContacts: Array<{
     name: string;
     phone: string;
     email: string;
     role: string;
   }>;
+}
+
+export interface SchoolDeletionResult {
+  school: School;
+  summary: {
+    adminsDeleted: number;
+    usersDeactivated: number;
+    message: string;
+  };
 }
 
 export interface SchoolsResponse {
@@ -114,5 +125,31 @@ export const schoolService = {
     }
 
     return response.json();
-  }
+  },
+
+  deleteSchool: async (schoolId: string): Promise<SchoolDeletionResult> => {
+    const response = await fetch(`${API_BASE_URL}/schools/delete/${schoolId}`, {
+      method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({}));
+      throw new Error(error.message || 'Failed to delete school');
+    }
+
+    return response.json();
+  },
+
+  restoreSchool: async (schoolId: string): Promise<School> => {
+    const response = await fetch(`${API_BASE_URL}/schools/restore/${schoolId}`, {
+      method: 'PATCH',
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({}));
+      throw new Error(error.message || 'Failed to restore school');
+    }
+
+    return response.json();
+  },
 }; 
