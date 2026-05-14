@@ -29,7 +29,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   { title: 'Dashboard',         href: '/talimadmindashboard',                   icon: LayoutDashboard },
   { title: 'School Management', href: '/talimschool',                           icon: School          },
-  { title: 'Announcements',     href: '/talimadmindashboard/talimannouncement', icon: Bell            },
+  { title: 'Notifications',     href: '/talimadmindashboard/talimannouncement', icon: Bell            },
   { title: 'Support',           href: '/talimsupport',                          icon: HelpCircle      },
   { title: 'Settings',          href: '/talimadmindashboard/talimsetting',      icon: Settings        },
 ];
