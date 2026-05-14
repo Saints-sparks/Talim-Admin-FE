@@ -197,6 +197,7 @@ export default function TalimNotificationsPage() {
   const [totalCount, setTotalCount] = useState(0);
   const [notificationStats, setNotificationStats] =
     useState<NotificationStats | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -208,17 +209,24 @@ export default function TalimNotificationsPage() {
   const fetchNotifications = async (page = currentPage) => {
     try {
       setIsRefreshing(true);
+      setLoadError(null);
       const response = await notificationService.getAllNotifications({
         page,
         limit: 20,
         source: sourceFilter === "all" ? undefined : sourceFilter,
       });
 
-      setNotifications(response.data);
-      setTotalPages(response.meta.lastPage || 1);
-      setTotalCount(response.meta.total || response.data.length);
+      const data = Array.isArray(response.data) ? response.data : [];
+      setNotifications(data);
+      setTotalPages(response.meta?.lastPage || 1);
+      setTotalCount(response.meta?.total || data.length);
     } catch (error: any) {
-      toast.error(error.message || "Failed to fetch notifications");
+      const message = error.message || "Failed to fetch notifications";
+      setLoadError(message);
+      setNotifications([]);
+      setTotalPages(1);
+      setTotalCount(0);
+      toast.error(message);
     } finally {
       setIsLoading(false);
       setIsRefreshing(false);
@@ -233,6 +241,7 @@ export default function TalimNotificationsPage() {
       setNotificationStats(stats);
       setTotalCount(stats.total);
     } catch (error: any) {
+      setNotificationStats(null);
       toast.error(error.message || "Failed to fetch notification KPIs");
     }
   };
@@ -409,9 +418,11 @@ export default function TalimNotificationsPage() {
       <div className="mx-auto max-w-[1500px] space-y-5">
         <header className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">Notifications</h1>
+            <h1 className="text-2xl font-bold tracking-tight">
+              Announcements & Notifications
+            </h1>
             <p className="text-sm text-[#64748B]">
-              Send and manage Talim-wide notifications to schools and users.
+              Send Talim platform notifications and review school announcement delivery.
             </p>
           </div>
 
@@ -429,10 +440,32 @@ export default function TalimNotificationsPage() {
               onClick={() => setIsCreateOpen(true)}
             >
               <Plus className="h-4 w-4" />
-              New Notification
+              New Talim Notification
             </Button>
           </div>
         </header>
+
+        {loadError ? (
+          <div className="flex flex-col gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="font-semibold">Notification records could not be loaded.</p>
+              <p className="mt-1 text-amber-800">
+                {loadError}. You can still open the create modal and test the send flow once the backend is available.
+              </p>
+            </div>
+            <Button
+              variant="outline"
+              className="h-9 rounded-xl border-amber-300 bg-white text-amber-900 hover:bg-amber-100"
+              onClick={() => {
+                fetchNotifications(currentPage);
+                fetchNotificationStats();
+              }}
+            >
+              <RefreshCw className="h-4 w-4" />
+              Retry
+            </Button>
+          </div>
+        ) : null}
 
         <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {stats.map((item) => (
