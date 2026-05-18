@@ -30,6 +30,23 @@ export interface School {
   name: string;
 }
 
+export interface NotificationDeliveryStats {
+  totalRecipients: number;
+  deliveredCount: number;
+  failedCount: number;
+  pendingCount: number;
+  deliveredRate: number;
+  byRole?: Partial<Record<RecipientRole, number>>;
+  byChannel?: {
+    inApp?: number;
+    email?: number;
+    push?: number;
+  };
+  sentAt?: string | null;
+  scheduledAt?: string | null;
+  deliveredAt?: string | null;
+}
+
 export interface CreateNotificationRequest {
   title: string;
   message: string;
@@ -70,6 +87,7 @@ export interface NotificationResponse {
   metadata?: Record<string, unknown>;
   createdAt: string;
   updatedAt: string;
+  deliveryStats?: NotificationDeliveryStats;
 }
 
 export interface PaginationMeta {
@@ -104,44 +122,37 @@ export interface GetNotificationsParams {
   source?: NotificationSource;
   category?: NotificationCategory;
   type?: string;
+  schoolId?: string;
 }
 
 const buildQuery = (params: GetNotificationsParams = {}) => {
   const searchParams = new URLSearchParams();
-
   Object.entries(params).forEach(([key, value]) => {
     if (value !== undefined && value !== null && value !== '') {
       searchParams.set(key, String(value));
     }
   });
-
   const query = searchParams.toString();
   return query ? `?${query}` : '';
 };
 
 export const notificationService = {
-  createNotification: async (
-    data: CreateNotificationRequest,
-  ): Promise<NotificationResponse> => {
+  createNotification: async (data: CreateNotificationRequest): Promise<NotificationResponse> => {
     return apiRequest<NotificationResponse>(API_ENDPOINTS.NOTIFICATIONS, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
   },
 
-  getAllNotifications: async (
-    params: GetNotificationsParams = {},
-  ): Promise<NotificationsResponse> => {
+  getAllNotifications: async (params: GetNotificationsParams = {}): Promise<NotificationsResponse> => {
     return apiRequest<NotificationsResponse>(
-      `${API_ENDPOINTS.NOTIFICATIONS}${buildQuery({
-        page: 1,
-        limit: 10,
-        ...params,
-      })}`,
+      `${API_ENDPOINTS.NOTIFICATIONS}${buildQuery({ page: 1, limit: 20, ...params })}`,
     );
+  },
+
+  getNotificationById: async (id: string): Promise<NotificationResponse> => {
+    return apiRequest<NotificationResponse>(API_ENDPOINTS.NOTIFICATION_BY_ID(id));
   },
 
   getNotificationStats: async (
@@ -152,19 +163,26 @@ export const notificationService = {
     );
   },
 
-  markAsRead: async (
-    id: string,
-    userId: string,
-  ): Promise<NotificationResponse> => {
-    return apiRequest<NotificationResponse>(
-      `${API_ENDPOINTS.NOTIFICATIONS}/${id}/read`,
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userId }),
-      },
-    );
+  resendNotification: async (id: string): Promise<NotificationResponse> => {
+    return apiRequest<NotificationResponse>(API_ENDPOINTS.NOTIFICATION_RESEND(id), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+    });
+  },
+
+  duplicateNotification: async (id: string, senderId: string): Promise<NotificationResponse> => {
+    return apiRequest<NotificationResponse>(API_ENDPOINTS.NOTIFICATION_DUPLICATE(id), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ senderId }),
+    });
+  },
+
+  markAsRead: async (id: string, userId: string): Promise<NotificationResponse> => {
+    return apiRequest<NotificationResponse>(`${API_ENDPOINTS.NOTIFICATIONS}/${id}/read`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId }),
+    });
   },
 };
