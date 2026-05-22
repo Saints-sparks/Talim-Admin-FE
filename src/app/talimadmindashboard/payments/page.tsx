@@ -15,6 +15,7 @@ import {
   UpdateProviderConfigPayload,
 } from '@/app/services/payments.service';
 import { toast } from 'sonner';
+import { ApiError } from '@/app/lib/api/client';
 
 // ─── Provider metadata ─────────────────────────────────────────────────────────
 
@@ -57,6 +58,19 @@ const CHANNEL_LABELS: Record<PaymentChannel, string> = {
   wallet: 'Wallet',
   bank: 'Bank',
   mobile_money: 'Mobile Money',
+};
+
+const getErrorMessage = (
+  error: unknown,
+  fallback: string,
+): string => {
+  if (error instanceof ApiError) {
+    return error.message || fallback;
+  }
+  if (error instanceof Error) {
+    return error.message || fallback;
+  }
+  return fallback;
 };
 
 // ─── Toggle switch ─────────────────────────────────────────────────────────────
@@ -393,20 +407,40 @@ export default function PaymentProvidersPage() {
   }, []);
 
   const handleSave = async (name: PaymentProviderName, payload: UpdateProviderConfigPayload) => {
-    await paymentsService.updateProviderConfig(name, payload);
-    toast.success(`${PROVIDER_META[name].label} configuration saved`);
-    fetchProviders();
+    try {
+      await paymentsService.updateProviderConfig(name, payload);
+      toast.success(`${PROVIDER_META[name].label} configuration saved`);
+      fetchProviders();
+    } catch (error) {
+      toast.error(
+        getErrorMessage(
+          error,
+          `Failed to save ${PROVIDER_META[name].label} configuration`,
+        ),
+      );
+      throw error;
+    }
   };
 
   const handleToggle = async (name: PaymentProviderName, enable: boolean) => {
-    if (enable) {
-      await paymentsService.enableProvider(name);
-      toast.success(`${PROVIDER_META[name].label} enabled`);
-    } else {
-      await paymentsService.disableProvider(name);
-      toast.success(`${PROVIDER_META[name].label} disabled`);
+    try {
+      if (enable) {
+        await paymentsService.enableProvider(name);
+        toast.success(`${PROVIDER_META[name].label} enabled`);
+      } else {
+        await paymentsService.disableProvider(name);
+        toast.success(`${PROVIDER_META[name].label} disabled`);
+      }
+      fetchProviders();
+    } catch (error) {
+      toast.error(
+        getErrorMessage(
+          error,
+          `Failed to ${enable ? 'enable' : 'disable'} ${PROVIDER_META[name].label}`,
+        ),
+      );
+      throw error;
     }
-    fetchProviders();
   };
 
   const enabledCount = ALL_PROVIDERS.filter((n) => configs[n]?.isEnabled).length;
