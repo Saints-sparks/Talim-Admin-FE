@@ -29,4 +29,9 @@ export const API_ENDPOINTS = {
   PROFILE_UPDATE: `${API_BASE_URL}/auth/profile/update/`,
   PROFILE_AVATAR: `${API_BASE_URL}/auth/profile/avatar`,
   PROFILE_BY_ID: (userId: string) => `${API_BASE_URL}/auth/profile/${userId}`,
+
+  PAYMENT_PLATFORM_PROVIDERS: `${API_BASE_URL}/payments/platform/providers`,
+  PAYMENT_PLATFORM_PROVIDER_CONFIG: (name: string) => `${API_BASE_URL}/payments/platform/providers/${name}/config`,
+  PAYMENT_PLATFORM_PROVIDER_ENABLE: (name: string) => `${API_BASE_URL}/payments/platform/providers/${name}/enable`,
+  PAYMENT_PLATFORM_PROVIDER_DISABLE: (name: string) => `${API_BASE_URL}/payments/platform/providers/${name}/disable`,
 } as const;

@@ -15,6 +15,7 @@ import {
   Loader2,
   ChevronLeft,
   Shield,
+  CreditCard,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useAuthContext } from '@/app/context/AuthContext';
@@ -29,6 +30,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   { title: 'Dashboard',         href: '/talimadmindashboard',                   icon: LayoutDashboard },
   { title: 'School Management', href: '/talimschool',                           icon: School          },
+  { title: 'Payment Providers', href: '/talimadmindashboard/payments',          icon: CreditCard      },
   { title: 'Notifications',     href: '/talimadmindashboard/talimannouncement', icon: Bell            },
   { title: 'Support',           href: '/talimsupport',                          icon: HelpCircle      },
   { title: 'Settings',          href: '/talimadmindashboard/talimsetting',      icon: Settings        },
