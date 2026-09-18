@@ -24,16 +24,42 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
+import { getErrorMessage } from '@/lib/apiError';
 
+/** Client validation mirroring `UpdateProfileDto` (name required, max 80 chars, phone optional). */
 const schema = z.object({
-  firstName: z.string().min(1, 'First name is required').max(50),
-  lastName: z.string().min(1, 'Last name is required').max(50),
-  phoneNumber: z.string().optional(),
+  firstName: z.string().min(1, 'First name is required').max(80),
+  lastName: z.string().min(1, 'Last name is required').max(80),
+  phoneNumber: z
+    .string()
+    .regex(/^\+?[0-9\s\-()]{7,20}$/, 'Enter a valid phone number')
+    .optional()
+    .or(z.literal('')),
 });
 
 type FormValues = z.infer<typeof schema>;
 
-const Field = ({
+/** A read-only fact shown outside edit mode. */
+const StaticField = ({
+  icon: Icon,
+  label,
+  value,
+}: {
+  icon: React.ElementType;
+  label: string;
+  value?: string | null;
+}) => (
+  <div className="flex flex-col gap-1.5">
+    <Label className="flex items-center gap-1.5 text-xs font-medium text-[#6F6F6F] uppercase tracking-wide">
+      <Icon className="h-3.5 w-3.5" />
+      {label}
+    </Label>
+    <p className="text-sm font-semibold text-[#030E18]">{value || '—'}</p>
+  </div>
+);
+
+/** An editable field, rendered as text outside edit mode. */
+const EditableField = ({
   icon: Icon,
   label,
   value,
@@ -42,7 +68,6 @@ const Field = ({
   register,
   error,
   type = 'text',
-  readOnly,
 }: {
   icon: React.ElementType;
   label: string;
@@ -52,28 +77,35 @@ const Field = ({
   register: ReturnType<typeof useForm<FormValues>>['register'];
   error?: string;
   type?: string;
-  readOnly?: boolean;
-}) => (
-  <div className="flex flex-col gap-1.5">
-    <Label className="flex items-center gap-1.5 text-xs font-medium text-[#6F6F6F] uppercase tracking-wide">
-      <Icon className="h-3.5 w-3.5" />
-      {label}
-    </Label>
-    {editing && !readOnly ? (
-      <div>
-        <Input
-          {...register(name)}
-          type={type}
-          className="h-9 text-sm border-[#F1F1F1] bg-[#F8F8F8] focus:border-[#003366] focus:ring-[#003366]"
-        />
-        {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
-      </div>
-    ) : (
-      <p className="text-sm font-semibold text-[#030E18]">{value || '—'}</p>
-    )}
-  </div>
-);
+}) =>
+  editing ? (
+    <div className="flex flex-col gap-1.5">
+      <Label
+        htmlFor={name}
+        className="flex items-center gap-1.5 text-xs font-medium text-[#6F6F6F] uppercase tracking-wide"
+      >
+        <Icon className="h-3.5 w-3.5" />
+        {label}
+      </Label>
+      <Input
+        id={name}
+        {...register(name)}
+        type={type}
+        aria-invalid={Boolean(error)}
+        className="h-9 border-[#F1F1F1] bg-[#F8F8F8] text-sm focus:border-[#003366] focus:ring-[#003366]"
+      />
+      {error && <p className="text-xs text-red-500">{error}</p>}
+    </div>
+  ) : (
+    <StaticField icon={Icon} label={label} value={value} />
+  );
 
+/**
+ * The signed-in administrator's own editable profile: name and phone, plus
+ * read-only account facts.
+ *
+ * @returns The personal information card.
+ */
 export default function PersonalInfo() {
   const { user, updateUser } = useAuthContext();
   const [isEditing, setIsEditing] = useState(false);
@@ -106,12 +138,16 @@ export default function PersonalInfo() {
   const onSubmit = async (values: FormValues) => {
     setIsSaving(true);
     try {
-      const updated = await profileService.updateProfile(values);
+      const updated = await profileService.updateProfile({
+        firstName: values.firstName,
+        lastName: values.lastName,
+        phoneNumber: values.phoneNumber || undefined,
+      });
       updateUser(updated);
       setIsEditing(false);
-      toast.success('Profile updated successfully');
-    } catch {
-      toast.error('Failed to update profile. Please try again.');
+      toast.success('Profile updated');
+    } catch (error) {
+      toast.error('The profile could not be updated', { description: getErrorMessage(error) });
     } finally {
       setIsSaving(false);
     }
@@ -132,17 +168,16 @@ export default function PersonalInfo() {
 
   return (
     <div className="rounded-xl border border-[#F1F1F1] bg-white">
-      {/* Header */}
       <div className="flex items-center justify-between border-b border-[#F1F1F1] px-6 py-4">
         <div>
           <h3 className="text-base font-semibold text-[#030E18]">Personal Information</h3>
-          <p className="text-xs text-[#6F6F6F] mt-0.5">Manage your account details</p>
+          <p className="mt-0.5 text-xs text-[#6F6F6F]">Manage your account details</p>
         </div>
         {!isEditing ? (
           <Button
             size="sm"
             variant="outline"
-            className="gap-1.5 text-xs border-[#D7E6F6] text-[#003366] hover:bg-[#EAF2FB]"
+            className="gap-1.5 border-[#D7E6F6] text-xs text-[#003366] hover:bg-[#EAF2FB]"
             onClick={() => setIsEditing(true)}
           >
             <Pencil className="h-3.5 w-3.5" />
@@ -162,7 +197,7 @@ export default function PersonalInfo() {
             </Button>
             <Button
               size="sm"
-              className="gap-1.5 text-xs bg-[#003366] hover:bg-[#002244] text-white"
+              className="gap-1.5 bg-[#003366] text-xs text-white hover:bg-[#002244]"
               onClick={handleSubmit(onSubmit)}
               disabled={isSaving || !isDirty}
             >
@@ -177,9 +212,8 @@ export default function PersonalInfo() {
         )}
       </div>
 
-      {/* Fields */}
       <div className="grid grid-cols-1 gap-6 p-6 sm:grid-cols-2">
-        <Field
+        <EditableField
           icon={User}
           label="First Name"
           value={user?.firstName}
@@ -188,7 +222,7 @@ export default function PersonalInfo() {
           register={register}
           error={errors.firstName?.message}
         />
-        <Field
+        <EditableField
           icon={User}
           label="Last Name"
           value={user?.lastName}
@@ -197,22 +231,15 @@ export default function PersonalInfo() {
           register={register}
           error={errors.lastName?.message}
         />
-        <Field
-          icon={Mail}
-          label="Email Address"
-          value={user?.email}
-          editing={false}
-          readOnly
-          name="firstName"
-          register={register}
-        />
-        <Field
+        <StaticField icon={Mail} label="Email Address" value={user?.email} />
+        <EditableField
           icon={Phone}
           label="Phone Number"
           value={user?.phoneNumber}
           editing={isEditing}
           name="phoneNumber"
           register={register}
+          error={errors.phoneNumber?.message}
           type="tel"
         />
         <div className="flex flex-col gap-1.5">
@@ -221,7 +248,7 @@ export default function PersonalInfo() {
             Role
           </Label>
           <div className="flex items-center gap-2">
-            <Badge className="bg-[#EAF2FB] text-[#003366] border-0 capitalize font-medium text-xs">
+            <Badge className="border-0 bg-[#EAF2FB] text-xs font-medium capitalize text-[#003366]">
               {user?.role?.replace(/_/g, ' ') ?? 'Administrator'}
             </Badge>
           </div>
@@ -233,18 +260,18 @@ export default function PersonalInfo() {
           </Label>
           <div className="flex items-center gap-2">
             {user?.isEmailVerified ? (
-              <Badge className="gap-1 bg-emerald-50 text-emerald-700 border-0 font-medium text-xs">
+              <Badge className="gap-1 border-0 bg-emerald-50 text-xs font-medium text-emerald-700">
                 <CheckCircle2 className="h-3 w-3" />
                 Verified
               </Badge>
             ) : (
-              <Badge className="gap-1 bg-amber-50 text-amber-700 border-0 font-medium text-xs">
+              <Badge className="gap-1 border-0 bg-amber-50 text-xs font-medium text-amber-700">
                 <XCircle className="h-3 w-3" />
                 Unverified
               </Badge>
             )}
             {user?.isActive && (
-              <Badge className="bg-emerald-50 text-emerald-700 border-0 font-medium text-xs">
+              <Badge className="border-0 bg-emerald-50 text-xs font-medium text-emerald-700">
                 Active
               </Badge>
             )}

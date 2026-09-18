@@ -5,16 +5,31 @@ import { Camera, Trash2, Upload, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuthContext } from '@/app/context/AuthContext';
 import { profileService } from '@/app/services/profile.service';
+import { validateImageFile } from '@/app/services/upload.service';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { getErrorMessage } from '@/lib/apiError';
 
-const getInitials = (firstName?: string, lastName?: string, email?: string) => {
+/**
+ * Up to two initials for the avatar fallback.
+ *
+ * @param firstName - The user's first name, if known.
+ * @param lastName - The user's last name, if known.
+ * @param email - The user's email, as a last resort.
+ * @returns The initials to show.
+ */
+const getInitials = (firstName?: string, lastName?: string, email?: string): string => {
   if (firstName && lastName) return `${firstName[0]}${lastName[0]}`.toUpperCase();
   if (firstName) return firstName.slice(0, 2).toUpperCase();
   if (email) return email.slice(0, 2).toUpperCase();
   return 'TA';
 };
 
+/**
+ * The signed-in administrator's avatar, with upload and removal.
+ *
+ * @returns The profile picture card.
+ */
 export default function ProfilePicture() {
   const { user, updateUser } = useAuthContext();
   const fileRef = useRef<HTMLInputElement>(null);
@@ -29,30 +44,25 @@ export default function ProfilePicture() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (!file.type.startsWith('image/')) {
-      toast.error('Please select an image file');
-      return;
-    }
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error('Image must be smaller than 5 MB');
+    const problem = validateImageFile(file);
+    if (problem) {
+      toast.error(problem);
       return;
     }
 
-    // Show preview immediately
     const reader = new FileReader();
     reader.onload = () => setPreview(reader.result as string);
     reader.readAsDataURL(file);
 
-    // Upload in background
     startTransition(async () => {
       try {
         const res = await profileService.uploadAvatar(file);
         updateUser({ userAvatar: res.userAvatar });
         setPreview(null);
         toast.success('Profile picture updated');
-      } catch {
+      } catch (error) {
         setPreview(null);
-        toast.error('Failed to upload picture. Please try again.');
+        toast.error('The picture could not be uploaded', { description: getErrorMessage(error) });
       }
     });
   };
@@ -64,8 +74,8 @@ export default function ProfilePicture() {
       updateUser({ userAvatar: undefined });
       setPreview(null);
       toast.success('Profile picture removed');
-    } catch {
-      toast.error('Failed to remove picture. Please try again.');
+    } catch (error) {
+      toast.error('The picture could not be removed', { description: getErrorMessage(error) });
     } finally {
       setIsRemoving(false);
     }
@@ -74,21 +84,20 @@ export default function ProfilePicture() {
   const isLoading = isPending || isRemoving;
 
   return (
-    <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6">
-      {/* Avatar */}
+    <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-end">
       <div className="relative shrink-0">
-        <Avatar className="h-28 w-28 ring-4 ring-white shadow-md">
+        <Avatar className="h-28 w-28 shadow-md ring-4 ring-white">
           <AvatarImage src={currentAvatar ?? undefined} alt="Profile picture" />
-          <AvatarFallback className="bg-[#EAF2FB] text-[#003366] text-2xl font-bold">
+          <AvatarFallback className="bg-[#EAF2FB] text-2xl font-bold text-[#003366]">
             {initials}
           </AvatarFallback>
         </Avatar>
 
-        {/* Camera badge */}
         <button
+          type="button"
           onClick={() => fileRef.current?.click()}
           disabled={isLoading}
-          className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full bg-[#003366] text-white shadow-md hover:bg-[#002244] transition-colors disabled:opacity-60"
+          className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full bg-[#003366] text-white shadow-md transition-colors hover:bg-[#002244] disabled:opacity-60"
           aria-label="Change photo"
         >
           {isPending ? (
@@ -99,21 +108,22 @@ export default function ProfilePicture() {
         </button>
       </div>
 
-      {/* Info + actions */}
       <div className="flex flex-col gap-1 text-center sm:text-left">
         <h2 className="text-xl font-bold text-[#030E18]">
           {user?.firstName && user?.lastName
             ? `${user.firstName} ${user.lastName}`
-            : user?.email ?? 'Talim Admin'}
+            : (user?.email ?? 'Talim Admin')}
         </h2>
-        <p className="text-sm text-[#6F6F6F] capitalize">{user?.role?.replace('_', ' ') ?? 'Administrator'}</p>
+        <p className="text-sm capitalize text-[#6F6F6F]">
+          {user?.role?.replace(/_/g, ' ') ?? 'Administrator'}
+        </p>
         <p className="text-xs text-[#878787]">{user?.email}</p>
 
-        <div className="flex items-center gap-2 mt-3">
+        <div className="mt-3 flex items-center gap-2">
           <Button
             size="sm"
             variant="outline"
-            className="gap-1.5 text-xs border-[#D7E6F6] text-[#003366] hover:bg-[#EAF2FB] hover:border-[#D7E6F6]"
+            className="gap-1.5 border-[#D7E6F6] text-xs text-[#003366] hover:border-[#D7E6F6] hover:bg-[#EAF2FB]"
             onClick={() => fileRef.current?.click()}
             disabled={isLoading}
           >
@@ -139,13 +149,14 @@ export default function ProfilePicture() {
           )}
         </div>
 
-        <p className="text-xs text-[#878787] mt-1">JPG, PNG or GIF · max 5 MB</p>
+        <p className="mt-1 text-xs text-[#878787]">JPG, PNG, GIF or WebP · max 5 MB</p>
       </div>
 
       <input
         ref={fileRef}
         type="file"
         accept="image/*"
+        aria-label="Upload profile picture"
         className="hidden"
         onChange={handleFileChange}
         onClick={(e) => {
