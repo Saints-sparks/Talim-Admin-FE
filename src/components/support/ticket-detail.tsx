@@ -1,179 +1,209 @@
 'use client';
 
-import { useState } from 'react';
-import {
-  Dialog, DialogContent, DialogTitle,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from '@/components/ui/select';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Building2, Calendar, FileText, Hash, Loader2, Mail, Ticket, User } from 'lucide-react';
 import {
-  Ticket, Building2, Mail, User, Calendar, FileText, Hash, Loader2,
-} from 'lucide-react';
-import { Complaint, ComplaintStatus } from '@/app/services/support.service';
+  COMPLAINT_STATUSES,
+  type Complaint,
+  type ComplaintStatus,
+} from '@/app/services/support.service';
+import {
+  STATUS_STYLES,
+  formatTicketDate,
+  getInitials,
+  getSchoolName,
+  getUserName,
+} from './ticket-helpers';
 
 interface TicketDetailProps {
   complaint: Complaint;
   isOpen: boolean;
+  /** True while a status change is in flight. */
+  isSaving: boolean;
   onClose: () => void;
-  onStatusChange: (id: string, status: ComplaintStatus) => Promise<void>;
+  onStatusChange: (status: ComplaintStatus) => void;
 }
 
-const statusColors: Record<ComplaintStatus, string> = {
-  Pending: 'bg-amber-100 text-amber-700',
-  'In Progress': 'bg-blue-100 text-blue-700',
-  Resolved: 'bg-emerald-100 text-emerald-700',
-};
+/**
+ * One labelled fact in the details grid.
+ *
+ * @param props - The icon, label and content.
+ * @param props.icon - Rendered beside the label.
+ * @param props.label - The field name.
+ * @param props.children - The value.
+ * @returns The field element.
+ */
+function DetailField({
+  icon: Icon,
+  label,
+  children,
+}: {
+  icon: React.ElementType;
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-col gap-1">
+      <span className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-[#878787]">
+        <Icon className="h-3 w-3" />
+        {label}
+      </span>
+      {children}
+    </div>
+  );
+}
 
-const getSchoolName = (c: Complaint): string => {
-  if (!c.schoolId) return 'No school';
-  if (typeof c.schoolId === 'string') return c.schoolId;
-  return c.schoolId.name;
-};
-
-const getInitials = (name: string): string =>
-  name.split(' ').map((w) => w[0]).join('').toUpperCase().slice(0, 2);
-
-const getUserName = (c: Complaint): string => {
-  if (!c.userId) return 'Unknown';
-  const { firstName, lastName, email } = c.userId;
-  if (firstName && lastName) return `${firstName} ${lastName}`;
-  return email;
-};
-
-export function TicketDetail({ complaint, isOpen, onClose, onStatusChange }: TicketDetailProps) {
-  const [isSaving, setIsSaving] = useState(false);
-
-  const handleStatusChange = async (status: ComplaintStatus) => {
-    setIsSaving(true);
-    await onStatusChange(complaint._id, status);
-    setIsSaving(false);
-  };
-
+/**
+ * The full record of one support ticket, with the status control.
+ *
+ * There is deliberately no reply box and no "assign to admin" control. The
+ * backend's complaints module exposes create, list, read, update-own-text,
+ * update-status and delete, and nothing else: there is no message or thread
+ * collection, and although `assignedAdmin` is declared on the Complaint schema
+ * no route ever reads or writes it. Rather than a control that silently does
+ * nothing, the portal shows the ticket and its status only — see T4.17 in the
+ * hardening notes for the endpoints this screen needs.
+ *
+ * @param props - The ticket and its handlers.
+ * @param props.complaint - The ticket to show.
+ * @param props.isOpen - Whether the dialog is open.
+ * @param props.isSaving - True while a status change is in flight.
+ * @param props.onClose - Closes the dialog.
+ * @param props.onStatusChange - Called with the new status.
+ * @returns The detail dialog.
+ */
+export function TicketDetail({
+  complaint,
+  isOpen,
+  isSaving,
+  onClose,
+  onStatusChange,
+}: TicketDetailProps) {
   const schoolName = getSchoolName(complaint);
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
-        <DialogTitle className="sr-only">Ticket Detail</DialogTitle>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="max-h-[90vh] max-w-xl overflow-y-auto">
+        <DialogTitle className="sr-only">Ticket {complaint.ticket}</DialogTitle>
 
         <div className="space-y-5">
-          {/* Header */}
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-center gap-3">
-              <Avatar className="h-10 w-10 bg-[#EAF2FB] shrink-0">
-                <AvatarFallback className="text-[#003366] text-sm font-semibold">
+              <Avatar className="h-10 w-10 shrink-0 bg-[#EAF2FB]">
+                <AvatarFallback className="text-sm font-semibold text-[#003366]">
                   {getInitials(schoolName)}
                 </AvatarFallback>
               </Avatar>
-              <div>
-                <p className="font-semibold text-slate-900">{schoolName}</p>
-                <p className="text-xs text-slate-400 flex items-center gap-1 mt-0.5">
-                  <Hash className="h-3 w-3" />{complaint.ticket}
+              <div className="min-w-0">
+                <p className="truncate font-semibold text-[#030E18]">{schoolName}</p>
+                <p className="mt-0.5 flex items-center gap-1 text-xs text-[#878787]">
+                  <Hash className="h-3 w-3" />
+                  {complaint.ticket}
                 </p>
               </div>
             </div>
-            <Badge className={`shrink-0 text-xs font-medium border-0 ${statusColors[complaint.status]}`}>
+            <Badge
+              className={`shrink-0 border-0 text-xs font-medium ${STATUS_STYLES[complaint.status]}`}
+            >
               {complaint.status}
             </Badge>
           </div>
 
-          {/* Subject + description */}
-          <div className="rounded-xl border border-slate-100 bg-slate-50 p-4 space-y-2">
-            <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">
+          <div className="space-y-2 rounded-xl border border-[#F1F1F1] bg-[#F8F8F8] p-4">
+            <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-[#6F6F6F]">
               <FileText className="h-3.5 w-3.5" />
               Subject
             </div>
-            <p className="text-sm font-medium text-slate-800">{complaint.subject}</p>
+            <p className="text-sm font-medium text-[#030E18]">{complaint.subject}</p>
             {complaint.description && (
-              <p className="text-sm text-slate-600 leading-relaxed">{complaint.description}</p>
+              <p className="whitespace-pre-wrap text-sm leading-relaxed text-[#6F6F6F]">
+                {complaint.description}
+              </p>
             )}
           </div>
 
-          {/* Details grid */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-1">
-              <span className="flex items-center gap-1.5 text-xs font-medium text-slate-400 uppercase tracking-wide">
-                <User className="h-3 w-3" />Submitted by
-              </span>
-              <p className="text-sm font-medium text-slate-800">{getUserName(complaint)}</p>
-              <p className="text-xs text-slate-400">{complaint.userId?.email}</p>
-            </div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <DetailField icon={User} label="Submitted by">
+              <p className="text-sm font-medium text-[#030E18]">{getUserName(complaint)}</p>
+              {complaint.userId?.email && (
+                <p className="text-xs text-[#878787]">{complaint.userId.email}</p>
+              )}
+            </DetailField>
 
-            <div className="flex flex-col gap-1">
-              <span className="flex items-center gap-1.5 text-xs font-medium text-slate-400 uppercase tracking-wide">
-                <Building2 className="h-3 w-3" />School
-              </span>
-              <p className="text-sm font-medium text-slate-800">{schoolName}</p>
+            <DetailField icon={Building2} label="School">
+              <p className="text-sm font-medium text-[#030E18]">{schoolName}</p>
               {typeof complaint.schoolId === 'object' && complaint.schoolId?.email && (
-                <p className="text-xs text-slate-400 flex items-center gap-1">
-                  <Mail className="h-3 w-3" />{complaint.schoolId.email}
+                <p className="flex items-center gap-1 text-xs text-[#878787]">
+                  <Mail className="h-3 w-3" />
+                  {complaint.schoolId.email}
                 </p>
               )}
-            </div>
+            </DetailField>
 
-            <div className="flex flex-col gap-1">
-              <span className="flex items-center gap-1.5 text-xs font-medium text-slate-400 uppercase tracking-wide">
-                <Calendar className="h-3 w-3" />Submitted
-              </span>
-              <p className="text-sm font-medium text-slate-800">
-                {new Date(complaint.createdAt).toLocaleDateString('en-GB', {
-                  day: 'numeric', month: 'long', year: 'numeric',
-                })}
+            <DetailField icon={Calendar} label="Submitted">
+              <p className="text-sm font-medium text-[#030E18]">
+                {formatTicketDate(complaint.createdAt, 'long')}
               </p>
-            </div>
+            </DetailField>
 
-            <div className="flex flex-col gap-1">
-              <span className="flex items-center gap-1.5 text-xs font-medium text-slate-400 uppercase tracking-wide">
-                <Ticket className="h-3 w-3" />Last updated
-              </span>
-              <p className="text-sm font-medium text-slate-800">
-                {new Date(complaint.updatedAt).toLocaleDateString('en-GB', {
-                  day: 'numeric', month: 'long', year: 'numeric',
-                })}
+            <DetailField icon={Ticket} label="Last updated">
+              <p className="text-sm font-medium text-[#030E18]">
+                {formatTicketDate(complaint.updatedAt, 'long')}
               </p>
-            </div>
+            </DetailField>
           </div>
 
-          {/* Attachment */}
           {complaint.attachment && (
-            <div className="rounded-lg border border-slate-200 p-3 flex items-center gap-2">
-              <FileText className="h-4 w-4 text-slate-400 shrink-0" />
+            <div className="flex items-center gap-2 rounded-lg border border-[#F1F1F1] p-3">
+              <FileText className="h-4 w-4 shrink-0 text-[#878787]" />
               <a
                 href={complaint.attachment}
                 target="_blank"
                 rel="noreferrer"
-                className="text-sm text-[#003366] hover:underline truncate"
+                className="truncate text-sm text-[#003366] hover:underline"
               >
                 View attachment
               </a>
             </div>
           )}
 
-          {/* Status update */}
-          <div className="border-t border-slate-100 pt-4 flex items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#F1F1F1] pt-4">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-slate-700">Update status:</span>
+              <span className="text-sm font-medium text-[#030E18]">Update status:</span>
               <Select
                 value={complaint.status}
-                onValueChange={(v) => handleStatusChange(v as ComplaintStatus)}
+                onValueChange={(value) => onStatusChange(value as ComplaintStatus)}
                 disabled={isSaving}
               >
-                <SelectTrigger className="h-8 w-36 text-xs border-slate-200">
+                <SelectTrigger className="h-8 w-36 border-[#F1F1F1] text-xs">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Pending">Pending</SelectItem>
-                  <SelectItem value="In Progress">In Progress</SelectItem>
-                  <SelectItem value="Resolved">Resolved</SelectItem>
+                  {COMPLAINT_STATUSES.map((status) => (
+                    <SelectItem key={status} value={status}>
+                      {status}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
-              {isSaving && <Loader2 className="h-3.5 w-3.5 animate-spin text-slate-400" />}
+              {isSaving && <Loader2 className="h-3.5 w-3.5 animate-spin text-[#878787]" />}
             </div>
-            <Button variant="outline" size="sm" onClick={onClose} className="text-xs border-slate-200">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onClose}
+              className="border-[#F1F1F1] text-xs"
+            >
               Close
             </Button>
           </div>
