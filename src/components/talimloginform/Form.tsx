@@ -14,9 +14,13 @@ import { useAuthContext } from '@/app/context/AuthContext';
 import { ApiError, getErrorMessage } from '@/lib/apiError';
 
 
+// Mirrors AdminLoginDto: email format + max 254, password just non-empty +
+// max 128. The server enforces no minimum length on login (only on password
+// creation/reset), so a stricter client rule here could reject a legitimate
+// account the server would accept.
 const schema = z.object({
-  email: z.string().email('Enter a valid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
+  email: z.string().email('Enter a valid email address').max(254),
+  password: z.string().min(1, 'Enter your password').max(128),
 });
 
 type FormValues = z.infer<typeof schema>;
