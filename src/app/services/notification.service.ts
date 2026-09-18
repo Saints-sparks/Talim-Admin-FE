@@ -1,29 +1,32 @@
 import { API_ENDPOINTS } from '../lib/api/config';
 import { api } from '@/lib/apiClient';
 
-/**
- *
- */
+/** Mirrors `NotificationPriority`. */
 export type Priority = 'low' | 'medium' | 'high';
+
 /**
- *
+ * Mirrors `UserRole` in the backend, which is what `recipientRoles` is typed
+ * as. Note `admin` is the *platform* administrator; a school's own
+ * administrator is `school_admin`.
  */
-export type RecipientRole = 'student' | 'teacher' | 'parent' | 'admin';
-/**
- *
- */
+export type RecipientRole =
+  | 'student'
+  | 'teacher'
+  | 'parent'
+  | 'admin'
+  | 'school_admin'
+  | 'school_sub_admin';
+
+/** Delivery state of a notification. */
 export type NotificationStatus = 'pending' | 'sent' | 'failed';
-/**
- *
- */
+
+/** Mirrors `NotificationSource`. */
 export type NotificationSource = 'school' | 'talim' | 'system';
-/**
- *
- */
-export type NotificationDeliveryChannel = 'inApp' | 'email' | 'push';
-/**
- *
- */
+
+/** Mirrors `NotificationDeliveryChannel`. */
+export type NotificationDeliveryChannel = 'inApp' | 'email' | 'push' | 'webPush';
+
+/** Mirrors `NotificationCategory`. */
 export type NotificationCategory =
   | 'announcement'
   | 'attendance'
@@ -34,9 +37,7 @@ export type NotificationCategory =
   | 'account'
   | 'other';
 
-/**
- *
- */
+/** The administrator who sent a notification, as the API populates them. */
 export interface Sender {
   _id?: string;
   email?: string;
@@ -46,17 +47,13 @@ export interface Sender {
   userAvatar?: string;
 }
 
-/**
- *
- */
+/** A school reference on a notification. */
 export interface School {
   _id: string;
   name: string;
 }
 
-/**
- *
- */
+/** Real delivery counters. Absent on notifications the queue has not reported on. */
 export interface NotificationDeliveryStats {
   totalRecipients: number;
   deliveredCount: number;
@@ -75,7 +72,8 @@ export interface NotificationDeliveryStats {
 }
 
 /**
- *
+ * Body for `POST /notifications`. Exactly the fields `CreateNotificationDto`
+ * declares — the API runs `forbidNonWhitelisted`, so one extra key is a 400.
  */
 export interface CreateNotificationRequest {
   title: string;
@@ -83,19 +81,20 @@ export interface CreateNotificationRequest {
   attachments?: string[];
   recipientRoles?: RecipientRole[];
   targetSchools?: string[];
-  senderId: string;
-  priority: Priority;
+  senderId?: string;
+  priority?: Priority;
   type?: string;
   source?: NotificationSource;
   category?: NotificationCategory;
   metadata?: Record<string, unknown>;
   recipientId?: string;
+  /** ISO timestamp. A top-level field, not metadata: the DTO declares it. */
+  scheduledFor?: string;
+  isScheduled?: boolean;
   deliveryChannels?: NotificationDeliveryChannel[];
 }
 
-/**
- *
- */
+/** One notification as the API returns it. */
 export interface NotificationResponse {
   _id: string;
   id?: string;
@@ -113,6 +112,7 @@ export interface NotificationResponse {
   isRead?: boolean;
   isScheduled?: boolean;
   scheduledFor?: string | null;
+  deliveryChannels?: NotificationDeliveryChannel[];
   source?: NotificationSource;
   sourceLabel?: string;
   category?: NotificationCategory;
@@ -123,9 +123,7 @@ export interface NotificationResponse {
   deliveryStats?: NotificationDeliveryStats;
 }
 
-/**
- *
- */
+/** Pagination envelope shared by every paginated list. */
 export interface PaginationMeta {
   total: number;
   page: number;
@@ -133,17 +131,13 @@ export interface PaginationMeta {
   limit: number;
 }
 
-/**
- *
- */
+/** One page of notifications. */
 export interface NotificationsResponse {
   data: NotificationResponse[];
   meta: PaginationMeta;
 }
 
-/**
- *
- */
+/** Platform-wide notification counters from `GET /notifications/stats/summary`. */
 export interface NotificationStats {
   total: number;
   sent: number;
@@ -159,7 +153,8 @@ export interface NotificationStats {
 }
 
 /**
- *
+ * Query for `GET /notifications` and its stats sibling. Only what
+ * `NotificationQueryDto` accepts: there is no school filter on either route.
  */
 export interface GetNotificationsParams {
   page?: number;
@@ -167,7 +162,6 @@ export interface GetNotificationsParams {
   source?: NotificationSource;
   category?: NotificationCategory;
   type?: string;
-  schoolId?: string;
 }
 
 /**
