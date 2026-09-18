@@ -11,8 +11,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuthContext } from '@/app/context/AuthContext';
-import { ApiError } from '@/app/lib/api/client';
-import loginIllustration from '../../../public/Super-Admin.png';
+import { ApiError, getErrorMessage } from '@/lib/apiError';
+
 
 const schema = z.object({
   email: z.string().email('Enter a valid email address'),
@@ -46,16 +46,13 @@ export function LoginForm() {
       await login({ email: values.email, password: values.password });
       router.replace('/talimadmindashboard');
     } catch (err) {
-      if (err instanceof ApiError) {
-        if (err.status === 403) {
-          setLoginError({ kind: 'access_denied', email: values.email });
-        } else if (err.status === 401) {
-          setLoginError({ kind: 'invalid_credentials' });
-        } else {
-          setLoginError({ kind: 'unknown', message: err.message });
-        }
+      // Keyed on the API's stable error.code, never on message text.
+      if (err instanceof ApiError && err.code === 'FORBIDDEN') {
+        setLoginError({ kind: 'access_denied', email: values.email });
+      } else if (err instanceof ApiError && err.isAuthError) {
+        setLoginError({ kind: 'invalid_credentials' });
       } else {
-        setLoginError({ kind: 'unknown', message: 'An unexpected error occurred. Please try again.' });
+        setLoginError({ kind: 'unknown', message: getErrorMessage(err) });
       }
     } finally {
       setIsSubmitting(false);
@@ -188,9 +185,10 @@ export function LoginForm() {
       <div className="hidden lg:flex flex-col items-center justify-center bg-[#003366] p-12">
         <div className="relative w-full max-w-md aspect-square opacity-90">
           <Image
-            src={loginIllustration}
+            src="/Super-Admin.png"
             alt="Talim Admin portal illustration"
             fill
+            sizes="(max-width: 1024px) 0px, 28rem"
             priority
             className="object-contain"
           />

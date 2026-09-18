@@ -1,5 +1,5 @@
 import { API_ENDPOINTS } from '../lib/api/config';
-import { apiRequest } from '../lib/api/client';
+import { api } from '@/lib/apiClient';
 
 export type Priority = 'low' | 'medium' | 'high';
 export type RecipientRole = 'student' | 'teacher' | 'parent' | 'admin';
@@ -125,7 +125,13 @@ export interface GetNotificationsParams {
   schoolId?: string;
 }
 
-const buildQuery = (params: GetNotificationsParams = {}) => {
+/**
+ * Serialises defined params into a query string.
+ *
+ * @param params - The filter values.
+ * @returns The query string including `?`, or an empty string.
+ */
+const buildQuery = (params: GetNotificationsParams = {}): string => {
   const searchParams = new URLSearchParams();
   Object.entries(params).forEach(([key, value]) => {
     if (value !== undefined && value !== null && value !== '') {
@@ -137,52 +143,83 @@ const buildQuery = (params: GetNotificationsParams = {}) => {
 };
 
 export const notificationService = {
-  createNotification: async (data: CreateNotificationRequest): Promise<NotificationResponse> => {
-    return apiRequest<NotificationResponse>(API_ENDPOINTS.NOTIFICATIONS, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-  },
+  /**
+   * Sends (or schedules) a platform notification.
+   *
+   * @param data - Exactly the fields `CreateNotificationDto` declares.
+   * @returns The created notification.
+   * @throws ApiError - `VALIDATION_FAILED` with per-field details.
+   */
+  createNotification: async (data: CreateNotificationRequest): Promise<NotificationResponse> =>
+    api.post<NotificationResponse>(API_ENDPOINTS.NOTIFICATIONS, data),
 
-  getAllNotifications: async (params: GetNotificationsParams = {}): Promise<NotificationsResponse> => {
-    return apiRequest<NotificationsResponse>(
+  /**
+   * One page of notifications.
+   *
+   * @param params - Page, size and optional source/category/school filters.
+   * @returns The page and its pagination meta.
+   * @throws ApiError - On any non-2xx response.
+   */
+  getAllNotifications: async (
+    params: GetNotificationsParams = {},
+  ): Promise<NotificationsResponse> =>
+    api.get<NotificationsResponse>(
       `${API_ENDPOINTS.NOTIFICATIONS}${buildQuery({ page: 1, limit: 20, ...params })}`,
-    );
-  },
+    ),
 
-  getNotificationById: async (id: string): Promise<NotificationResponse> => {
-    return apiRequest<NotificationResponse>(API_ENDPOINTS.NOTIFICATION_BY_ID(id));
-  },
+  /**
+   * One notification with its delivery statistics.
+   *
+   * @param id - The notification id.
+   * @returns The notification.
+   * @throws ApiError - `NOT_FOUND` when it does not exist.
+   */
+  getNotificationById: async (id: string): Promise<NotificationResponse> =>
+    api.get<NotificationResponse>(API_ENDPOINTS.NOTIFICATION_BY_ID(id)),
 
+  /**
+   * Platform-wide delivery counters for the dashboard tiles.
+   *
+   * @param params - Optional source/category/school filters.
+   * @returns The summary counters.
+   * @throws ApiError - On any non-2xx response.
+   */
   getNotificationStats: async (
     params: Omit<GetNotificationsParams, 'page' | 'limit'> = {},
-  ): Promise<NotificationStats> => {
-    return apiRequest<NotificationStats>(
+  ): Promise<NotificationStats> =>
+    api.get<NotificationStats>(
       `${API_ENDPOINTS.NOTIFICATIONS}/stats/summary${buildQuery(params)}`,
-    );
-  },
+    ),
 
-  resendNotification: async (id: string): Promise<NotificationResponse> => {
-    return apiRequest<NotificationResponse>(API_ENDPOINTS.NOTIFICATION_RESEND(id), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-    });
-  },
+  /**
+   * Re-delivers a notification to the recipients it previously failed for.
+   *
+   * @param id - The notification id.
+   * @returns The notification with refreshed delivery statistics.
+   * @throws ApiError - `INVALID_STATE_TRANSITION` when nothing failed.
+   */
+  resendNotification: async (id: string): Promise<NotificationResponse> =>
+    api.post<NotificationResponse>(API_ENDPOINTS.NOTIFICATION_RESEND(id)),
 
-  duplicateNotification: async (id: string, senderId: string): Promise<NotificationResponse> => {
-    return apiRequest<NotificationResponse>(API_ENDPOINTS.NOTIFICATION_DUPLICATE(id), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ senderId }),
-    });
-  },
+  /**
+   * Copies a notification into a new draft owned by `senderId`.
+   *
+   * @param id - The notification to copy.
+   * @param senderId - The administrator the copy belongs to.
+   * @returns The new draft.
+   * @throws ApiError - On any non-2xx response.
+   */
+  duplicateNotification: async (id: string, senderId: string): Promise<NotificationResponse> =>
+    api.post<NotificationResponse>(API_ENDPOINTS.NOTIFICATION_DUPLICATE(id), { senderId }),
 
-  markAsRead: async (id: string, userId: string): Promise<NotificationResponse> => {
-    return apiRequest<NotificationResponse>(`${API_ENDPOINTS.NOTIFICATIONS}/${id}/read`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId }),
-    });
-  },
+  /**
+   * Marks a notification read for one user.
+   *
+   * @param id - The notification id.
+   * @param userId - The reader.
+   * @returns The updated notification.
+   * @throws ApiError - On any non-2xx response.
+   */
+  markAsRead: async (id: string, userId: string): Promise<NotificationResponse> =>
+    api.put<NotificationResponse>(`${API_ENDPOINTS.NOTIFICATIONS}/${id}/read`, { userId }),
 };

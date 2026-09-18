@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import {
   Monitor,
   Smartphone,
@@ -19,28 +18,11 @@ import {
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { apiRequest } from '@/app/lib/api/client';
-import { API_ENDPOINTS } from '@/app/lib/api/config';
-
-interface ActivityLog {
-  _id: string;
-  userId: string;
-  action: string;
-  platform: string;
-  deviceToken?: string;
-  ipAddress?: string;
-  userAgent?: string;
-  success: boolean;
-  metadata?: Record<string, unknown>;
-  createdAt: string;
-}
-
-interface ActivityLogsResponse {
-  logs: ActivityLog[];
-  total: number;
-  page: number;
-  limit: number;
-}
+import { useQuery } from '@tanstack/react-query';
+import { activityService, type ActivityLog } from '@/app/services/activity.service';
+import { useAuthContext } from '@/app/context/AuthContext';
+import { queryKeys, staleTimes } from '@/lib/queryKeys';
+import { getErrorMessage } from '@/lib/apiError';
 
 const actionMeta: Record<
   string,
@@ -81,29 +63,32 @@ const formatFull = (iso: string): string =>
     hour: '2-digit', minute: '2-digit',
   });
 
+/**
+ * The signed-in administrator's own sign-in and account history.
+ *
+ * @returns The activity panel.
+ */
 export default function RecentActivity() {
-  const [logs, setLogs] = useState<ActivityLog[]>([]);
-  const [total, setTotal] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { user } = useAuthContext();
+  const userId = user?.userId ?? '';
 
-  const fetchLogs = async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const res = await apiRequest<ActivityLogsResponse>(
-        `${API_ENDPOINTS.ACTIVITY_LOGS}?limit=15`,
-      );
-      setLogs(res.logs);
-      setTotal(res.total);
-    } catch {
-      setError('Could not load activity logs.');
-    } finally {
-      setIsLoading(false);
-    }
+  const {
+    data,
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: queryKeys.profile.activity(userId, { limit: 15 }),
+    queryFn: () => activityService.getMyActivity(15),
+    enabled: Boolean(userId),
+    staleTime: staleTimes.list,
+  });
+
+  const logs = data?.logs ?? [];
+  const total = data?.total ?? 0;
+  const fetchLogs = () => {
+    void refetch();
   };
-
-  useEffect(() => { void fetchLogs(); }, []);
 
   return (
     <div className="rounded-xl border border-[#F1F1F1] bg-white">
@@ -137,7 +122,7 @@ export default function RecentActivity() {
         </div>
       ) : error ? (
         <div className="flex flex-col items-center gap-2 py-12 text-center">
-          <p className="text-sm text-[#6F6F6F]">{error}</p>
+          <p className="text-sm text-[#6F6F6F]">{getErrorMessage(error, 'Could not load activity logs.')}</p>
           <Button variant="outline" size="sm" onClick={fetchLogs} className="text-xs border-[#F1F1F1]">
             Retry
           </Button>

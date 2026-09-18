@@ -1,5 +1,5 @@
 import { API_ENDPOINTS } from '@/app/lib/api/config';
-import { apiRequest } from '@/app/lib/api/client';
+import { api } from '@/lib/apiClient';
 
 export type PaymentEnvironment = 'test' | 'live';
 export type PaymentProviderName = 'paystack' | 'opay' | 'stripe';
@@ -30,26 +30,56 @@ export interface UpdateProviderConfigPayload {
 }
 
 export const paymentsService = {
+  /**
+   * Every platform payment provider and its configuration.
+   *
+   * @returns The provider list, empty when none is configured yet.
+   * @throws ApiError - On any non-2xx response.
+   */
   async getProviders(): Promise<PlatformProviderConfig[]> {
-    const res = await apiRequest<{ success: boolean; providers: PlatformProviderConfig[] }>(
+    const res = await api.get<{ success?: boolean; providers?: PlatformProviderConfig[] }>(
       API_ENDPOINTS.PAYMENT_PLATFORM_PROVIDERS,
     );
     return res.providers ?? [];
   },
 
-  async updateProviderConfig(name: PaymentProviderName, payload: UpdateProviderConfigPayload) {
-    return apiRequest(API_ENDPOINTS.PAYMENT_PLATFORM_PROVIDER_CONFIG(name), {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
+  /**
+   * Updates one provider's credentials and settings.
+   *
+   * @param name - The provider to change.
+   * @param payload - Only the fields the DTO declares.
+   * @returns The updated configuration.
+   * @throws ApiError - `VALIDATION_FAILED` with per-field details.
+   */
+  async updateProviderConfig(
+    name: PaymentProviderName,
+    payload: UpdateProviderConfigPayload,
+  ): Promise<PlatformProviderConfig> {
+    return api.patch<PlatformProviderConfig>(
+      API_ENDPOINTS.PAYMENT_PLATFORM_PROVIDER_CONFIG(name),
+      payload,
+    );
   },
 
-  async enableProvider(name: PaymentProviderName) {
-    return apiRequest(API_ENDPOINTS.PAYMENT_PLATFORM_PROVIDER_ENABLE(name), { method: 'PATCH' });
+  /**
+   * Turns a provider on for the whole platform.
+   *
+   * @param name - The provider to enable.
+   * @returns The updated configuration.
+   * @throws ApiError - `BAD_REQUEST` when the provider has no credentials yet.
+   */
+  async enableProvider(name: PaymentProviderName): Promise<PlatformProviderConfig> {
+    return api.patch<PlatformProviderConfig>(API_ENDPOINTS.PAYMENT_PLATFORM_PROVIDER_ENABLE(name));
   },
 
-  async disableProvider(name: PaymentProviderName) {
-    return apiRequest(API_ENDPOINTS.PAYMENT_PLATFORM_PROVIDER_DISABLE(name), { method: 'PATCH' });
+  /**
+   * Turns a provider off for the whole platform.
+   *
+   * @param name - The provider to disable.
+   * @returns The updated configuration.
+   * @throws ApiError - `BAD_REQUEST` when it is the only enabled provider.
+   */
+  async disableProvider(name: PaymentProviderName): Promise<PlatformProviderConfig> {
+    return api.patch<PlatformProviderConfig>(API_ENDPOINTS.PAYMENT_PLATFORM_PROVIDER_DISABLE(name));
   },
 };

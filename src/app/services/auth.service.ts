@@ -1,110 +1,103 @@
 import { API_ENDPOINTS } from '@/app/lib/api/config';
-import { apiRequest } from '@/app/lib/api/client';
-import { clearAuthSession, setAccessToken } from '@/app/lib/auth/session';
-import { decodeJwtPayload } from '@/app/lib/auth/jwt';
-import {
-  AuthResponse,
-  IntrospectResponse,
-  LoginCredentials,
-  User,
-} from '@/app/types/auth';
+import { api } from '@/lib/apiClient';
+import type { SessionUser } from '@/lib/session';
+import { AuthResponse, IntrospectResponse, LoginCredentials } from '@/app/types/auth';
 
-const getDeviceToken = (): string => {
-  if (typeof window === 'undefined') {
-    return 'talim-admin-web';
-  }
+/**
+ * A stable per-browser device identifier, so the backend can list and revoke
+ * sessions. It is not a credential and carries no session state.
+ *
+ * @returns The device token.
+ */
+function getDeviceToken(): string {
+  if (typeof window === 'undefined') return 'talim-admin-web';
 
-  const existingToken = localStorage.getItem('talim_device_token');
-  if (existingToken) {
-    return existingToken;
-  }
+  const existing = localStorage.getItem('talim_device_token');
+  if (existing) return existing;
 
   const token = `talim-admin-${crypto.randomUUID()}`;
   localStorage.setItem('talim_device_token', token);
   return token;
-};
-
-const getFallbackUserFromToken = (token: string): User | null => {
-  const payload = decodeJwtPayload(token);
-  if (!payload?.sub || !payload.email || !payload.role) {
-    return null;
-  }
-
-  return {
-    userId: payload.sub,
-    email: payload.email,
-    role: payload.role,
-    schoolId: payload.schoolId ?? undefined,
-  };
-};
+}
 
 export const authService = {
-  async login(credentials: LoginCredentials): Promise<{ accessToken: string; user: User }> {
-    const response = await apiRequest<AuthResponse>(API_ENDPOINTS.ADMIN_LOGIN, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        ...credentials,
+  /**
+   * Signs a platform administrator in through `POST /auth/admin-login`, which
+   * refuses any account whose role is not `admin`. The backend sets the
+   * httpOnly `refreshToken` cookie; the access token comes back in the body and
+   * is held in memory only.
+   *
+   * @param credentials - Email and password.
+   * @returns The access token and the introspected user.
+   * @throws ApiError - 401 for bad credentials, 403 when the account is not a
+   *   platform administrator.
+   */
+  async login(credentials: LoginCredentials): Promise<{ accessToken: string; user: SessionUser }> {
+    const response = await api.post<AuthResponse>(
+      API_ENDPOINTS.ADMIN_LOGIN,
+      {
+        email: credentials.email,
+        password: credentials.password,
         deviceToken: credentials.deviceToken || getDeviceToken(),
         platform: credentials.platform || 'admin-web',
-      }),
-      skipAuth: true,
-    });
-
-    setAccessToken(response.access_token);
-
-    const introspectResponse = await apiRequest<IntrospectResponse>(
-      API_ENDPOINTS.INTROSPECT,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ token: response.access_token }),
-        skipAuth: true,
       },
+      { skipAuth: true },
     );
 
-    const user = introspectResponse.user || getFallbackUserFromToken(response.access_token);
-    if (!user) {
-      throw new Error('Unable to resolve user profile after login');
-    }
+    const user = await this.introspect(response.access_token);
+    if (!user) throw new Error('Unable to resolve the administrator profile after sign-in.');
 
-    return {
-      accessToken: response.access_token,
-      user,
-    };
+    return { accessToken: response.access_token, user };
   },
 
-  async introspect(accessToken: string): Promise<User | null> {
+  /**
+   * Exchanges the httpOnly refresh cookie for a new access token. Returns
+   * `null` when there is no valid session, which is the normal cold-start case.
+   *
+   * @returns The new access token, or `null`.
+   */
+  async refresh(): Promise<string | null> {
     try {
-      const response = await apiRequest<IntrospectResponse>(API_ENDPOINTS.INTROSPECT, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ token: accessToken }),
-        skipAuth: true,
-      });
-
-      return response.user;
+      const response = await api.post<AuthResponse>(
+        API_ENDPOINTS.REFRESH_TOKEN,
+        undefined,
+        { skipAuth: true },
+      );
+      return response.access_token ?? null;
     } catch {
-      return getFallbackUserFromToken(accessToken);
+      return null;
     }
   },
 
+  /**
+   * Resolves the user behind an access token. This is the only source of the
+   * signed-in identity — nothing in the app decodes the token itself.
+   *
+   * @param accessToken - The token to introspect.
+   * @returns The user, or `null` when the token is not valid.
+   */
+  async introspect(accessToken: string): Promise<SessionUser | null> {
+    try {
+      const response = await api.post<IntrospectResponse>(
+        API_ENDPOINTS.INTROSPECT,
+        { token: accessToken },
+        { skipAuth: true },
+      );
+      return response.active === false ? null : (response.user ?? null);
+    } catch {
+      return null;
+    }
+  },
+
+  /**
+   * Revokes the refresh token and clears the server-side cookie. Never throws:
+   * the local session is cleared by the caller either way.
+   */
   async logout(): Promise<void> {
     try {
-      await apiRequest<{ message: string }>(API_ENDPOINTS.LOGOUT, {
-        method: 'POST',
-      });
+      await api.post(API_ENDPOINTS.LOGOUT);
     } catch {
-      // Swallow logout API errors and clear local session anyway.
-    } finally {
-      clearAuthSession();
+      /* the local session is cleared regardless */
     }
   },
 };
-

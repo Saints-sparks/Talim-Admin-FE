@@ -15,7 +15,7 @@ import {
   UpdateProviderConfigPayload,
 } from '@/app/services/payments.service';
 import { toast } from 'sonner';
-import { ApiError } from '@/app/lib/api/client';
+import { ApiError } from '@/lib/apiError';
 
 // ─── Provider metadata ─────────────────────────────────────────────────────────
 

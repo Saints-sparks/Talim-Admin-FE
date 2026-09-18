@@ -1,3 +1,6 @@
+import type { SessionUser } from '@/lib/session';
+
+/** Body for `POST /auth/admin-login`. Mirrors `AdminLoginDto`. */
 export interface LoginCredentials {
   email: string;
   password: string;
@@ -5,67 +8,21 @@ export interface LoginCredentials {
   platform?: string;
 }
 
-export interface User {
-  _id?: string;
-  userId: string;
-  email: string;
-  role: string;
-  firstName?: string;
-  lastName?: string;
-  phoneNumber?: string;
-  isActive?: boolean;
-  isEmailVerified?: boolean;
-  userAvatar?: string;
-  schoolId?:
-    | string
-    | {
-    _id: string;
-    name: string;
-    email: string;
-    physicalAddress: string;
-    location: {
-      country: string;
-      state: string;
-      _id: string;
-    };
-    schoolPrefix: string;
-    active: boolean;
-    logo: string;
-    createdAt: string;
-    updatedAt: string;
-  };
-  isTwoFactorEnabled?: boolean;
-  createdAt?: string;
-  updatedAt?: string;
-  devices?: Array<{
-    deviceToken: string;
-    platform: string;
-    _id?: string;
-    id?: string;
-  }>;
-}
+/**
+ * The signed-in platform administrator. Re-exported from the session store so
+ * there is exactly one user shape in the app.
+ */
+export type User = SessionUser;
 
+/** Response of `POST /auth/admin-login` and `POST /auth/refresh`. */
 export interface AuthResponse {
   access_token: string;
 }
 
+/** Response of `POST /auth/introspect`. */
 export interface IntrospectResponse {
   active: boolean;
-  user: User;
+  user: SessionUser | null;
   exp?: number;
   iat?: number;
-}
-
-export interface JwtPayload {
-  sub: string;
-  email: string;
-  role: string;
-  schoolId?: string | null;
-  exp?: number;
-  iat?: number;
-}
-
-export interface AuthError {
-  message: string;
-  status: number;
 }

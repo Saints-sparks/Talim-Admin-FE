@@ -23,6 +23,10 @@ export const API_ENDPOINTS = {
     `${API_BASE_URL}/schools/update/${schoolId}`,
   SCHOOL_STATUS: (schoolId: string) =>
     `${API_BASE_URL}/schools/${schoolId}/status`,
+  SCHOOL_DELETE: (schoolId: string) => `${API_BASE_URL}/schools/delete/${schoolId}`,
+  SCHOOL_RESTORE: (schoolId: string) => `${API_BASE_URL}/schools/restore/${schoolId}`,
+
+  UPLOAD_IMAGE: `${API_BASE_URL}/upload/image`,
 
   ADMIN_LOGIN: `${API_BASE_URL}/auth/admin-login`,
   ACTIVITY_LOGS: `${API_BASE_URL}/auth/activity-logs`,
