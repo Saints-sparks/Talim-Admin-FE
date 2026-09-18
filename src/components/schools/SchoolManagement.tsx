@@ -1,10 +1,25 @@
-"use client"
+'use client';
 
-import * as React from "react"
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import * as React from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Filter, MoreVertical, Plus, School as SchoolIcon, Search } from 'lucide-react';
+import { toast } from 'sonner';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,376 +29,360 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { toast } from "sonner"
-import { Filter, MoreVertical, Plus, School as SchoolIcon, Search, WifiOff } from "lucide-react"
-import { School, SchoolDeletionResult, schoolService } from "@/app/services/school.service"
-import { LoadingModal } from "@/components/ui/loading-modal"
-import { useDebounce } from "@/hooks/use-debounce"
+} from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { School, schoolService } from '@/app/services/school.service';
+import { useDebounce } from '@/hooks/use-debounce';
+import { queryKeys, staleTimes } from '@/lib/queryKeys';
+import { getErrorMessage } from '@/lib/apiError';
+import { logger } from '@/lib/logger';
+import { EmptyState, ErrorState, LoadingState } from '@/components/StateComponents';
 
+const PAGE_SIZE = 10;
+
+/**
+ * The school register: search, activate/suspend, edit and delete every school
+ * on the platform.
+ *
+ * @returns The school management console.
+ */
 export function SchoolManagement() {
-  const router = useRouter()
-  const [searchTerm, setSearchTerm] = useState("")
-  const [currentPage, setCurrentPage] = useState(1)
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
-  const [showToggleDialog, setShowToggleDialog] = useState(false)
-  const [selectedSchool, setSelectedSchool] = useState<School | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false)
-  const [isDeleting, setIsDeleting] = useState(false)
-  const [deletionResult, setDeletionResult] = useState<SchoolDeletionResult | null>(null)
-  const [schools, setSchools] = useState<School[]>([])
-  const [totalPages, setTotalPages] = useState(1)
-  const [totalSchools, setTotalSchools] = useState(0)
-  const [error, setError] = useState<string | null>(null)
-  const debouncedSearch = useDebounce(searchTerm, 500)
-  const limit = 10
+  const router = useRouter();
+  const queryClient = useQueryClient();
 
-  const fetchSchools = async (page: number, query?: string) => {
-    try {
-      setIsLoading(true)
-      setError(null)
-      const response = await schoolService.getAllSchools(page, limit, query)
-      setSchools(response.data)
-      setTotalPages(response.meta.lastPage)
-      setTotalSchools(response.meta.total)
-    } catch (error) {
-      setError("Unable to connect to the server. Please check your connection and try again.")
-      toast.error("Connection Error", {
-        description: "Failed to fetch schools. Please try again later.",
-      })
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [schoolToDelete, setSchoolToDelete] = useState<School | null>(null);
+  const [schoolToToggle, setSchoolToToggle] = useState<School | null>(null);
+
+  const debouncedSearch = useDebounce(searchTerm, 400);
 
   useEffect(() => {
-    fetchSchools(currentPage, debouncedSearch)
-  }, [currentPage, debouncedSearch])
+    setCurrentPage(1);
+  }, [debouncedSearch]);
 
-  const handleRegisterClick = () => {
-    router.push("/talimregister")
-  }
+  const params = { page: currentPage, limit: PAGE_SIZE, query: debouncedSearch || undefined };
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value)
-    setCurrentPage(1) // Reset to first page when searching
-  }
+  const { data, isLoading, error, refetch, isPlaceholderData } = useQuery({
+    queryKey: queryKeys.schools.list(params),
+    queryFn: () => schoolService.getAllSchools(currentPage, PAGE_SIZE, debouncedSearch),
+    staleTime: staleTimes.list,
+    placeholderData: (previous) => previous,
+  });
 
-  const handleToggleStatus = async () => {
-    if (!selectedSchool) return;
+  const schools = data?.data ?? [];
+  const totalPages = data?.meta?.lastPage ?? 1;
+  const totalSchools = data?.meta?.total ?? 0;
 
-    try {
-      setIsUpdatingStatus(true)
-      const newStatus = !selectedSchool.active;
-      
-      await schoolService.updateSchoolStatus(selectedSchool._id, newStatus);
-      
-      // Update local state optimistically
-      setSchools(prevSchools => 
-        prevSchools.map(school => 
-          school._id === selectedSchool._id 
-            ? { ...school, active: newStatus }
-            : school
-        )
-      );
+  const invalidate = () => queryClient.invalidateQueries({ queryKey: queryKeys.schools.all });
 
-      toast.success(`School ${newStatus ? 'activated' : 'deactivated'} successfully`);
-      
-      // Refresh the schools list to ensure we have the latest data
-      await fetchSchools(currentPage, searchTerm);
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to update school status';
-      toast.error(errorMessage);
-      
-      // Revert optimistic update on error
-      await fetchSchools(currentPage, searchTerm);
-    } finally {
-      setIsUpdatingStatus(false)
-      setShowToggleDialog(false)
-      setSelectedSchool(null)
-    }
-  }
+  const toggleMutation = useMutation({
+    mutationFn: ({ school, active }: { school: School; active: boolean }) =>
+      schoolService.updateSchoolStatus(school._id, active),
+    onSuccess: async (_result, { school, active }) => {
+      toast.success(`"${school.name}" ${active ? 'activated' : 'deactivated'}`);
+      await invalidate();
+    },
+    onError: (err) => {
+      logger.error('schools', 'Status change failed', err);
+      toast.error('The status could not be changed', { description: getErrorMessage(err) });
+    },
+    onSettled: () => setSchoolToToggle(null),
+  });
 
-  const handleDelete = async () => {
-    if (!selectedSchool) return
-
-    try {
-      setIsDeleting(true)
-      const result = await schoolService.deleteSchool(selectedSchool._id)
-      setDeletionResult(result)
-
-      // Remove from list immediately
-      setSchools(prev => prev.filter(s => s._id !== selectedSchool._id))
-      setTotalSchools(prev => prev - 1)
-
-      toast.success(`"${selectedSchool.name}" deleted`, {
+  const deleteMutation = useMutation({
+    mutationFn: (school: School) => schoolService.deleteSchool(school._id),
+    onSuccess: async (result, school) => {
+      toast.success(`"${school.name}" deleted`, {
         description: result.summary.message,
         duration: 6000,
-      })
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to delete school'
-      toast.error('Delete failed', { description: message })
-    } finally {
-      setIsDeleting(false)
-      setShowDeleteDialog(false)
-      setSelectedSchool(null)
-    }
-  }
+      });
+      await invalidate();
+    },
+    onError: (err) => {
+      logger.error('schools', 'Delete failed', err);
+      toast.error('The school could not be deleted', { description: getErrorMessage(err) });
+    },
+    onSettled: () => setSchoolToDelete(null),
+  });
 
-  const EmptyState = () => (
-    <div className="flex flex-col items-center justify-center py-12 px-4">
-      {error ? (
-        <>
-          <WifiOff className="h-16 w-16 text-gray-400 mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Oops! We're not online</h3>
-          <p className="text-gray-500 text-center max-w-sm mb-4">{error}</p>
-        </>
-      ) : (
-        <>
-          <SchoolIcon className="h-16 w-16 text-gray-400 mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No schools found</h3>
-          <p className="text-gray-500 text-center max-w-sm mb-4">
-            {searchTerm ? "No schools match your search criteria." : "Get started by adding your first school to the system."}
-          </p>
-        </>
-      )}
-      <Button onClick={handleRegisterClick} className="bg-sky-700 hover:bg-sky-800">
-        <Plus className="mr-2 h-4 w-4" />
-        Add a school
-      </Button>
-    </div>
-  )
+  const isBusy = toggleMutation.isPending || deleteMutation.isPending;
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <LoadingModal isOpen={isLoading || isUpdatingStatus || isDeleting} message={isDeleting ? "Deleting school and cleaning up accounts..." : isUpdatingStatus ? "Updating school status..." : "Loading schools..."} />
-      
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h1 className="text-2xl font-bold">Schools</h1>
-        <Button className="hover:bg-gray-600 bg-sky-700" onClick={handleRegisterClick}>
+    <div className="container mx-auto space-y-6 p-6">
+      <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+        <h1 className="text-2xl font-bold text-[#030E18]">Schools</h1>
+        <Button
+          className="bg-[#003366] hover:bg-[#002244]"
+          onClick={() => router.push('/talimregister')}
+        >
           <Plus className="mr-2 h-4 w-4" />
           Add a school
         </Button>
       </div>
 
       <div className="rounded-lg border bg-card">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-4">
+        <div className="flex flex-col items-start justify-between gap-4 p-4 sm:flex-row sm:items-center">
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm">
-              <Filter className="mr-2 h-4 w-4"/>
-              <p className="text-gray-600">Filters</p>
-            </Button>
-            <div className="text-sm text-gray-500">
-              Total Schools: {totalSchools}
-            </div>
+            <Filter className="h-4 w-4 text-[#878787]" />
+            <span className="text-sm text-[#6F6F6F]">
+              {isLoading ? 'Loading…' : `${totalSchools.toLocaleString()} schools`}
+            </span>
           </div>
           <div className="relative w-full sm:w-auto">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#878787]" />
             <Input
-              placeholder="Search schools..."
+              placeholder="Search schools…"
+              aria-label="Search schools"
               value={searchTerm}
-              onChange={handleSearch}
-              className="w-full sm:w-[300px] pl-9"
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-9 sm:w-[300px]"
             />
           </div>
         </div>
 
-        {(!schools.length || error) ? (
-          <EmptyState />
+        {error ? (
+          <ErrorState error={error} onRetry={() => void refetch()} />
+        ) : isLoading ? (
+          <LoadingState message="Loading schools…" />
+        ) : schools.length === 0 ? (
+          <div className="p-4">
+            <EmptyState
+              icon={<SchoolIcon className="h-12 w-12 text-[#878787]" />}
+              title="No schools found"
+              message={
+                searchTerm
+                  ? 'No school matches your search.'
+                  : 'Get started by adding your first school to the platform.'
+              }
+              actionText={searchTerm ? undefined : 'Add a school'}
+              onAction={searchTerm ? undefined : () => router.push('/talimregister')}
+            />
+          </div>
         ) : (
           <>
-            <div className="relative overflow-x-auto">
+            <div
+              className={`relative overflow-x-auto transition-opacity ${
+                isPlaceholderData ? 'opacity-60' : ''
+              }`}
+            >
               <Table>
                 <TableHeader>
-                  <TableRow className="bg-gray-300">
-                    <TableHead>School Prefix</TableHead>
+                  <TableRow className="bg-[#F8F8F8]">
+                    <TableHead>Prefix</TableHead>
                     <TableHead>Name</TableHead>
-                    <TableHead>Email Address</TableHead>
-                    <TableHead>Primary Contact</TableHead>
-                    <TableHead>Location</TableHead>
+                    <TableHead className="hidden md:table-cell">Email</TableHead>
+                    <TableHead className="hidden lg:table-cell">Primary Contact</TableHead>
+                    <TableHead className="hidden lg:table-cell">Location</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead className="w-[50px]">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {schools.map((school) => (
-                    <TableRow 
-                      key={school._id} 
-                      className="text-black cursor-pointer hover:bg-gray-50"
+                    <TableRow
+                      key={school._id}
+                      className="cursor-pointer text-[#030E18] hover:bg-[#F8F8F8]"
                       onClick={() => router.push(`/SchoolProfile/view/${school._id}`)}
                     >
                       <TableCell className="font-medium">{school.schoolPrefix}</TableCell>
                       <TableCell>{school.name}</TableCell>
-                      <TableCell>{school.email}</TableCell>
-                      <TableCell>
-                        {school.primaryContacts[0]?.name || 'N/A'}
-                        <div className="text-xs text-gray-500">
-                          {school.primaryContacts[0]?.role || ''}
-                        </div>
+                      <TableCell className="hidden md:table-cell">{school.email}</TableCell>
+                      <TableCell className="hidden lg:table-cell">
+                        {school.primaryContacts[0]?.name ?? '—'}
+                        {school.primaryContacts[0]?.role && (
+                          <div className="text-xs text-[#878787]">
+                            {school.primaryContacts[0].role}
+                          </div>
+                        )}
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="hidden lg:table-cell">
                         {school.location.state}, {school.location.country}
                       </TableCell>
                       <TableCell>
-                        <Badge 
-                          variant={school.active ? "default" : "destructive"}
-                          className={school.active ? "bg-green-100 text-green-800 hover:bg-green-200" : "bg-red-100 text-red-800 hover:bg-red-200"}
+                        <Badge
+                          className={
+                            school.active
+                              ? 'border-0 bg-emerald-50 text-emerald-700'
+                              : 'border-0 bg-red-50 text-red-700'
+                          }
                         >
-                          {school.active ? "Active" : "Inactive"}
+                          {school.active ? 'Active' : 'Inactive'}
                         </Badge>
                       </TableCell>
-
-<TableCell className="relative" onClick={(e) => e.stopPropagation()}>
-  <DropdownMenu>
-    <DropdownMenuTrigger asChild>
-      <Button variant="ghost" size="icon" className="h-8 w-8 p-0">
-        <MoreVertical className="h-4 w-4" />
-        <span className="sr-only">Open menu</span>
-      </Button>
-    </DropdownMenuTrigger>
-    <DropdownMenuContent
-      align="end"
-      className="absolute right-0 top-8 w-40 bg-gray-100 shadow-lg border border-gray-200 rounded-lg z-50"
-    >
-      {/* Edit Option */}
-      <DropdownMenuItem onClick={() => router.push(`/SchoolProfile/${school._id}`)}>
-        Edit
-      </DropdownMenuItem>
-
-      {/* Dynamic Activate/Deactivate Option */}
-      <DropdownMenuItem
-        onClick={() => {
-          setSelectedSchool(school);
-          setShowToggleDialog(true);
-        }}
-        className={school.active ? "text-red-600" : "text-green-600"}
-      >
-        {school.active ? "Deactivate" : "Activate"}
-      </DropdownMenuItem>
-
-      {/* Always Visible Delete Option */}
-      <DropdownMenuItem
-        onClick={() => {
-          setSelectedSchool(school);
-          setShowDeleteDialog(true);
-        }}
-        className="text-red-600"
-      >
-        Delete
-      </DropdownMenuItem>
-    </DropdownMenuContent>
-  </DropdownMenu>
-</TableCell>
-
+                      <TableCell onClick={(e) => e.stopPropagation()}>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 p-0"
+                              disabled={isBusy}
+                            >
+                              <MoreVertical className="h-4 w-4" />
+                              <span className="sr-only">Actions for {school.name}</span>
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="w-40">
+                            <DropdownMenuItem
+                              onClick={() => router.push(`/SchoolProfile/${school._id}`)}
+                            >
+                              Edit
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => setSchoolToToggle(school)}
+                              className={school.active ? 'text-red-600' : 'text-emerald-600'}
+                            >
+                              {school.active ? 'Deactivate' : 'Activate'}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => setSchoolToDelete(school)}
+                              className="text-red-600"
+                            >
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
             </div>
 
-            <div className="flex items-center justify-between p-4">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                disabled={currentPage === 1}
-              >
-                Previous
-              </Button>
-              <span className="text-sm text-gray-600">
-                Page {currentPage} of {totalPages}
-              </span>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                disabled={currentPage === totalPages}
-              >
-                Next
-              </Button>
-            </div>
+            {totalPages > 1 && (
+              <div className="flex items-center justify-between border-t p-4">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                >
+                  Previous
+                </Button>
+                <span className="text-sm text-[#6F6F6F]">
+                  Page {currentPage} of {totalPages}
+                </span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={currentPage >= totalPages}
+                >
+                  Next
+                </Button>
+              </div>
+            )}
           </>
         )}
       </div>
 
-      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-  <AlertDialogContent className="max-w-lg p-6 bg-white rounded-lg shadow-lg">
-    <AlertDialogHeader className="space-y-3">
-      <AlertDialogTitle className="text-lg font-semibold text-gray-900">
-        Delete &quot;{selectedSchool?.name}&quot;?
-      </AlertDialogTitle>
-      <AlertDialogDescription asChild>
-        <div className="space-y-3 text-sm text-gray-600">
-          <p>This will permanently remove the school. Here is what happens:</p>
-          <ul className="space-y-1.5 list-none">
-            <li className="flex items-start gap-2">
-              <span className="mt-0.5 text-red-500 font-bold">✕</span>
-              <span><strong>School admin account deleted</strong> — their email becomes available for re-registration</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="mt-0.5 text-yellow-500 font-bold">⚠</span>
-              <span><strong>Teachers, parents &amp; students deactivated</strong> — accounts suspended, all data preserved</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="mt-0.5 text-green-600 font-bold">✓</span>
-              <span><strong>Student records kept</strong> — grades, attendance &amp; history are safe</span>
-            </li>
-          </ul>
-          <p className="text-red-600 font-medium">This action cannot be undone from the UI.</p>
-        </div>
-      </AlertDialogDescription>
-    </AlertDialogHeader>
-    <AlertDialogFooter className="flex justify-end space-x-3 pt-2">
-      <AlertDialogCancel
-        disabled={isDeleting}
-        className="px-4 py-2 border rounded-md text-gray-600 hover:bg-gray-100"
+      <AlertDialog
+        open={Boolean(schoolToDelete)}
+        onOpenChange={(open) => {
+          if (!open && !deleteMutation.isPending) setSchoolToDelete(null);
+        }}
       >
-        Cancel
-      </AlertDialogCancel>
-      <AlertDialogAction
-        onClick={handleDelete}
-        disabled={isDeleting}
-        className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 disabled:opacity-50"
-      >
-        {isDeleting ? 'Deleting...' : 'Yes, delete school'}
-      </AlertDialogAction>
-    </AlertDialogFooter>
-  </AlertDialogContent>
-</AlertDialog>
+        <AlertDialogContent className="max-w-lg rounded-lg bg-white p-6 shadow-lg">
+          <AlertDialogHeader className="space-y-3">
+            <AlertDialogTitle className="text-lg font-semibold text-[#030E18]">
+              Delete &quot;{schoolToDelete?.name}&quot;?
+            </AlertDialogTitle>
+            <AlertDialogDescription asChild>
+              <div className="space-y-3 text-sm text-[#6F6F6F]">
+                <p>This will permanently remove the school. Here is what happens:</p>
+                <ul className="list-none space-y-1.5">
+                  <li className="flex items-start gap-2">
+                    <span className="mt-0.5 font-bold text-red-500">✕</span>
+                    <span>
+                      <strong>School admin account deleted</strong> — their email becomes available
+                      for re-registration
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="mt-0.5 font-bold text-amber-500">⚠</span>
+                    <span>
+                      <strong>Teachers, parents &amp; students deactivated</strong> — accounts
+                      suspended, all data preserved
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="mt-0.5 font-bold text-emerald-600">✓</span>
+                    <span>
+                      <strong>Student records kept</strong> — grades, attendance &amp; history are
+                      safe
+                    </span>
+                  </li>
+                </ul>
+                <p className="font-medium text-red-600">
+                  This action cannot be undone from the UI.
+                </p>
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex justify-end space-x-3 pt-2">
+            <AlertDialogCancel disabled={deleteMutation.isPending}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(event) => {
+                event.preventDefault();
+                if (schoolToDelete) deleteMutation.mutate(schoolToDelete);
+              }}
+              disabled={deleteMutation.isPending}
+              className="bg-red-600 text-white hover:bg-red-700 disabled:opacity-50"
+            >
+              {deleteMutation.isPending ? 'Deleting…' : 'Yes, delete school'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
-<AlertDialog open={showToggleDialog} onOpenChange={setShowToggleDialog}>
-  <AlertDialogContent className="max-w-md p-6 bg-white rounded-lg shadow-lg">
-    <AlertDialogHeader className="space-y-2">
-      <AlertDialogTitle className="text-lg font-semibold text-gray-900">
-        {selectedSchool?.active ? "Deactivate School" : "Activate School"}
-      </AlertDialogTitle>
-      <AlertDialogDescription className="text-gray-600">
-        Are you sure you want to 
-        <span className="font-medium"> {selectedSchool?.active ? "deactivate" : "activate"} </span> 
-        this school?
-      </AlertDialogDescription>
-    </AlertDialogHeader>
-    <AlertDialogFooter className="flex justify-end space-x-3">
-      <AlertDialogCancel className="px-4 py-2 border rounded-md text-gray-600 hover:bg-gray-100">
-        Cancel
-      </AlertDialogCancel>
-      <AlertDialogAction 
-        onClick={handleToggleStatus} 
-        className={`px-4 py-2 text-white rounded-md ${
-          selectedSchool?.active ? "bg-red-600 hover:bg-red-700" : "bg-green-600 hover:bg-green-700"
-        }`}
+      <AlertDialog
+        open={Boolean(schoolToToggle)}
+        onOpenChange={(open) => {
+          if (!open && !toggleMutation.isPending) setSchoolToToggle(null);
+        }}
       >
-        {selectedSchool?.active ? "Deactivate" : "Activate"}
-      </AlertDialogAction>
-    </AlertDialogFooter>
-  </AlertDialogContent>
-</AlertDialog>
-
+        <AlertDialogContent className="max-w-md rounded-lg bg-white p-6 shadow-lg">
+          <AlertDialogHeader className="space-y-2">
+            <AlertDialogTitle className="text-lg font-semibold text-[#030E18]">
+              {schoolToToggle?.active ? 'Deactivate school' : 'Activate school'}
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-[#6F6F6F]">
+              {schoolToToggle?.active
+                ? `Suspend "${schoolToToggle?.name}"? Its users will not be able to sign in.`
+                : `Activate "${schoolToToggle?.name}"? Its users will be able to sign in again.`}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex justify-end space-x-3">
+            <AlertDialogCancel disabled={toggleMutation.isPending}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(event) => {
+                event.preventDefault();
+                if (schoolToToggle) {
+                  toggleMutation.mutate({
+                    school: schoolToToggle,
+                    active: !schoolToToggle.active,
+                  });
+                }
+              }}
+              disabled={toggleMutation.isPending}
+              className={
+                schoolToToggle?.active
+                  ? 'bg-red-600 text-white hover:bg-red-700'
+                  : 'bg-emerald-600 text-white hover:bg-emerald-700'
+              }
+            >
+              {toggleMutation.isPending
+                ? 'Saving…'
+                : schoolToToggle?.active
+                  ? 'Deactivate'
+                  : 'Activate'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
-  )
+  );
 }
-
