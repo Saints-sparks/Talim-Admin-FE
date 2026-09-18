@@ -5,11 +5,12 @@ import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { PageHeader } from "@/components/ui/page-header";
 
-interface DashboardHeaderProps {
-  isSidebarOpen: boolean;
-}
-
-const DashboardHeader = ({ isSidebarOpen: _isSidebarOpen }: DashboardHeaderProps) => {
+/**
+ * The dashboard's sticky header, with the primary "register a school" action.
+ *
+ * @returns The header element.
+ */
+const DashboardHeader = () => {
   const router = useRouter();
 
   const handleRegisterClick = () => {
