@@ -12,14 +12,13 @@ import {
   ShieldAlert,
   Clock,
   Activity,
-  ChevronRight,
   Loader2,
   RefreshCw,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useQuery } from '@tanstack/react-query';
-import { activityService, type ActivityLog } from '@/app/services/activity.service';
+import { activityService } from '@/app/services/activity.service';
 import { useAuthContext } from '@/app/context/AuthContext';
 import { queryKeys, staleTimes } from '@/lib/queryKeys';
 import { getErrorMessage } from '@/lib/apiError';

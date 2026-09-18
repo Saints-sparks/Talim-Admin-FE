@@ -1,10 +1,26 @@
 import { API_ENDPOINTS } from '@/app/lib/api/config';
 import { api } from '@/lib/apiClient';
 
+/**
+ *
+ */
+/** Which set of provider credentials a configuration uses. */
 export type PaymentEnvironment = 'test' | 'live';
+/**
+ *
+ */
+/** The payment providers the platform can route through. */
 export type PaymentProviderName = 'paystack' | 'opay' | 'stripe';
+/**
+ *
+ */
+/** A way a payer can settle, as the provider names it. */
 export type PaymentChannel = 'card' | 'bank_transfer' | 'ussd' | 'wallet' | 'bank' | 'mobile_money';
 
+/**
+ *
+ */
+/** One provider's platform-wide configuration. */
 export interface PlatformProviderConfig {
   providerName: PaymentProviderName;
   isEnabled: boolean;
@@ -18,6 +34,13 @@ export interface PlatformProviderConfig {
   updatedAt?: string;
 }
 
+/**
+ *
+ */
+/**
+ * Body for `PATCH /payments/platform/providers/:name/config`. Only the fields
+ * the DTO declares; the API runs `forbidNonWhitelisted`.
+ */
 export interface UpdateProviderConfigPayload {
   publicKey?: string;
   secretKey?: string;

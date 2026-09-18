@@ -13,13 +13,21 @@ import { toast } from "sonner"
 import { UploadProgress } from "@/components/ui/upload-progress"
 import { School, schoolService } from "@/app/services/school.service"
 import {
+  ACCEPTED_IMAGE_TYPES,
+  MAX_IMAGE_BYTES,
+  uploadImage,
+  validateImageFile,
+} from "@/app/services/upload.service"
+import { ApiError, getErrorMessage } from "@/lib/apiError"
+import { queryKeys } from "@/lib/queryKeys"
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { API_BASE_URL } from "@/app/lib/api/config"
+import { useQueryClient } from "@tanstack/react-query"
 
 // Nigerian states
 const NIGERIAN_STATES = [
@@ -29,10 +37,6 @@ const NIGERIAN_STATES = [
   "Niger", "Ogun", "Ondo", "Osun", "Oyo", "Plateau", "Rivers", "Sokoto", "Taraba",
   "Yobe", "Zamfara",
 ]
-
-// File upload constants
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 
 interface FormData {
   schoolLogo: string
@@ -57,6 +61,8 @@ interface SchoolRegistrationFormProps {
 
 export function SchoolRegistrationForm({ mode = 'create', initialData, schoolId }: SchoolRegistrationFormProps) {
   const router = useRouter()
+  const queryClient = useQueryClient()
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const [isLoading, setIsLoading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
   const [uploadStatus, setUploadStatus] = useState<'uploading' | 'success' | 'error'>('uploading')
@@ -87,110 +93,27 @@ export function SchoolRegistrationForm({ mode = 'create', initialData, schoolId 
   const [previewUrl, setPreviewUrl] = useState<string>(initialData?.logo || "")
   const [showUploadProgress, setShowUploadProgress] = useState(false)
 
-  const validateFile = (file: File): string | null => {
-    if (!file) return "No file selected";
-    
-    if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
-      return "File type not supported. Please upload a JPEG, PNG, GIF, or WebP image.";
-    }
-
-    if (file.size > MAX_FILE_SIZE) {
-      return `File is too large. Maximum size is ${MAX_FILE_SIZE / 1024 / 1024}MB.`;
-    }
-
-    return null;
-  };
-
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+    const file = event.target.files?.[0]
+    if (!file) return
 
-    // Validate file
-    const error = validateFile(file);
-    if (error) {
-      toast.error(error);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
-      return;
+    const problem = validateImageFile(file)
+    if (problem) {
+      toast.error(problem)
+      if (fileInputRef.current) fileInputRef.current.value = ''
+      return
     }
 
-    // Store the file for later upload
-    setSelectedFile(file);
-
-    // Create preview URL
-    const objectUrl = URL.createObjectURL(file);
-    setPreviewUrl(objectUrl);
-  };
+    setSelectedFile(file)
+    setPreviewUrl(URL.createObjectURL(file))
+  }
 
   const handleRemoveLogo = () => {
     setPreviewUrl("")
     setSelectedFile(null)
     setFormData(prev => ({ ...prev, schoolLogo: "" }))
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ""
-    }
+    if (fileInputRef.current) fileInputRef.current.value = ""
   }
-
-  const uploadImage = async (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      setShowUploadProgress(true)
-      setUploadStatus('uploading')
-      setUploadProgress(0)
-      setUploadError(undefined)
-
-      const xhr = new XMLHttpRequest();
-      const formData = new FormData();
-      formData.append('file', file);
-
-      xhr.upload.onprogress = (event) => {
-        if (event.lengthComputable) {
-          const progress = Math.round((event.loaded / event.total) * 100);
-          setUploadProgress(progress);
-        }
-      };
-
-      xhr.onload = () => {
-        try {
-          if (xhr.status === 0) {
-            setUploadStatus('error')
-            setUploadError('Network error occurred. Please check your connection.')
-            reject(new Error('Network error occurred'))
-            return
-          }
-
-          const response = JSON.parse(xhr.responseText);
-          console.log('Upload response:', response);
-
-          if (xhr.status >= 200 && xhr.status < 300 && response.url) {
-            setUploadStatus('success')
-            setTimeout(() => {
-              setShowUploadProgress(false)
-            }, 1000)
-            resolve(response.url);
-          } else {
-            setUploadStatus('error')
-            setUploadError(response.message || 'Upload failed')
-            reject(new Error(response.message || 'Upload failed'));
-          }
-        } catch (error) {
-          console.error('Response parsing error:', xhr.responseText);
-          setUploadStatus('error')
-          setUploadError('Invalid server response')
-          reject(new Error('Invalid response format'));
-        }
-      };
-
-      xhr.onerror = () => {
-        setUploadStatus('error')
-        setUploadError('Network error occurred. Please check your connection.')
-        reject(new Error('Network error occurred'));
-      };
-
-      xhr.open('POST', `${API_BASE_URL}/upload/image`);
-      xhr.send(formData);
-    });
-  };
 
   const handlePrimaryContactChange = (index: number, field: string, value: string) => {
     setFormData(prev => ({
@@ -203,75 +126,76 @@ export function SchoolRegistrationForm({ mode = 'create', initialData, schoolId 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+    setFieldErrors({})
+
+    let logoUrl = formData.schoolLogo
+    if (!selectedFile && !logoUrl) {
+      toast.error("Add a school logo before saving.")
+      return
+    }
+
+    setIsLoading(true)
     try {
-      setIsLoading(true)
-      
-      // Upload image if selected
-      let logoUrl = formData.schoolLogo;
       if (selectedFile) {
+        setShowUploadProgress(true)
+        setUploadStatus('uploading')
+        setUploadProgress(0)
+        setUploadError(undefined)
         try {
-          logoUrl = await uploadImage(selectedFile);
+          logoUrl = await uploadImage(selectedFile, setUploadProgress)
+          setUploadStatus('success')
+          setTimeout(() => setShowUploadProgress(false), 1000)
         } catch (error) {
-          const errorMessage = error instanceof Error ? error.message : 'Failed to upload image';
-          toast.error(errorMessage);
-          return;
+          setUploadStatus('error')
+          setUploadError(getErrorMessage(error, 'The logo could not be uploaded.'))
+          toast.error(getErrorMessage(error, 'The logo could not be uploaded.'))
+          return
         }
-      } else if (!formData.schoolLogo) {
-        toast.error('Please select a school logo');
-        return;
       }
 
-      const payload = {
+      // Exactly the fields CreateSchoolDto / UpdateSchoolDto declare — the API
+      // runs forbidNonWhitelisted, so one extra key would be a 400.
+      const base = {
         name: formData.schoolName,
         email: formData.emailAddress,
         physicalAddress: formData.physicalAddress,
-        location: {
-          country: "Nigeria",
-          state: formData.state
-        },
-        schoolPrefix: formData.schoolPrefix,
+        location: { country: "Nigeria", state: formData.state },
         primaryContacts: formData.primaryContacts,
         active: initialData?.active ?? true,
-        logo: logoUrl
+        logo: logoUrl,
       }
 
-      console.log('Submitting payload:', payload)
-
-      let response;
       if (mode === 'edit' && schoolId) {
-        response = await schoolService.updateSchool(schoolId, payload);
-        toast.success('School updated successfully!');
+        await schoolService.updateSchool(schoolId, base)
+        toast.success('School updated')
       } else {
-        response = await fetch(`${API_BASE_URL}/schools/create`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(payload),
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || 'Failed to create school');
-        }
-
-        toast.success('School registered successfully!');
+        await schoolService.createSchool({ ...base, schoolPrefix: formData.schoolPrefix })
+        toast.success('School registered')
       }
 
+      await queryClient.invalidateQueries({ queryKey: queryKeys.schools.all })
       router.push('/talimschool')
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to process school'
-      toast.error(errorMessage)
-      console.error('Form submission error:', error)
+      if (error instanceof ApiError && error.code === 'VALIDATION_FAILED') {
+        setFieldErrors(error.fieldErrors())
+      }
+      toast.error(
+        mode === 'edit' ? 'The school could not be updated' : 'The school could not be registered',
+        { description: getErrorMessage(error) },
+      )
     } finally {
       setIsLoading(false)
       setUploadProgress(0)
+      setShowUploadProgress(false)
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className="container mx-auto p-6 space-y-6">
+      <LoadingModal
+        isOpen={isLoading && !showUploadProgress}
+        message={mode === 'edit' ? 'Saving changes…' : 'Registering school…'}
+      />
       {showUploadProgress && (
         <UploadProgress
           progress={uploadProgress}
@@ -302,11 +226,14 @@ export function SchoolRegistrationForm({ mode = 'create', initialData, schoolId 
   </div>
 
   {/* Submit Button */}
-  <Button 
-    type="submit" 
-    className="w-full md:w-auto bg-[#002244] hover:bg-[#002244]"
+  <Button
+    type="submit"
+    disabled={isLoading}
+    className="w-full md:w-auto bg-[#002244] hover:bg-[#002244] disabled:opacity-60"
   >
-    {mode === 'edit' ? 'Save Changes' : 'Register School'}
+    {isLoading
+      ? mode === 'edit' ? 'Saving…' : 'Registering…'
+      : mode === 'edit' ? 'Save Changes' : 'Register School'}
   </Button>
 </div>
 
@@ -345,7 +272,7 @@ export function SchoolRegistrationForm({ mode = 'create', initialData, schoolId 
             <span className="text-[#003366] hover:underline">browse</span>
           </p>
           <p className="text-xs text-gray-500">
-            JPEG, PNG, GIF, or WebP (max. {MAX_FILE_SIZE / 1024 / 1024}MB)
+            JPEG, PNG, GIF, or WebP (max. {MAX_IMAGE_BYTES / 1024 / 1024}MB)
           </p>
         </label>
       )}
@@ -367,9 +294,11 @@ export function SchoolRegistrationForm({ mode = 'create', initialData, schoolId 
           id="schoolName"
           value={formData.schoolName}
           onChange={e => setFormData(prev => ({ ...prev, schoolName: e.target.value }))}
+          aria-invalid={Boolean(fieldErrors.name)}
           placeholder="Enter school's name"
           required
         />
+        {fieldErrors.name && <p className="text-xs text-red-500">{fieldErrors.name}</p>}
       </div>
 
       <div className="space-y-2">
@@ -378,9 +307,11 @@ export function SchoolRegistrationForm({ mode = 'create', initialData, schoolId 
           id="schoolPrefix"
           value={formData.schoolPrefix}
           onChange={e => setFormData(prev => ({ ...prev, schoolPrefix: e.target.value }))}
+          aria-invalid={Boolean(fieldErrors.schoolPrefix)}
           placeholder="Enter school prefix"
           required
         />
+        {fieldErrors.schoolPrefix && <p className="text-xs text-red-500">{fieldErrors.schoolPrefix}</p>}
       </div>
 
       <div className="space-y-2">
@@ -390,9 +321,11 @@ export function SchoolRegistrationForm({ mode = 'create', initialData, schoolId 
           type="email"
           value={formData.emailAddress}
           onChange={e => setFormData(prev => ({ ...prev, emailAddress: e.target.value }))}
+          aria-invalid={Boolean(fieldErrors.email)}
           placeholder="Enter school's email address"
           required
         />
+        {fieldErrors.email && <p className="text-xs text-red-500">{fieldErrors.email}</p>}
       </div>
 
       <div className="space-y-2">
@@ -401,9 +334,11 @@ export function SchoolRegistrationForm({ mode = 'create', initialData, schoolId 
           id="physicalAddress"
           value={formData.physicalAddress}
           onChange={e => setFormData(prev => ({ ...prev, physicalAddress: e.target.value }))}
+          aria-invalid={Boolean(fieldErrors.physicalAddress)}
           placeholder="Enter physical address"
           required
         />
+        {fieldErrors.physicalAddress && <p className="text-xs text-red-500">{fieldErrors.physicalAddress}</p>}
       </div>
 
       <div className="space-y-2 relative">

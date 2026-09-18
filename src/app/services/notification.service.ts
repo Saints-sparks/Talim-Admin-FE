@@ -1,11 +1,29 @@
 import { API_ENDPOINTS } from '../lib/api/config';
 import { api } from '@/lib/apiClient';
 
+/**
+ *
+ */
 export type Priority = 'low' | 'medium' | 'high';
+/**
+ *
+ */
 export type RecipientRole = 'student' | 'teacher' | 'parent' | 'admin';
+/**
+ *
+ */
 export type NotificationStatus = 'pending' | 'sent' | 'failed';
+/**
+ *
+ */
 export type NotificationSource = 'school' | 'talim' | 'system';
+/**
+ *
+ */
 export type NotificationDeliveryChannel = 'inApp' | 'email' | 'push';
+/**
+ *
+ */
 export type NotificationCategory =
   | 'announcement'
   | 'attendance'
@@ -16,6 +34,9 @@ export type NotificationCategory =
   | 'account'
   | 'other';
 
+/**
+ *
+ */
 export interface Sender {
   _id?: string;
   email?: string;
@@ -25,11 +46,17 @@ export interface Sender {
   userAvatar?: string;
 }
 
+/**
+ *
+ */
 export interface School {
   _id: string;
   name: string;
 }
 
+/**
+ *
+ */
 export interface NotificationDeliveryStats {
   totalRecipients: number;
   deliveredCount: number;
@@ -47,6 +74,9 @@ export interface NotificationDeliveryStats {
   deliveredAt?: string | null;
 }
 
+/**
+ *
+ */
 export interface CreateNotificationRequest {
   title: string;
   message: string;
@@ -63,6 +93,9 @@ export interface CreateNotificationRequest {
   deliveryChannels?: NotificationDeliveryChannel[];
 }
 
+/**
+ *
+ */
 export interface NotificationResponse {
   _id: string;
   id?: string;
@@ -90,6 +123,9 @@ export interface NotificationResponse {
   deliveryStats?: NotificationDeliveryStats;
 }
 
+/**
+ *
+ */
 export interface PaginationMeta {
   total: number;
   page: number;
@@ -97,11 +133,17 @@ export interface PaginationMeta {
   limit: number;
 }
 
+/**
+ *
+ */
 export interface NotificationsResponse {
   data: NotificationResponse[];
   meta: PaginationMeta;
 }
 
+/**
+ *
+ */
 export interface NotificationStats {
   total: number;
   sent: number;
@@ -116,6 +158,9 @@ export interface NotificationStats {
   byCategory: Partial<Record<NotificationCategory, number>>;
 }
 
+/**
+ *
+ */
 export interface GetNotificationsParams {
   page?: number;
   limit?: number;
