@@ -1,7 +1,10 @@
 import {
   buildConfigPayload,
+  formFrom,
+  providerStatusLabel,
+  toggleChannel,
   validateProviderForm,
-} from '@/app/talimadmindashboard/payments/_components/ProviderCard';
+} from '@/app/talimadmindashboard/payments/_components/providerForm';
 import { ALL_PROVIDERS, PROVIDER_META } from '@/app/talimadmindashboard/payments/_components/providerMeta';
 
 type Form = Parameters<typeof validateProviderForm>[0];
@@ -80,5 +83,59 @@ describe('provider metadata', () => {
       expect(PROVIDER_META[name]).toBeDefined();
       expect(PROVIDER_META[name].channels.length).toBeGreaterThan(0);
     }
+  });
+});
+
+describe('formFrom', () => {
+  it('starts blank with the provider\'s channels when nothing is saved', () => {
+    expect(formFrom(null, ['card', 'ussd'])).toEqual({
+      publicKey: '',
+      secretKey: '',
+      webhookSecret: '',
+      merchantId: '',
+      environment: 'test',
+      platformFeePercent: '2',
+      channels: ['card', 'ussd'],
+    });
+  });
+
+  it('loads the saved settings but never a secret', () => {
+    const saved = {
+      providerName: 'opay',
+      isEnabled: true,
+      isDefault: false,
+      publicKey: 'pk_live',
+      environment: 'live',
+      supportedChannels: ['wallet'],
+      currency: 'NGN',
+      merchantId: 'm9',
+      platformFeePercent: 1.5,
+    } as const;
+    const loaded = formFrom({ ...saved, supportedChannels: [...saved.supportedChannels] }, ['card']);
+    expect(loaded).toMatchObject({
+      publicKey: 'pk_live',
+      merchantId: 'm9',
+      environment: 'live',
+      platformFeePercent: '1.5',
+      channels: ['wallet'],
+      secretKey: '',
+      webhookSecret: '',
+    });
+  });
+});
+
+describe('toggleChannel', () => {
+  it('adds a channel that is off and removes one that is on', () => {
+    expect(toggleChannel(['card'], 'ussd')).toEqual(['card', 'ussd']);
+    expect(toggleChannel(['card', 'ussd'], 'card')).toEqual(['ussd']);
+    expect(toggleChannel(['card'], 'card')).toEqual([]);
+  });
+});
+
+describe('providerStatusLabel', () => {
+  it('reads Enabled, Configured or Not configured', () => {
+    expect(providerStatusLabel(true, true)).toBe('Enabled');
+    expect(providerStatusLabel(false, true)).toBe('Configured');
+    expect(providerStatusLabel(false, false)).toBe('Not configured');
   });
 });
