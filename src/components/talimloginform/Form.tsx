@@ -180,7 +180,7 @@ export function LoginForm() {
 
           <p className="mt-10 text-center text-xs text-[#878787]">
             © Talim {new Date().getFullYear()} ·{' '}
-            <a href="mailto:help@talim.com" className="hover:underline text-[#003366]">help@talim.com</a>
+            <a href="mailto:support@mytalim.com" className="hover:underline text-[#003366]">support@mytalim.com</a>
           </p>
         </div>
       </div>
