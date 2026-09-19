@@ -6,7 +6,15 @@ import jsdoc from 'eslint-plugin-jsdoc';
 
 export default [
   {
-    ignores: ['node_modules/', '.next/', 'coverage/', '*.config.*', 'next-env.d.ts'],
+    ignores: [
+      'node_modules/',
+      '.next/',
+      'coverage/',
+      '*.config.*',
+      'next-env.d.ts',
+      // Generated copy of the backend contract (npm run types:api).
+      'src/types/api.d.ts',
+    ],
   },
   {
     files: ['**/*.ts', '**/*.tsx'],
