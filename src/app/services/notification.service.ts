@@ -1,5 +1,6 @@
 import { API_ENDPOINTS } from '../lib/api/config';
 import { api } from '@/lib/apiClient';
+import type { CreateNotificationPayload } from '@/types/apiPayloads';
 
 /** Mirrors `NotificationPriority`. */
 export type Priority = 'low' | 'medium' | 'high';
@@ -75,24 +76,7 @@ export interface NotificationDeliveryStats {
  * Body for `POST /notifications`. Exactly the fields `CreateNotificationDto`
  * declares — the API runs `forbidNonWhitelisted`, so one extra key is a 400.
  */
-export interface CreateNotificationRequest {
-  title: string;
-  message: string;
-  attachments?: string[];
-  recipientRoles?: RecipientRole[];
-  targetSchools?: string[];
-  senderId?: string;
-  priority?: Priority;
-  type?: string;
-  source?: NotificationSource;
-  category?: NotificationCategory;
-  metadata?: Record<string, unknown>;
-  recipientId?: string;
-  /** ISO timestamp. A top-level field, not metadata: the DTO declares it. */
-  scheduledFor?: string;
-  isScheduled?: boolean;
-  deliveryChannels?: NotificationDeliveryChannel[];
-}
+export type CreateNotificationRequest = CreateNotificationPayload;
 
 /** One notification as the API returns it. */
 export interface NotificationResponse {

@@ -1,13 +1,16 @@
 import { API_ENDPOINTS } from '@/app/lib/api/config';
 import { api } from '@/lib/apiClient';
 import type { SessionUser } from '@/lib/session';
+import type { UpdateProfileContractPayload } from '@/types/apiPayloads';
 
-/** Body for `PUT /auth/profile/update/`. Mirrors `UpdateProfileDto`. */
-export interface UpdateProfilePayload {
-  firstName?: string;
-  lastName?: string;
-  phoneNumber?: string;
-}
+/**
+ * Body for `PUT /auth/profile/update/`: the fields of `UpdateProfileDto` this
+ * page edits (the DTO also takes `dateOfBirth`, `gender` and `userAvatar`).
+ */
+export type UpdateProfilePayload = Pick<
+  UpdateProfileContractPayload,
+  'firstName' | 'lastName' | 'phoneNumber'
+>;
 
 /** Response of `PUT /auth/profile/avatar`. */
 export interface UpdateAvatarResponse {

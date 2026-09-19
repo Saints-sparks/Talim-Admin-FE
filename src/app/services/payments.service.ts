@@ -1,5 +1,6 @@
 import { API_ENDPOINTS } from '@/app/lib/api/config';
 import { api } from '@/lib/apiClient';
+import type { PlatformProviderConfigPayload } from '@/types/apiPayloads';
 
 /**
  *
@@ -41,16 +42,7 @@ export interface PlatformProviderConfig {
  * Body for `PATCH /payments/platform/providers/:name/config`. Only the fields
  * the DTO declares; the API runs `forbidNonWhitelisted`.
  */
-export interface UpdateProviderConfigPayload {
-  publicKey?: string;
-  secretKey?: string;
-  webhookSecret?: string;
-  merchantId?: string;
-  environment?: PaymentEnvironment;
-  supportedChannels?: PaymentChannel[];
-  platformFeePercent?: number;
-  isDefault?: boolean;
-}
+export type UpdateProviderConfigPayload = PlatformProviderConfigPayload;
 
 export const paymentsService = {
   /**

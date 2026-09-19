@@ -1,5 +1,10 @@
 import { api } from '@/lib/apiClient';
 import { API_ENDPOINTS } from '@/app/lib/api/config';
+import type {
+  CreateSchoolPayload,
+  UpdateSchoolPayload,
+  UpdateSchoolStatusPayload,
+} from '@/types/apiPayloads';
 
 /** A named contact on a school record. Mirrors `PrimaryContactDto`. */
 export interface PrimaryContact {
@@ -51,22 +56,18 @@ export interface SchoolsResponse {
 }
 
 /**
- * Body for `POST /schools/create`. Exactly the fields `CreateSchoolDto`
- * declares — the API runs `forbidNonWhitelisted`, so one extra key is a 400.
+ * Body for `POST /schools/create`: the backend `CreateSchoolDto`, generated into
+ * `src/types/apiPayloads.ts`. The API runs `forbidNonWhitelisted`, so one extra
+ * key is a 400.
  */
-export interface CreateSchoolData {
-  name: string;
-  email: string;
-  physicalAddress: string;
-  location: { country: string; state: string };
-  schoolPrefix: string;
-  primaryContacts: PrimaryContact[];
-  active: boolean;
-  logo: string;
-}
+export type CreateSchoolData = CreateSchoolPayload;
 
-/** Body for `PUT /schools/update/:id`. Mirrors `UpdateSchoolDto`. */
-export type UpdateSchoolData = Omit<CreateSchoolData, 'schoolPrefix'>;
+/**
+ * Body for `PUT /schools/update/:id`: the create body without the prefix (and
+ * the optional slug), which the form never edits. It is checked against
+ * `UpdateSchoolDto` where it is sent.
+ */
+export type UpdateSchoolData = Omit<CreateSchoolPayload, 'schoolPrefix' | 'slug'>;
 
 /** What `POST /schools/create` returns: the school and the admins it provisioned. */
 export interface CreateSchoolResult {
@@ -121,7 +122,7 @@ export const schoolService = {
    * @throws ApiError - `VALIDATION_FAILED` with per-field details.
    */
   async updateSchool(schoolId: string, data: UpdateSchoolData): Promise<School> {
-    return api.put<School>(API_ENDPOINTS.SCHOOL_UPDATE(schoolId), data);
+    return api.put<School>(API_ENDPOINTS.SCHOOL_UPDATE(schoolId), data satisfies UpdateSchoolPayload);
   },
 
   /**
@@ -133,7 +134,7 @@ export const schoolService = {
    * @throws ApiError - On any non-2xx response.
    */
   async updateSchoolStatus(schoolId: string, active: boolean): Promise<School> {
-    return api.patch<School>(API_ENDPOINTS.SCHOOL_STATUS(schoolId), { active });
+    return api.patch<School>(API_ENDPOINTS.SCHOOL_STATUS(schoolId), { active } satisfies UpdateSchoolStatusPayload);
   },
 
   /**

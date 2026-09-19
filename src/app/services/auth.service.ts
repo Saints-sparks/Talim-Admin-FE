@@ -1,5 +1,6 @@
 import { API_ENDPOINTS } from '@/app/lib/api/config';
 import { api } from '@/lib/apiClient';
+import type { AdminLoginPayload, IntrospectPayload } from '@/types/apiPayloads';
 import type { SessionUser } from '@/lib/session';
 import { AuthResponse, IntrospectResponse, LoginCredentials } from '@/app/types/auth';
 
@@ -33,16 +34,13 @@ export const authService = {
    *   platform administrator.
    */
   async login(credentials: LoginCredentials): Promise<{ accessToken: string; user: SessionUser }> {
-    const response = await api.post<AuthResponse>(
-      API_ENDPOINTS.ADMIN_LOGIN,
-      {
-        email: credentials.email,
-        password: credentials.password,
-        deviceToken: credentials.deviceToken || getDeviceToken(),
-        platform: credentials.platform || 'admin-web',
-      },
-      { skipAuth: true },
-    );
+    const body: AdminLoginPayload = {
+      email: credentials.email,
+      password: credentials.password,
+      deviceToken: credentials.deviceToken || getDeviceToken(),
+      platform: credentials.platform || 'admin-web',
+    };
+    const response = await api.post<AuthResponse>(API_ENDPOINTS.ADMIN_LOGIN, body, { skipAuth: true });
 
     const user = await this.introspect(response.access_token);
     if (!user) throw new Error('Unable to resolve the administrator profile after sign-in.');
@@ -80,7 +78,7 @@ export const authService = {
     try {
       const response = await api.post<IntrospectResponse>(
         API_ENDPOINTS.INTROSPECT,
-        { token: accessToken },
+        { token: accessToken } satisfies IntrospectPayload,
         { skipAuth: true },
       );
       return response.active === false ? null : (response.user ?? null);

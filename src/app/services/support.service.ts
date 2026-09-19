@@ -1,5 +1,6 @@
 import { api } from '@/lib/apiClient';
 import { API_ENDPOINTS } from '@/app/lib/api/config';
+import type { UpdateComplaintStatusPayload } from '@/types/apiPayloads';
 
 /**
  * Mirrors `ComplaintStatus` in
@@ -85,7 +86,7 @@ export const supportService = {
    * @throws ApiError - `VALIDATION_FAILED` for a status outside the enum.
    */
   async updateStatus(id: string, status: ComplaintStatus): Promise<Complaint> {
-    return api.patch<Complaint>(API_ENDPOINTS.COMPLAINT_STATUS(id), { status });
+    return api.patch<Complaint>(API_ENDPOINTS.COMPLAINT_STATUS(id), { status } satisfies UpdateComplaintStatusPayload);
   },
 
   /**
