@@ -215,27 +215,6 @@ export const notificationService = {
     ),
 
   /**
-   * Re-delivers a notification to the recipients it previously failed for.
-   *
-   * @param id - The notification id.
-   * @returns The notification with refreshed delivery statistics.
-   * @throws ApiError - `INVALID_STATE_TRANSITION` when nothing failed.
-   */
-  resendNotification: async (id: string): Promise<NotificationResponse> =>
-    api.post<NotificationResponse>(API_ENDPOINTS.NOTIFICATION_RESEND(id)),
-
-  /**
-   * Copies a notification into a new draft owned by `senderId`.
-   *
-   * @param id - The notification to copy.
-   * @param senderId - The administrator the copy belongs to.
-   * @returns The new draft.
-   * @throws ApiError - On any non-2xx response.
-   */
-  duplicateNotification: async (id: string, senderId: string): Promise<NotificationResponse> =>
-    api.post<NotificationResponse>(API_ENDPOINTS.NOTIFICATION_DUPLICATE(id), { senderId }),
-
-  /**
    * Marks a notification read for one user.
    *
    * @param id - The notification id.

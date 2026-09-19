@@ -107,13 +107,9 @@ describe('NotificationDetail', () => {
       notification: n,
       hasPrev: true,
       hasNext: false,
-      isResending: false,
-      isDuplicating: false,
       onClose: jest.fn(),
       onPrev: jest.fn(),
       onNext: jest.fn(),
-      onResend: jest.fn(),
-      onDuplicate: jest.fn(),
       ...extra,
     };
     render(<NotificationDetail {...props} />);
@@ -159,18 +155,10 @@ describe('NotificationDetail', () => {
     expect(props.onClose).toHaveBeenCalledTimes(2);
   });
 
-  it('resends and duplicates, and locks both while either is running', async () => {
-    const props = setup(notification());
-    await userEvent.click(screen.getByRole('button', { name: /Resend Notification/ }));
-    await userEvent.click(screen.getByRole('button', { name: /Duplicate/ }));
-    expect(props.onResend).toHaveBeenCalled();
-    expect(props.onDuplicate).toHaveBeenCalled();
-  });
-
-  it('disables both actions while a resend is in flight', () => {
-    setup(notification(), { isResending: true });
-    expect(screen.getByRole('button', { name: /Resend Notification/ })).toBeDisabled();
-    expect(screen.getByRole('button', { name: /Duplicate/ })).toBeDisabled();
+  it("offers no Resend or Duplicate, because the API has no such routes", () => {
+    setup(notification());
+    expect(screen.queryByRole('button', { name: /Resend/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Duplicate/ })).not.toBeInTheDocument();
   });
 
   it('labels a sent notification Delivered', () => {

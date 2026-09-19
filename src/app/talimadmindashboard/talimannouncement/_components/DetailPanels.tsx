@@ -1,4 +1,4 @@
-import { Bell, Copy, Download, FileText, Loader2, Mail, RefreshCw, Send } from 'lucide-react';
+import { Bell, Download, FileText, Mail, Send } from 'lucide-react';
 import type { NotificationDeliveryChannel, NotificationDeliveryStats } from '@/app/services/notification.service';
 import { cn } from '@/lib/utils';
 import { formatDateTime } from './helpers';
@@ -156,48 +156,6 @@ export function TimelineCard({ steps }: { steps: TimelineStep[] }) {
             </div>
           </div>
         ))}
-      </div>
-    </div>
-  );
-}
-
-const ACTION_BUTTON =
-  'flex h-10 w-full items-center justify-center gap-2 rounded-lg border border-[#DCE5F2] text-sm font-semibold text-[#344054] transition hover:bg-[#F8FBFF] disabled:opacity-60';
-
-/** Resend and Duplicate; both are disabled while either is in flight. */
-export function ActionsCard({
-  isResending,
-  isDuplicating,
-  onResend,
-  onDuplicate,
-}: {
-  isResending: boolean;
-  isDuplicating: boolean;
-  onResend: () => void;
-  onDuplicate: () => void;
-}) {
-  return (
-    <div className={CARD}>
-      <h2 className="mb-4 font-semibold text-[#101828]">Actions</h2>
-      <div className="space-y-2">
-        <button
-          type="button"
-          onClick={onResend}
-          disabled={isResending || isDuplicating}
-          className={ACTION_BUTTON}
-        >
-          {isResending ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
-          Resend Notification
-        </button>
-        <button
-          type="button"
-          onClick={onDuplicate}
-          disabled={isResending || isDuplicating}
-          className={ACTION_BUTTON}
-        >
-          {isDuplicating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Copy className="h-4 w-4" />}
-          Duplicate
-        </button>
       </div>
     </div>
   );

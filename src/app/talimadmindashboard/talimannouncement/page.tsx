@@ -108,35 +108,6 @@ export default function TalimNotificationsPage() {
     },
   });
 
-  const resendMutation = useMutation({
-    mutationFn: (id: string) => notificationService.resendNotification(id),
-    onSuccess: async () => {
-      toast.success('Notification resent');
-      await invalidateNotifications();
-    },
-    onError: (err) => {
-      logger.error('notifications', 'Resend failed', err);
-      toast.error('The notification could not be resent', { description: getErrorMessage(err) });
-    },
-  });
-
-  const duplicateMutation = useMutation({
-    mutationFn: (id: string) =>
-      notificationService.duplicateNotification(id, user?.userId ?? user?._id ?? ''),
-    onSuccess: async () => {
-      toast.success('Notification duplicated');
-      setSelectedId(null);
-      setCurrentPage(1);
-      await invalidateNotifications();
-    },
-    onError: (err) => {
-      logger.error('notifications', 'Duplicate failed', err);
-      toast.error('The notification could not be duplicated', {
-        description: getErrorMessage(err),
-      });
-    },
-  });
-
   const filtered = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
     return notifications.filter((notification) => {
@@ -193,13 +164,9 @@ export default function TalimNotificationsPage() {
         notification={selected}
         hasPrev={selectedIndex > 0}
         hasNext={selectedIndex >= 0 && selectedIndex < filtered.length - 1}
-        isResending={resendMutation.isPending}
-        isDuplicating={duplicateMutation.isPending}
         onClose={() => setSelectedId(null)}
         onPrev={() => setSelectedId(filtered[selectedIndex - 1]?._id ?? null)}
         onNext={() => setSelectedId(filtered[selectedIndex + 1]?._id ?? null)}
-        onResend={() => resendMutation.mutate(selected._id)}
-        onDuplicate={() => duplicateMutation.mutate(selected._id)}
       />
     );
   }

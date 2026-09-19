@@ -15,7 +15,6 @@ import {
   userTypesLabel,
 } from './detailModel';
 import {
-  ActionsCard,
   AttachmentList,
   ChannelBreakdownCard,
   DeliverySummaryCard,
@@ -38,37 +37,25 @@ import {
  * @param props.notification - The record to show.
  * @param props.hasPrev - Whether a previous notification exists in the list.
  * @param props.hasNext - Whether a next notification exists in the list.
- * @param props.isResending - True while a resend is in flight.
- * @param props.isDuplicating - True while a duplicate is in flight.
  * @param props.onClose - Returns to the list.
  * @param props.onPrev - Moves to the previous notification.
  * @param props.onNext - Moves to the next notification.
- * @param props.onResend - Re-delivers the notification.
- * @param props.onDuplicate - Copies it into a new one.
  * @returns The detail view.
  */
 export function NotificationDetail({
   notification,
   hasPrev,
   hasNext,
-  isResending,
-  isDuplicating,
   onClose,
   onPrev,
   onNext,
-  onResend,
-  onDuplicate,
 }: {
   notification: NotificationResponse;
   hasPrev: boolean;
   hasNext: boolean;
-  isResending: boolean;
-  isDuplicating: boolean;
   onClose: () => void;
   onPrev: () => void;
   onNext: () => void;
-  onResend: () => void;
-  onDuplicate: () => void;
 }) {
   const status = getDisplayStatus(notification);
   const roleData = roleSlices(notification);
@@ -174,12 +161,6 @@ export function NotificationDetail({
             {roleData.length > 0 && <RoleBreakdownCard slices={roleData} />}
             {channelData.length > 0 && <ChannelBreakdownCard entries={channelData} />}
             {timeline.length > 0 && <TimelineCard steps={timeline} />}
-            <ActionsCard
-              isResending={isResending}
-              isDuplicating={isDuplicating}
-              onResend={onResend}
-              onDuplicate={onDuplicate}
-            />
           </div>
         </div>
       </div>
