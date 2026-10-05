@@ -46,6 +46,1124 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/teachers/today": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The calling teacher's Today page in one call
+         * @description Everything the teacher's Today page shows.
+         */
+        get: operations["TeachersTodayController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/teachers/me/school": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The calling teacher's school contact card
+         * @description Name, email and address from the school record; the phone of the school's first primary contact; office hours from PATCH /settings/academic (null until set).
+         */
+        get: operations["TeachersMeController_school"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/teachers/me/classes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The calling teacher's classes (class pickers)
+         * @description The calling teacher's classes, class-teacher classes first.
+         */
+        get: operations["TeachersMeController_myClasses"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/teachers/me/classes/{classId}/students": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A class's students (class teacher, course teacher, staff)
+         * @description A class's roster: attendance this term and each guardian.
+         */
+        get: operations["TeachersMeController_students"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/teachers/me/students/{studentId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A student's record (a teacher of the student's class, or staff)
+         * @description A student's record: details, guardian, attendance and scores.
+         */
+        get: operations["TeachersMeController_student"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/students/me/today": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The student's Today (B1)
+         * @description B1 Today.
+         */
+        get: operations["StudentsMeController_today"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/students/me/timetable": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The student's week (B2)
+         * @description B2 Timetable.
+         */
+        get: operations["StudentsMeController_timetable"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/students/me/subjects": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The student's subjects for a term (B3)
+         * @description B3 Subjects.
+         */
+        get: operations["StudentsMeController_subjects"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/students/me/subjects/{courseId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * One subject of the student (B4)
+         * @description B4 Subject detail.
+         */
+        get: operations["StudentsMeController_subject"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/students/me/report-card": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The student's report card for a term (B5)
+         * @description B5 Report card.
+         */
+        get: operations["StudentsMeController_reportCard"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/students/me/report-card/terms": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The terms with results, and their status (B5)
+         * @description B5 The terms that have results.
+         */
+        get: operations["StudentsMeController_reportTerms"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/students/me/attendance": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The student's attendance for a term (B6)
+         * @description B6 Attendance.
+         */
+        get: operations["StudentsMeController_attendance"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/students/me/files": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The student's files (B7)
+         * @description B7 Files, a page at a time.
+         */
+        get: operations["StudentsMeController_files"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/students/me/files/archive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A zip of the student's files (B7)
+         * @description Streams a zip. Files are downloaded from the school file storage only (RESOURCE_ARCHIVE_HOSTS); any other file is listed with its link in links.txt. At most 200 files.
+         */
+        get: operations["StudentsMeController_archive"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/students/me/school": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The student's school contact card (B12)
+         * @description B12 School contact.
+         */
+        get: operations["StudentsMeController_school"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/students/me/preferences": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The student's UI preferences (the guided tour)
+         * @description The student's UI preferences (the guided tour).
+         */
+        get: operations["StudentsMeController_preferences"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Update the student's UI preferences
+         * @description `guides.tourCompleted: true` stamps guides.tourCompletedAt; false clears it.
+         */
+        patch: operations["StudentsMeController_updatePreferences"];
+        trace?: never;
+    };
+    "/parents/me/children/{childId}/dashboard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A child's dashboard (B1, parent variant)
+         * @description B1 The child's dashboard.
+         */
+        get: operations["ParentChildrenController_dashboard"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/parents/me/children/{childId}/timetable": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A child's week (B2)
+         * @description The /students/me/timetable shape. Replaces the old parent timetable shape (weekRange, timetableSlots, listView), which only the parents web app read.
+         */
+        get: operations["ParentChildrenController_timetable"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/parents/me/children/{childId}/report-card": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A child's report card for a term (B5)
+         * @description B5 The child's report card.
+         */
+        get: operations["ParentChildrenController_reportCard"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/parents/me/children/{childId}/report-card/terms": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A child's terms with results (B5)
+         * @description B5 The terms that have results for the child.
+         */
+        get: operations["ParentChildrenController_reportTerms"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/parents/me/children/{childId}/report-card/acknowledge": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Acknowledge a published report card (B8)
+         * @description Stored on the term remark (parentAckAt, parentAckBy). 409 RESULTS_NOT_PUBLISHED until the term results are published. A second call keeps the first time.
+         */
+        post: operations["ParentChildrenController_acknowledge"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/parents/me/children/{childId}/attendance": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A child's attendance (B6)
+         * @description B6 The child's attendance.
+         */
+        get: operations["ParentChildrenController_attendance"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/parents/me/children/{childId}/school": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A child's school contact card (B12)
+         * @description B12 The child's school contact card.
+         */
+        get: operations["ParentChildrenController_school"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/calendar-events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List school calendar events in a date range
+         * @description Events overlapping `[from, to]`, by start date.
+         */
+        get: operations["CalendarEventsController_list"];
+        put?: never;
+        /**
+         * Add a calendar event
+         * @description Adds a holiday, event or early close.
+         */
+        post: operations["CalendarEventsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/calendar-events/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete a calendar event
+         * @description Deletes an event.
+         */
+        delete: operations["CalendarEventsController_remove"];
+        options?: never;
+        head?: never;
+        /**
+         * Change a calendar event
+         * @description Changes an event.
+         */
+        patch: operations["CalendarEventsController_update"];
+        trace?: never;
+    };
+    "/timetable/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The calling teacher's timetable for one week
+         * @description The teacher's lessons, periods and calendar for one week.
+         */
+        get: operations["TimetableMeController_me"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/registers/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Register status of your classes for a day
+         * @description Where each register stands on a day.
+         */
+        get: operations["RegistersController_status"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/registers/{classId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A class's register for a day (class teacher, course teacher, staff)
+         * @description A class's register on a day, student by student, with what the caller
+         *     may do with it.
+         */
+        get: operations["RegistersController_view"];
+        /**
+         * Save (and optionally submit) a class's register for a day
+         * @description Upserts the attendance rows. Students on approved leave are ignored in `marks` and written as Excused on submit. With `submit: true` every student not on leave must be marked (else the marks are still saved and the answer is 409). `notified` counts the parents told by this call. Parents of absent students are notified on submit only: on the first submit every absent student, later only those not notified before; late students are not notified.
+         */
+        put: operations["RegistersController_save"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/registers/{classId}/submit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Submit a class's morning register
+         * @description Submits a class's register once every student is marked or on leave.
+         */
+        post: operations["RegistersController_submit"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/scheme-of-work/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The calling teacher's subject cards (Subjects page)
+         * @description The calling teacher's subject cards: one per course they teach.
+         */
+        get: operations["SchemeOfWorkController_mine"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/scheme-of-work/course/{courseId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A course's week-by-week scheme of work
+         * @description A course's scheme for a term, every week present.
+         */
+        get: operations["SchemeOfWorkController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/scheme-of-work/course/{courseId}/weeks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Save several weeks of a scheme of work
+         * @description Saves several weeks at once.
+         */
+        put: operations["SchemeOfWorkController_saveWeeks"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/scheme-of-work/course/{courseId}/weeks/{week}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Save one week of a scheme of work
+         * @description Saves one week.
+         */
+        put: operations["SchemeOfWorkController_saveWeek"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/scheme-of-work/course/{courseId}/weeks/{week}/taught": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Mark a scheme-of-work week taught
+         * @description Marks a week taught or not taught.
+         */
+        post: operations["SchemeOfWorkController_markTaught"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/grading/course/{courseId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** A course's grading sheet (course teacher, staff) */
+        get: operations["GradingController_sheet"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/grading/course/{courseId}/assessments/{assessmentId}/scores": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Save one assessment's scores for a course
+         * @description Saves scores of one assessment; `null` deletes a score.
+         */
+        put: operations["GradingController_saveScores"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/grading/course/{courseId}/assessments/{assessmentId}/publish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Publish one assessment's scores for a course
+         * @description Publishes one assessment's scores for a course.
+         */
+        post: operations["GradingController_publish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/grading/course/{courseId}/assessments/{assessmentId}/unlock": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Unlock published scores for a correction
+         * @description Unlocks published scores for a correction.
+         */
+        post: operations["GradingController_unlock"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/grading/classes/{classId}/readiness": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** A class's grading readiness (class teacher, staff) */
+        get: operations["GradingController_readiness"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/grading/classes/{classId}/reminders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Remind a course teacher (class teacher only)
+         * @description Reminds a course teacher that scores are awaited (once a day).
+         */
+        post: operations["GradingController_remind"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/grading/classes/{classId}/broadsheet": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A class's broadsheet (class teacher, staff)
+         * @description The class's broadsheet of published scores.
+         */
+        get: operations["GradingController_broadsheet"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/grading/classes/{classId}/remarks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A class's term remarks (class teacher, staff)
+         * @description The class's term remarks.
+         */
+        get: operations["GradingController_remarks"];
+        /**
+         * Save class-teacher remarks (class teacher, staff)
+         * @description Saves class-teacher remarks.
+         */
+        put: operations["GradingController_saveRemarks"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/grading/classes/{classId}/term-results": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A class's term results (class teacher, staff)
+         * @description The class's term results submissions.
+         */
+        get: operations["GradingController_classSubmissions"];
+        put?: never;
+        /**
+         * Submit term results (class teacher, staff)
+         * @description Submits the class's term results to the office.
+         */
+        post: operations["GradingController_submit"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/grading/term-results": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Term results queue (staff) */
+        get: operations["GradingController_queue"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/grading/term-results/counts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Term results counts by status (staff)
+         * @description How many submissions are in each status.
+         */
+        get: operations["GradingController_counts"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/grading/term-results/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * One term results submission (staff, or its class teacher)
+         * @description One submission.
+         */
+        get: operations["GradingController_detail"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/grading/term-results/{id}/publish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Publish term results (staff)
+         * @description Publishes submitted results to students and parents.
+         */
+        post: operations["GradingController_publishResults"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/grading/term-results/{id}/return": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Return term results to the class teacher (staff)
+         * @description Returns submitted results to the class teacher.
+         */
+        post: operations["GradingController_returnResults"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/grading/term-results/{id}/principal-remarks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Save the principal's remarks (staff)
+         * @description Saves the principal's remarks for a submission's class.
+         */
+        put: operations["GradingController_savePrincipalRemarks"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/resources": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get all resources */
+        get: operations["ResourceController_findAll"];
+        put?: never;
+        /** Upload a new resource */
+        post: operations["ResourceController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/resources/class/{classId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get resources by class ID */
+        get: operations["ResourceController_findByClassId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/resources/term/{termId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get resources by term ID */
+        get: operations["ResourceController_findByTermId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/resources/course/{courseId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get resources by course ID */
+        get: operations["ResourceController_findByCourseId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/resources/user/{uploadedBy}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get resources by uploaded user ID */
+        get: operations["ResourceController_findByUploadedBy"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/resources/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a resource by ID */
+        get: operations["ResourceController_findOne"];
+        /** Update a resource */
+        put: operations["ResourceController_update"];
+        post?: never;
+        /** Delete a resource */
+        delete: operations["ResourceController_remove"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/resources/{id}/view": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Record a view of a resource (students, parents) */
+        post: operations["ResourceController_recordView"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/subjects-courses/courses": {
         parameters: {
             query?: never;
@@ -283,7 +1401,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get terms by school ID */
+        /**
+         * Get terms by school ID
+         * @description The school's terms (for a parent, the chosen child's school), each
+         *     with `id` and its `session` for the learner term pickers (B).
+         */
         get: operations["AcademicYearTermController_getTermBySchoolId"];
         put?: never;
         post?: never;
@@ -368,7 +1490,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get timetable by teacher */
+        /**
+         * Get timetable by teacher (deprecated: use GET /timetable/me (the signed-in teacher))
+         * @deprecated
+         */
         get: operations["TimetableController_getTimetableByTeacher"];
         put?: never;
         post?: never;
@@ -574,23 +1699,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/grade-records/bulk": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Bulk create assessment grade records */
-        post: operations["GradeRecordsController_bulkCreateAssessmentGradeRecords"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/grade-records/kpis": {
         parameters: {
             query?: never;
@@ -773,7 +1881,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Save assessment scores in batch for grading workspace */
+        /**
+         * Save assessment scores in batch for grading workspace (deprecated: use PUT /grading/course/:courseId/assessments/:assessmentId/scores)
+         * @deprecated
+         */
         post: operations["GradeRecordsController_saveAssessmentScores"];
         delete?: never;
         options?: never;
@@ -790,7 +1901,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Batch upload scores endpoint (JSON payload) */
+        /**
+         * Batch upload scores endpoint (JSON payload) (deprecated: use PUT /grading/course/:courseId/assessments/:assessmentId/scores)
+         * @deprecated
+         */
         post: operations["GradeRecordsController_batchUploadAssessmentScores"];
         delete?: never;
         options?: never;
@@ -912,7 +2026,8 @@ export interface paths {
         get?: never;
         put?: never;
         /**
-         * Publish assessment grades for a course
+         * Publish assessment grades for a course (deprecated: use POST /grading/course/:courseId/assessments/:assessmentId/publish)
+         * @deprecated
          * @description Publishes grades only after all active students in the class have been graded, then notifies students and parents.
          */
         post: operations["GradeRecordsController_publishAssessmentGrades"];
@@ -933,43 +2048,6 @@ export interface paths {
         put?: never;
         /** Create a course grade record */
         post: operations["GradeRecordsController_createCourseGradeRecord"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/grade-records/course-grade-records": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get course grade records for the school
-         * @description Returns paginated course grade records for the authenticated school. Filter by courseId and/or termId.
-         */
-        get: operations["GradeRecordsController_getCourseGradeRecords"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/grade-records/course-grade-records/{courseId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get paginated course grade records for a course */
-        get: operations["GradeRecordsController_getCourseGradeRecordsByCourse"];
-        put?: never;
-        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -1074,23 +2152,6 @@ export interface paths {
         put: operations["GradeRecordsController_bulkUpdateCourseGradeRecords"];
         /** Bulk create course grade records */
         post: operations["GradeRecordsController_bulkCreateCourseGradeRecords"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/grade-records/student-cumulative-term-grade-records": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Create a student cumulative term grade record */
-        post: operations["GradeRecordsController_createStudentCumulativeTermGradeRecord"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1203,23 +2264,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/grade-records/class-cumulative-term-grade-records": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Create a class cumulative term grade record */
-        post: operations["GradeRecordsController_createClassCumulativeTermGradeRecord"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/grade-records/class-cumulative-term-grade-records/{id}": {
         parameters: {
             query?: never;
@@ -1238,43 +2282,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/grade-records/class-cumulative-term-grade-records/calculate/{classId}/{termId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Auto-calculate and create class cumulative term grade record
-         * @description Calculates class average and recomputes positions from student cumulative records.
-         */
-        post: operations["GradeRecordsController_calculateAndCreateClassCumulativeTermGradeRecord"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/grade-records/student-cumulative-term-grade-records/class/{classId}/term/{termId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get all student cumulative term grade records for a class and term */
-        get: operations["GradeRecordsController_getStudentCumulativeTermGradeRecordsByClassAndTerm"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/grade-records/class-cumulative-term-grade-records/{classId}/{termId}/publish": {
         parameters: {
             query?: never;
@@ -1285,44 +2292,11 @@ export interface paths {
         get?: never;
         put?: never;
         /**
-         * Publish class cumulative term grade record
-         * @description Marks the class cumulative grade as published and notifies students and parents.
+         * Publish class cumulative term grade record (school office) (deprecated: use POST /grading/term-results/:id/publish)
+         * @deprecated
+         * @description Marks the class cumulative grade as published and notifies students and parents. School staff only (sub-admins need manage:assessments): teachers submit term results through POST /grading/classes/:classId/term-results instead.
          */
         post: operations["GradeRecordsController_publishClassCumulativeTermGradeRecord"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/grade-records/student/me/assessments/{assessmentId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get the authenticated student's score for a specific assessment */
-        get: operations["GradeRecordsController_getMyAssessmentGradeRecord"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/grade-records/student/me/course-grades/term/{termId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get the authenticated student's course grade records for a term */
-        get: operations["GradeRecordsController_getMyCourseGradeRecordsByTerm"];
-        put?: never;
-        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -1336,7 +2310,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get all courses in the authenticated student's class with published result counts */
+        /**
+         * Get all courses in the authenticated student's class with published result counts
+         * @deprecated
+         * @description Deprecated: use GET /students/me/subjects?termId= (B3). Same shape; coursePosition is the stored, published position (null until the term results are published).
+         */
         get: operations["GradeRecordsController_getMyClassCoursesWithPublishedAssessments"];
         put?: never;
         post?: never;
@@ -1353,30 +2331,12 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get published assessments for one course for the authenticated student */
-        get: operations["GradeRecordsController_getMyPublishedAssessmentsForCourse"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/grade-records/student/me/cumulative-grades": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
         /**
-         * Get all of the authenticated student's cumulative term grade records
-         * @description Only term results the teacher has published are returned: an unpublished
-         *     cumulative record is computed from every recorded score, so none of it
-         *     (average, grade, position) is shown until publication.
+         * Get published assessments for one course for the authenticated student
+         * @deprecated
+         * @description Deprecated: use GET /students/me/subjects/:courseId?termId= (B4). Same shape; a course outside the student's class answers 404.
          */
-        get: operations["GradeRecordsController_getMyCumulativeGradeRecords"];
+        get: operations["GradeRecordsController_getMyPublishedAssessmentsForCourse"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1413,7 +2373,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get student's cumulative result summary for a term */
+        /**
+         * Get student's cumulative result summary for a term
+         * @deprecated
+         * @description Deprecated: use GET /parents/me/children/:childId/report-card?termId= (B5). Same shape. The term figures appear once the term results are published; remarks are the class teacher's term remark.
+         */
         get: operations["ParentResultsController_getResultSummary"];
         put?: never;
         post?: never;
@@ -1430,59 +2394,12 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get student's per-subject results for a term */
+        /**
+         * Get student's per-subject results for a term
+         * @deprecated
+         * @description Deprecated: use GET /parents/me/children/:childId/report-card?termId= (B5). Same shape.
+         */
         get: operations["ParentResultsController_getSubjectResults"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/parent/results/{studentId}/grade-summary": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get student's grade distribution summary */
-        get: operations["ParentResultsController_getGradeSummary"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/parent/results/{studentId}/term-progress": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get student's term progress and course comparison */
-        get: operations["ParentResultsController_getTermProgress"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/parent/results/{studentId}/assessment-breakdown": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get student's individual assessment scores */
-        get: operations["ParentResultsController_getAssessmentBreakdown"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1498,7 +2415,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get live academic KPIs (avg grade + class position) from current term grades */
+        /**
+         * Get live academic KPIs (avg grade + class position) from current term grades
+         * @deprecated
+         * @description Deprecated: use GET /parents/me/children/:childId/dashboard (B1). Same shape; classPosition is the stored, published term position.
+         */
         get: operations["ParentResultsController_getLiveAcademicKpis"];
         put?: never;
         post?: never;
@@ -1515,7 +2436,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get courses with published assessment results (same data the student sees) */
+        /**
+         * Get courses with published assessment results (same data the student sees)
+         * @deprecated
+         * @description Deprecated: use GET /parents/me/children/:childId/report-card?termId= (B5). Same shape.
+         */
         get: operations["ParentResultsController_getParentPublishedCourses"];
         put?: never;
         post?: never;
@@ -1532,7 +2457,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get published assessments for one course (same data the student sees) */
+        /**
+         * Get published assessments for one course (same data the student sees)
+         * @deprecated
+         * @description Deprecated: use GET /parents/me/children/:childId/report-card?termId= (B5). Same shape; a course outside the child's class answers 404.
+         */
         get: operations["ParentResultsController_getParentPublishedAssessmentsForCourse"];
         put?: never;
         post?: never;
@@ -1571,7 +2500,12 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Authenticate user and get tokens */
+        /**
+         * Authenticate user and get tokens
+         * @description Signs a user in. The refresh token goes in the httpOnly cookie of the app
+         *     named in `X-Talim-App` (or the shared cookie without one); with the header,
+         *     an account whose role does not belong in that app is refused with 403.
+         */
         post: operations["AuthenticationController_login"];
         delete?: never;
         options?: never;
@@ -1624,7 +2558,7 @@ export interface paths {
         put?: never;
         /**
          * Refresh access token
-         * @description Reads the httpOnly refresh token cookie, rotates it, and returns a new access token.
+         * @description Browsers: reads the httpOnly `refreshToken` cookie, rotates it, and returns `{ access_token }` (the new refresh token is set as the cookie; it is never in the body). Native apps: send no cookie and `{ refreshToken }` in the body; the response is `{ access_token, refresh_token }` with the rotated token. When the request carries the cookie the body is ignored. With `X-Talim-App`, the app’s own `refreshToken_<app>` cookie is read and rotated instead, and the session’s account must have a role that belongs in the app (401 otherwise); a shared `refreshToken` cookie from before is used once, only when its role fits, and moved into the app’s cookie.
          */
         post: operations["AuthenticationController_refreshToken"];
         delete?: never;
@@ -1642,7 +2576,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Logout user and invalidate tokens */
+        /**
+         * Logout user and invalidate tokens
+         * @description Revokes the refresh token from the cookie (browsers) or, when there is no cookie, from the optional `{ refreshToken }` body (native apps), then ends the user’s sessions and blacklists the access token. With `X-Talim-App`, only that app’s `refreshToken_<app>` cookie is read and cleared.
+         */
         post: operations["AuthenticationController_logout"];
         delete?: never;
         options?: never;
@@ -1718,7 +2655,7 @@ export interface paths {
         put?: never;
         /**
          * Change the signed-in user’s password (all roles)
-         * @description Also completes the forced change for accounts created with a temporary password. Signs out other sessions and returns a fresh access token; the refresh cookie is replaced.
+         * @description Also completes the forced change for accounts created with a temporary password. Signs out other sessions and returns a fresh access token; the refresh cookie is replaced. Native apps send `platform` (`ios` or `android`) and also get the replacement `refresh_token` in the body.
          */
         post: operations["AuthenticationController_changePassword"];
         delete?: never;
@@ -1833,7 +2770,12 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Talim admin portal login — only role=admin users are granted access */
+        /**
+         * Talim admin portal login — only role=admin users are granted access
+         * @description Signs a Talim platform administrator in (any other role gets 403). The
+         *     refresh token goes in the `platform-admin` app's cookie when the request
+         *     sends `X-Talim-App: platform-admin`, else in the shared cookie.
+         */
         post: operations["AuthenticationController_adminLogin"];
         delete?: never;
         options?: never;
@@ -1907,7 +2849,11 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Login using a previously enrolled biometric credential */
+        /**
+         * Login using a previously enrolled biometric credential
+         * @description Signs in with an enrolled biometric credential (native apps). Follows
+         *     `X-Talim-App` like `POST /auth/login` if a client sends it.
+         */
         post: operations["AuthenticationController_biometricLogin"];
         delete?: never;
         options?: never;
@@ -1932,6 +2878,86 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/auth/sessions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The caller's sessions (signed-in devices)
+         * @description One per active refresh token, the current one first. `current` is decided by the refresh token on the request (the cookie, or `x-refresh-token`); when neither identifies a session, every entry has `current: false`.
+         */
+        get: operations["AuthSessionsController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/sessions/revoke-others": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Sign out other devices
+         * @description Revokes every session of the caller except the current one, together (one transaction). Their next refresh fails with 401; access tokens already issued expire on their own. When the current session cannot be identified, every session is revoked.
+         */
+        post: operations["AuthSessionsController_revokeOthers"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/sessions/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Sign out one session
+         * @description Revokes one of the caller's sessions (404 for anyone else's). Its next refresh fails with 401. Revoking the current session also clears the refresh cookie (with `X-Talim-App`, that app's own cookie).
+         */
+        delete: operations["AuthSessionsController_revoke"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/password-policy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The password policy (public)
+         * @description The rules every password change and reset enforces, with the contract field names. `historyCount` is 1: a new password must differ from the current one.
+         */
+        get: operations["AuthSessionsController_passwordPolicy"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/users/teachers": {
         parameters: {
             query?: never;
@@ -1939,7 +2965,12 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get all teachers for the user's school */
+        /**
+         * Get all teachers for the user's school
+         * @description The school's teacher accounts, a page at a time, each with its
+         *     `teacherProfile` (School Admin's roster fields, batched for the page;
+         *     null before the profile is created).
+         */
         get: operations["UserController_getTeachers"];
         put?: never;
         post?: never;
@@ -2154,46 +3185,6 @@ export interface paths {
         patch: operations["TeacherController_updateClassAndCourseAssignments"];
         trace?: never;
     };
-    "/teachers/dashboard/me": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get aggregate dashboard for authenticated teacher
-         * @description Returns teacher KPIs, timetable summaries, attendance summary, grading summary, resources summary, recent activity, and setup progress in one payload
-         */
-        get: operations["TeacherController_getMyTeacherDashboard"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/teachers/{teacherId}/dashboard": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get aggregate dashboard for a specific teacher
-         * @description Returns teacher KPIs, timetable summaries, attendance summary, grading summary, resources summary, recent activity, and setup progress in one payload
-         */
-        get: operations["TeacherController_getTeacherDashboard"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/teachers/{teacherId}/dashboard/kpis": {
         parameters: {
             query?: never;
@@ -2202,30 +3193,11 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Get dashboard KPIs for a specific teacher
+         * Get dashboard KPIs for a specific teacher (deprecated: use GET /teachers/today)
+         * @deprecated
          * @description Returns comprehensive dashboard statistics for a teacher including assigned subjects, added resources, recorded attendance, and other key metrics
          */
         get: operations["TeacherController_getTeacherDashboardKpis"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/teachers/dashboard/kpis/all": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get dashboard KPIs for all teachers in the school
-         * @description Returns comprehensive dashboard statistics for all teachers in the authenticated user's school
-         */
-        get: operations["TeacherController_getAllTeachersDashboardKpis"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2254,6 +3226,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/students/{id}/link-code": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Issue a parent link code for a student
+         * @description School admin, or a sub-admin with manage:students. Returns `{ code: "ABCD-2345", expiresAt }`; the code lasts 14 days and is used once. 404 for a student of another school.
+         */
+        post: operations["StudentController_issueLinkCode"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/students": {
         parameters: {
             query?: never;
@@ -2263,7 +3255,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Create a new student */
+        /**
+         * Create a new student
+         * @description Answers the student record plus `parentLink: { existing, parentName? }`: `existing` is true when the parent email belonged to a parent account (of any school), which the child was linked to instead of creating a new one.
+         */
         post: operations["StudentController_create"];
         delete?: never;
         options?: never;
@@ -2332,7 +3327,8 @@ export interface paths {
         };
         /**
          * Get student dashboard KPI metrics
-         * @description Retrieves comprehensive KPI metrics for a specific student including enrolled subjects, grade score, and attendance percentage.
+         * @deprecated
+         * @description Deprecated: use GET /students/me/today (B1). A thin wrapper over its glance: gradeScore is the term percent from published scores, classPosition the stored, published term position (0 until published), attendanceRate the term rate.
          */
         get: operations["StudentController_getStudentDashboardKpis"];
         put?: never;
@@ -2350,7 +3346,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get student dashboard KPIs by user ID */
+        /**
+         * Get student dashboard KPIs by user ID
+         * @deprecated
+         * @description Deprecated: use GET /students/me/today (B1). The same figures as GET /students/:studentId/dashboard/kpis.
+         */
         get: operations["StudentController_getStudentDashboardKpisByUserId"];
         put?: never;
         post?: never;
@@ -2411,23 +3411,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/students/by-parent/{parentId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get students by parent ID */
-        get: operations["StudentController_getStudentsByParentId"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/students/by-parent/{parentId}/all": {
         parameters: {
             query?: never;
@@ -2454,7 +3437,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Mark student attendance */
+        /**
+         * Mark student attendance (deprecated: use PUT /registers/:classId)
+         * @deprecated
+         */
         post: operations["AttendanceController_markAttendance"];
         delete?: never;
         options?: never;
@@ -2469,7 +3455,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get attendance record by ID */
+        /**
+         * Get attendance record by ID
+         * @description One attendance record, when the caller may read its student (the
+         *     AccessPolicy's `canViewStudent`); 404 otherwise.
+         */
         get: operations["AttendanceController_getAttendanceById"];
         put?: never;
         post?: never;
@@ -2477,7 +3467,8 @@ export interface paths {
         options?: never;
         head?: never;
         /**
-         * Correct a recorded attendance mark
+         * Correct a recorded attendance mark (deprecated: use PUT /registers/:classId)
+         * @deprecated
          * @description Changes the status and/or absence reason of an existing record. Only a teacher of the record’s class may do it, inside their own school; another school’s or an unknown record is 404. The student, class and date cannot be changed.
          */
         patch: operations["AttendanceController_updateAttendance"];
@@ -2509,7 +3500,8 @@ export interface paths {
         };
         /**
          * Get monthly attendance dashboard data for a parent/student view
-         * @description Returns monthly summary cards, calendar records, selected-day details, and recent attendance rows for the parent attendance dashboard.
+         * @deprecated
+         * @description Deprecated: use GET /students/me/attendance or GET /parents/me/children/:childId/attendance?month=YYYY-MM (B6). Returns monthly summary cards, calendar records, selected-day details, and recent attendance rows; the shape is kept.
          */
         get: operations["AttendanceController_getParentStudentMonthlyAttendance"];
         put?: never;
@@ -2528,7 +3520,8 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Get attendance status for a class
+         * Get attendance status for a class (deprecated: use GET /registers/:classId)
+         * @deprecated
          * @description Returns which students in a class have had their attendance marked for a specific date, including their status (present, absent, etc.)
          */
         get: operations["AttendanceController_getClassAttendanceStatus"];
@@ -2674,10 +3667,81 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get leave request summary counts for a student */
+        /**
+         * Get leave request summary counts for a student
+         * @description Leave request counts for a student the caller may see.
+         */
         get: operations["LeaveRequestController_getLeaveRequestSummary"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/parents/me/children/{childId}/leave": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A child's leave requests (B9)
+         * @description Newest first. `days` counts the school's weekdays in the span less holidays. `countThisSession` counts the child's requests whose first day falls in the school's current academic year. 404 for a child that is not the parent's.
+         */
+        get: operations["ParentLeaveController_list"];
+        put?: never;
+        /**
+         * File a leave request for a child (B9)
+         * @description Filed under the school's term covering `startDate` (else its current term; 400 when the school has neither). 400 when `endDate` is before `startDate`. The class teacher is notified.
+         */
+        post: operations["ParentLeaveController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/parents/me/children/{childId}/leave/{leaveId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Withdraw a child's pending leave request (B9)
+         * @description Only while pending: a decided request answers 400. Another child's request answers 404.
+         */
+        delete: operations["ParentLeaveController_remove"];
+        options?: never;
+        head?: never;
+        /**
+         * Edit a child's pending leave request (B9)
+         * @description Only while pending: a decided request answers 400. Another child's request answers 404.
+         */
+        patch: operations["ParentLeaveController_update"];
+        trace?: never;
+    };
+    "/parents/me/children/link": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Link a child with a code from the school
+         * @description Adds the child to the parent, even from another school. Wrong or expired codes answer 404; a code already used answers 409. The body is the link plus `child`, the card GET /parents/me/children lists.
+         */
+        post: operations["ParentsController_linkChild"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2691,7 +3755,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get children linked to the authenticated parent */
+        /**
+         * Get children linked to the authenticated parent
+         * @description B13, in one batched call: id, name, admissionNumber, class, school { id, name, city }, attendanceRate, average, averageGrade (the letter), gradeLevel, position (stored, published), outstanding, isDefault, relationship and avatarUrl, beside the older fields. `grade` keeps its old meaning, the grade level.
+         */
         get: operations["ParentsController_getMyChildren"];
         put?: never;
         post?: never;
@@ -2752,40 +3819,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/parents/me/children/{childId}/timetable": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get timetable for a linked child */
-        get: operations["ParentsController_getMyChildTimetable"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/parents/me/children/{childId}/timetable/download": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Download timetable for a linked child */
-        get: operations["ParentsController_downloadMyChildTimetable"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/parents/me/children/{childId}": {
         parameters: {
             query?: never;
@@ -2793,7 +3826,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get detail for a specific linked child */
+        /**
+         * Get detail for a specific linked child
+         * @description One linked child's detail. `ChildTenantGuard` has already found and
+         *     checked the child in the path; the service reuses that.
+         */
         get: operations["ParentsController_getMyChild"];
         put?: never;
         post?: never;
@@ -2816,7 +3853,11 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Update editable profile fields for a linked child (name, DOB) */
+        /**
+         * Update editable profile fields for a linked child (name, DOB, relationship)
+         * @description Updates a linked child's name and date of birth, and the parent's
+         *     relationship to them (B13: stored on the link).
+         */
         patch: operations["ParentsController_updateMyChildProfile"];
         trace?: never;
     };
@@ -2995,7 +4036,10 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Update parent profile (fullName, avatar) */
+        /**
+         * Update parent profile (fullName, avatar, occupation, address)
+         * @description Updates the parent's name, picture, occupation and address (B13).
+         */
         patch: operations["ParentSettingsController_updateProfile"];
         trace?: never;
     };
@@ -3012,7 +4056,11 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Change parent account password */
+        /**
+         * Change parent account password
+         * @description Changes the parent's password, ends their other sessions and replaces the
+         *     refresh cookie (the `parents` app's own with `X-Talim-App`).
+         */
         patch: operations["ParentSettingsController_changePassword"];
         trace?: never;
     };
@@ -3087,21 +4135,45 @@ export interface paths {
         patch: operations["ParentSettingsController_updateTheme"];
         trace?: never;
     };
-    "/parent/settings/children": {
+    "/parent/settings/payment-method": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** Get linked children (read-only) */
-        get: operations["ParentSettingsController_getLinkedChildren"];
+        get?: never;
         put?: never;
         post?: never;
         delete?: never;
         options?: never;
         head?: never;
-        patch?: never;
+        /**
+         * Set the preferred payment method
+         * @description Saves how the parent prefers to pay (C7); `GET /parent/settings`
+         *     returns it as `preferences.preferredProvider`.
+         */
+        patch: operations["ParentSettingsController_updatePreferredProvider"];
+        trace?: never;
+    };
+    "/parent/settings/preferences": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Update UI preferences (the guided tour)
+         * @description `guides.tourCompleted: true` stamps guides.tourCompletedAt; false clears it.
+         */
+        patch: operations["ParentSettingsController_updatePreferences"];
         trace?: never;
     };
     "/teacher/settings": {
@@ -3111,7 +4183,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get settings overview for authenticated teacher */
+        /**
+         * Get settings overview for authenticated teacher
+         * @description The settings page.
+         */
         get: operations["TeacherSettingsController_getSettings"];
         put?: never;
         post?: never;
@@ -3134,7 +4209,10 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Update teacher profile settings */
+        /**
+         * Update the teacher's name, phone or picture
+         * @description Names are 1..60 characters after trimming; the phone is stored as sent after trimming and must be 7..20 characters of "+", digits, spaces and dashes. Email is read-only (400 when sent). Answers the GET /teacher/settings shape.
+         */
         patch: operations["TeacherSettingsController_updateProfile"];
         trace?: never;
     };
@@ -3151,7 +4229,10 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Update teacher notification and workspace preferences */
+        /**
+         * Update teacher message and workspace preferences
+         * @description `messages.showOnlineStatus` and `messages.readReceipts` are the chat preferences chat enforces; `messages.soundEnabled` and the rest are the teacher's. Alert switches are in PATCH /notifications/preferences (a `notifications` section answers 400).
+         */
         patch: operations["TeacherSettingsController_updatePreferences"];
         trace?: never;
     };
@@ -3220,7 +4301,10 @@ export interface paths {
         put?: never;
         /** Register or update FCM device token after login */
         post: operations["MyNotificationsController_registerDeviceToken"];
-        /** Deactivate FCM device token on logout */
+        /**
+         * Deactivate FCM device token on logout
+         * @description Deactivates the caller's token for a device, on logout.
+         */
         delete: operations["MyNotificationsController_deactivateDeviceToken"];
         options?: never;
         head?: never;
@@ -3244,6 +4328,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/notifications/counts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Inbox counts: all and unread, in total and per category
+         * @description One feed (A10): the caller's notification rows; a school announcement is one row per recipient and counts under `announcement`. Every category is present (B11 adds `payments` and `leave`). `childId` (a parent's linked child, else 404) counts the rows about that child plus the rows that name no child, as `GET /notifications?childId=` lists them.
+         */
+        get: operations["MyNotificationsController_getCounts"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/notifications/read-all": {
         parameters: {
             query?: never;
@@ -3257,7 +4361,10 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Mark all notifications as read for authenticated user */
+        /**
+         * Mark all notifications and announcements as read
+         * @description Marks every row of the caller's feed read. Announcements are rows too (A10), so they are covered. `updated` counts the rows changed.
+         */
         patch: operations["MyNotificationsController_markAllRead"];
         trace?: never;
     };
@@ -3275,7 +4382,10 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Update notification preferences for authenticated user */
+        /**
+         * Update notification preferences for authenticated user
+         * @description Changes the caller's notification preferences.
+         */
         patch: operations["MyNotificationsController_updatePreferences"];
         trace?: never;
     };
@@ -3434,23 +4544,6 @@ export interface paths {
         /** Edit an announcement */
         put: operations["AnnoucementController_editAnnouncement"];
         post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/notifications/send": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Send notifications to multiple users */
-        post: operations["AnnoucementController_sendNotifications"];
         delete?: never;
         options?: never;
         head?: never;
@@ -3707,11 +4800,15 @@ export interface paths {
         };
         /**
          * List notifications (own, or any recipient for staff)
-         * @description Non-staff callers only ever see their own notifications.
+         * @description `unread=true` keeps only the notifications the recipient has not read; it combines with `category`, `source`, `type` and `childId`. `childId` (B11; a parent's linked child, else 404) keeps the rows whose `metadata.childId` or `metadata.studentId` names that child plus the rows that name no child (school-wide notices). Each item carries `attachmentFiles` and, from Round 4 producers, `metadata.target` and `metadata.actionLabel`.
          */
         get: operations["NotificationController_findAll"];
         put?: never;
-        /** Create and send a notification */
+        /**
+         * Create and send a notification
+         * @description Creates a notification and queues it for delivery. School staff always
+         *     send as themselves, to their own school.
+         */
         post: operations["NotificationController_create"];
         delete?: never;
         options?: never;
@@ -3726,7 +4823,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Notification KPI summary (own, or any recipient for staff) */
+        /**
+         * Notification KPI summary (own, or any recipient for staff)
+         * @description KPI totals for the caller's notifications (staff: any recipient's, or
+         *     broadcasts).
+         */
         get: operations["NotificationController_getStats"];
         put?: never;
         post?: never;
@@ -3743,7 +4844,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Unread notifications for a user (self, or any user for staff) */
+        /**
+         * Unread notifications for a user (self, or any user for staff)
+         * @description A user's unread notifications: the caller's own, or (staff) any user's in
+         *     their school.
+         */
         get: operations["NotificationController_getUnreadNotifications"];
         put?: never;
         post?: never;
@@ -3760,12 +4865,22 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get a notification by ID */
+        /**
+         * Get a notification by ID
+         * @description One notification the caller may see.
+         */
         get: operations["NotificationController_findOne"];
-        /** Update a notification */
+        /**
+         * Update a notification
+         * @description Edits a notification of the caller's school. Sender, audience and read
+         *     state cannot be changed.
+         */
         put: operations["NotificationController_update"];
         post?: never;
-        /** Delete a notification */
+        /**
+         * Delete a notification
+         * @description Deletes a notification of the caller's school.
+         */
         delete: operations["NotificationController_delete"];
         options?: never;
         head?: never;
@@ -3823,7 +4938,7 @@ export interface paths {
         };
         /**
          * People the caller can start a direct message with
-         * @description For a student or parent: the teachers of their class (or of each child's class) — the class teacher and whoever teaches it — as user ids ready for POST /chat/rooms. Empty for staff, who pick people from their own directories.
+         * @description For a teacher: the parents of their students (a parent who turned off teacher messages is left out), the school's other teachers and one `office` entry (open it with POST /chat/office); sorted by group (parent, colleague, office), then name. For a parent with `childId` (or the X-Talim-Child header, B10): that child's class teacher and course teachers, then one `office` entry for the child's school, in the §26 shape plus the older `firstName`/`lastName`/`userAvatar`; a child not linked to the parent answers 404. For a parent naming no child: the teachers of every child's class as before (no office entry). Teacher user ids are ready for POST /chat/rooms. Empty for a student (students message in their class and subject groups only, B10) and for staff, who pick people from their own directories.
          */
         get: operations["ChatController_getContacts"];
         put?: never;
@@ -3841,10 +4956,16 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get all chat rooms for the authenticated user */
+        /**
+         * Get all chat rooms for the authenticated user
+         * @description The caller's rooms, after bringing staff office membership up to date.
+         */
         get: operations["ChatController_getUserChatRooms"];
         put?: never;
-        /** Create a new chat room */
+        /**
+         * Create a new chat room
+         * @description A one_to_one room is refused (403) for a student caller and when the other member is a student: students message in their class and subject groups only (B10). The answer is the stored room (as before) plus the fields of the room view `GET /chat/rooms` shows, such as `subtitle` and `callPhone`.
+         */
         post: operations["ChatController_createChatRoom"];
         delete?: never;
         options?: never;
@@ -3881,7 +5002,11 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Create a group chat for admins and parents */
+        /**
+         * Create a group chat for admins and parents
+         * @description Creates a group chat for school admins and parents; same behaviour as
+         *     POST /chat/groups.
+         */
         post: operations["ChatController_createAdminParentGroupChat"];
         delete?: never;
         options?: never;
@@ -3904,9 +5029,69 @@ export interface paths {
         head?: never;
         /**
          * Update a group chat name, description or picture
-         * @description Allowed for whoever may manage the group (creator, teachers in the group, school staff with manage:messages). Members are told with the room-updated socket event.
+         * @description Allowed for the group's admins (its creator is the first), school staff with manage:messages and the platform admin; anyone else gets 403. Direct messages and the school office thread have no editable details (400). The name is 1..80 characters and the description at most 500. Members are told with the room-updated socket event.
          */
         patch: operations["ChatController_updateRoom"];
+        trace?: never;
+    };
+    "/chat/office": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Open the caller's school office thread
+         * @description Returns the caller's office room, creating it when needed: one per (school, teacher) and one per (school, parent). A parent's school is the child's: send X-Talim-Child (else the default child is used); a parent with no linked child at that school gets 403. Every school admin and every sub-admin with manage:messages reads and replies; staff see a parent's thread as "Office thread · {parent} (parent of {children's first names})". Membership is refreshed on every read and post. The owner cannot add or remove members or leave it.
+         */
+        post: operations["ChatController_openOffice"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/chat/course-groups/{courseId}/open": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Open a course's subject group
+         * @description Returns the course's group, creating it on first use (idempotent: a second call, or two at once, return the same room). It holds the class's active students and the course teacher, who is a group admin; missing students are added on every open, nobody is removed. Allowed for the course teacher, the students of the course's class and school staff with manage:messages (a school admin always). Another school's course answers 404; anyone else of the school gets 403. New members are told with participants-changed.
+         */
+        post: operations["ChatController_openCourseGroup"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/chat/rooms/{roomId}/media": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A room's shared images, videos, documents and links
+         * @description Participants only. Deleted messages are left out. `image`: image attachments; `video`: video attachments (B10; before, they were listed as documents); `document`: document and other file attachments; `link`: URLs found in message text. Newest first; `counts` totals every kind.
+         */
+        get: operations["ChatController_getRoomMedia"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/chat/rooms/{roomId}/read": {
@@ -3936,7 +5121,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Search chat rooms */
+        /**
+         * Search chat rooms
+         * @description Searches the caller's rooms by name and type.
+         */
         get: operations["ChatController_searchChatRooms"];
         put?: never;
         post?: never;
@@ -3953,7 +5141,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get messages from a chat room with populated participants */
+        /**
+         * Get messages from a chat room with populated participants
+         * @description One page of a room's messages, with each sender populated.
+         */
         get: operations["ChatController_getChatRoomMessages"];
         put?: never;
         post?: never;
@@ -3992,7 +5183,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Send a message to a chat room */
+        /**
+         * Send a message to a chat room
+         * @description A direct message with a student in it is read-only: sending by or to the student answers 403 (B10). The send-chat-message socket event follows the same rule.
+         */
         post: operations["ChatController_sendMessage"];
         delete?: never;
         options?: never;
@@ -4033,7 +5227,11 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Mark a message as read */
+        /**
+         * Mark a message as read
+         * @description Marks one message read (the room up to that message) and tells the
+         *     other members when read receipts are shared.
+         */
         patch: operations["ChatController_markMessageAsRead"];
         trace?: never;
     };
@@ -4044,7 +5242,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get unread message count for the authenticated user */
+        /**
+         * Get unread message count for the authenticated user
+         * @description The caller's unread total across all rooms.
+         */
         get: operations["ChatController_getUnreadMessageCount"];
         put?: never;
         post?: never;
@@ -4061,7 +5262,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get participants of a chat room */
+        /**
+         * Get participants of a chat room
+         * @description The user ids of a room's participants.
+         */
         get: operations["ChatController_getChatRoomParticipants"];
         put?: never;
         post?: never;
@@ -4100,7 +5304,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Add participant to a chat room */
+        /**
+         * Add participant to a chat room
+         * @description Adds one user to a group room and announces them when they are new.
+         */
         post: operations["ChatController_addParticipant"];
         delete?: never;
         options?: never;
@@ -4121,7 +5328,11 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Remove participant from a chat room */
+        /**
+         * Remove participant from a chat room
+         * @description Removes a user from a group room (or the caller leaves it), detaches
+         *     their sockets from the room and announces the change.
+         */
         patch: operations["ChatController_removeParticipant"];
         trace?: never;
     };
@@ -4132,14 +5343,20 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get message preferences for the authenticated user */
+        /**
+         * Get message preferences for the authenticated user
+         * @description The caller's chat preferences.
+         */
         get: operations["ChatController_getMessagePreferences"];
         put?: never;
         post?: never;
         delete?: never;
         options?: never;
         head?: never;
-        /** Update message preferences for the authenticated user */
+        /**
+         * Update message preferences for the authenticated user
+         * @description Changes the caller's chat preferences.
+         */
         patch: operations["ChatController_updateMessagePreferences"];
         trace?: never;
     };
@@ -4497,111 +5714,6 @@ export interface paths {
         patch: operations["ComplaintController_updateStatus"];
         trace?: never;
     };
-    "/resources": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get all resources */
-        get: operations["ResourceController_findAll"];
-        put?: never;
-        /** Upload a new resource */
-        post: operations["ResourceController_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/resources/class/{classId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get resources by class ID */
-        get: operations["ResourceController_findByClassId"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/resources/term/{termId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get resources by term ID */
-        get: operations["ResourceController_findByTermId"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/resources/course/{courseId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get resources by course ID */
-        get: operations["ResourceController_findByCourseId"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/resources/user/{uploadedBy}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get resources by uploaded user ID */
-        get: operations["ResourceController_findByUploadedBy"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/resources/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get a resource by ID */
-        get: operations["ResourceController_findOne"];
-        /** Update a resource */
-        put: operations["ResourceController_update"];
-        post?: never;
-        /** Delete a resource */
-        delete: operations["ResourceController_remove"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/fees/dashboard/summary": {
         parameters: {
             query?: never;
@@ -4626,7 +5738,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Fee totals per category for the dashboard */
+        /**
+         * Fee totals per category for the dashboard
+         * @description Fee totals per category for the dashboard.
+         */
         get: operations["FeesController_getCategoriesSummary"];
         put?: never;
         post?: never;
@@ -4643,14 +5758,22 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Read the fee receipt settings */
+        /**
+         * Read the receipt settings (deprecated: use GET /settings/receipt)
+         * @deprecated
+         */
         get: operations["FeesController_getReceiptSettings"];
         put?: never;
         post?: never;
         delete?: never;
         options?: never;
         head?: never;
-        /** Update the fee receipt settings */
+        /**
+         * Update the receipt settings (deprecated: use PATCH /settings/receipt)
+         * @deprecated
+         * @description Deprecated alias of `PATCH /settings/receipt` (A5). Answers the bare
+         *     settings.
+         */
         patch: operations["FeesController_updateReceiptSettings"];
         trace?: never;
     };
@@ -4661,7 +5784,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** List fee categories */
+        /**
+         * List fee categories
+         * @description List fee categories.
+         */
         get: operations["FeesController_getCategories"];
         put?: never;
         /** Create a fee category */
@@ -4679,14 +5805,20 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get a fee category */
+        /**
+         * Get a fee category
+         * @description Get a fee category.
+         */
         get: operations["FeesController_getCategoryById"];
         put?: never;
         post?: never;
         delete?: never;
         options?: never;
         head?: never;
-        /** Update a fee category */
+        /**
+         * Update a fee category
+         * @description Update a fee category.
+         */
         patch: operations["FeesController_updateCategory"];
         trace?: never;
     };
@@ -4703,7 +5835,10 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Archive a fee category */
+        /**
+         * Archive a fee category
+         * @description Archive a fee category.
+         */
         patch: operations["FeesController_archiveCategory"];
         trace?: never;
     };
@@ -4720,7 +5855,10 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Restore an archived fee category */
+        /**
+         * Restore an archived fee category
+         * @description Restore an archived fee category.
+         */
         patch: operations["FeesController_restoreCategory"];
         trace?: never;
     };
@@ -4731,7 +5869,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** List fee items */
+        /**
+         * List fee items
+         * @description List fee items.
+         */
         get: operations["FeesController_getFeeItems"];
         put?: never;
         /** Create a fee item */
@@ -4749,14 +5890,20 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get a fee item */
+        /**
+         * Get a fee item
+         * @description Get a fee item.
+         */
         get: operations["FeesController_getFeeItemById"];
         put?: never;
         post?: never;
         delete?: never;
         options?: never;
         head?: never;
-        /** Update a fee item */
+        /**
+         * Update a fee item
+         * @description Update a fee item.
+         */
         patch: operations["FeesController_updateFeeItem"];
         trace?: never;
     };
@@ -4769,7 +5916,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Duplicate a fee item */
+        /**
+         * Duplicate a fee item
+         * @description Duplicate a fee item.
+         */
         post: operations["FeesController_duplicateFeeItem"];
         delete?: never;
         options?: never;
@@ -4790,7 +5940,10 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Archive a fee item */
+        /**
+         * Archive a fee item
+         * @description Archive a fee item.
+         */
         patch: operations["FeesController_archiveFeeItem"];
         trace?: never;
     };
@@ -4807,7 +5960,10 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Restore an archived fee item */
+        /**
+         * Restore an archived fee item
+         * @description Restore an archived fee item.
+         */
         patch: operations["FeesController_restoreFeeItem"];
         trace?: never;
     };
@@ -4818,7 +5974,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** List fee assignments */
+        /**
+         * List fee assignments
+         * @description List fee assignments.
+         */
         get: operations["FeesController_getFeeAssignments"];
         put?: never;
         /** Assign a fee item to one or more classes */
@@ -4836,14 +5995,20 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get a fee assignment */
+        /**
+         * Get a fee assignment
+         * @description Get a fee assignment.
+         */
         get: operations["FeesController_getFeeAssignmentById"];
         put?: never;
         post?: never;
         delete?: never;
         options?: never;
         head?: never;
-        /** Update a fee assignment */
+        /**
+         * Update a fee assignment
+         * @description Update a fee assignment.
+         */
         patch: operations["FeesController_updateFeeAssignment"];
         trace?: never;
     };
@@ -4860,7 +6025,10 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Publish a fee assignment to parents */
+        /**
+         * Publish a fee assignment to parents
+         * @description Publish a fee assignment to parents.
+         */
         patch: operations["FeesController_publishFeeAssignment"];
         trace?: never;
     };
@@ -4877,7 +6045,10 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Unpublish a fee assignment */
+        /**
+         * Unpublish a fee assignment
+         * @description Unpublish a fee assignment.
+         */
         patch: operations["FeesController_unpublishFeeAssignment"];
         trace?: never;
     };
@@ -4894,7 +6065,10 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Archive a fee assignment */
+        /**
+         * Archive a fee assignment
+         * @description Archive a fee assignment.
+         */
         patch: operations["FeesController_archiveFeeAssignment"];
         trace?: never;
     };
@@ -4911,7 +6085,10 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Restore an archived fee assignment */
+        /**
+         * Restore an archived fee assignment
+         * @description Restore an archived fee assignment.
+         */
         patch: operations["FeesController_restoreFeeAssignment"];
         trace?: never;
     };
@@ -4924,7 +6101,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Record a fee payment made outside the platform */
+        /** Record a fee payment made outside the platform (writes the fee ledger and a receipt) */
         post: operations["FeesController_createManualPayment"];
         delete?: never;
         options?: never;
@@ -4939,7 +6116,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** List fee payments */
+        /**
+         * The fee ledger: where each child stands on each fee
+         * @description The school's fee ledger rows.
+         */
         get: operations["FeesController_getPayments"];
         put?: never;
         post?: never;
@@ -4956,7 +6136,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** List one student’s fee payments */
+        /**
+         * One child’s fee ledger rows
+         * @description One child's fee ledger rows.
+         */
         get: operations["FeesController_getStudentPayments"];
         put?: never;
         post?: never;
@@ -4973,8 +6156,150 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get a fee payment */
+        /**
+         * One fee ledger row
+         * @description One fee ledger row.
+         */
         get: operations["FeesController_getPaymentById"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/settings/school-profile": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read the school profile */
+        get: operations["SettingsController_getSchoolProfile"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update the school profile */
+        patch: operations["SettingsController_updateSchoolProfile"];
+        trace?: never;
+    };
+    "/settings/receipt": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read the receipt settings
+         * @description School admins, and sub-admins with manage:settings or manage:fees. PATCH needs manage:settings.
+         */
+        get: operations["SettingsController_getReceiptSettings"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Update the receipt settings
+         * @description Changes the receipt settings (`manage:settings`).
+         */
+        patch: operations["SettingsController_updateReceiptSettings"];
+        trace?: never;
+    };
+    "/settings/finance": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read the finance settings
+         * @description School admins, and sub-admins with manage:settings or manage:fees. PATCH needs manage:settings.
+         */
+        get: operations["SettingsController_getFinanceSettings"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Update the finance settings
+         * @description Changes the finance settings (`manage:settings`).
+         */
+        patch: operations["SettingsController_updateFinanceSettings"];
+        trace?: never;
+    };
+    "/settings/academic": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read the academic settings (timezone, periods) */
+        get: operations["SettingsController_getAcademicSettings"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Update the academic settings (timezone, periods)
+         * @description Changes the academic settings. `periods`, when sent, replaces the list
+         *     and must have unique keys and no overlapping times.
+         */
+        patch: operations["SettingsController_updateAcademicSettings"];
+        trace?: never;
+    };
+    "/settings/security/change-password": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Change your own password */
+        post: operations["SettingsController_changePassword"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/settings/data/export/{type}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Export this school’s students, staff or fees */
+        get: operations["SettingsController_exportData"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/payments/parent/fees": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fees of every linked child (all schools) in one call, with family totals */
+        get: operations["PaymentsController_getFamilyFees"];
         put?: never;
         post?: never;
         delete?: never;
@@ -4990,7 +6315,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Unpaid fee assignments for one of the parent’s children */
+        /**
+         * Fees one of the parent’s children still owes (ledger balances)
+         * @description Fees one child still owes (superseded by `parent/fees`).
+         */
         get: operations["PaymentsController_getDueFees"];
         put?: never;
         post?: never;
@@ -5007,7 +6335,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Totals paid and pending at checkout, and the receipt count, for the parent */
+        /**
+         * Money owed on every linked child’s fees, paid, pending at checkout or transfer, and receipts
+         * @description Family totals: owed, paid, pending checkouts and transfers, receipts.
+         */
         get: operations["PaymentsController_getPaymentSummary"];
         put?: never;
         post?: never;
@@ -5024,7 +6355,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Paged payment history for the parent */
+        /**
+         * Paged payment history of the linked children
+         * @description Paged payment history across the family (C6).
+         */
         get: operations["PaymentsController_getPaymentHistory"];
         put?: never;
         post?: never;
@@ -5041,7 +6375,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Paged receipts for the parent */
+        /**
+         * Paged receipts of the linked children, by term
+         * @description Paged receipts across the family, with school header and lines (C5).
+         */
         get: operations["PaymentsController_getReceipts"];
         put?: never;
         post?: never;
@@ -5058,7 +6395,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** One receipt belonging to the parent */
+        /**
+         * One receipt of a linked child
+         * @description One receipt the parent may see.
+         */
         get: operations["PaymentsController_getReceiptById"];
         put?: never;
         post?: never;
@@ -5075,7 +6415,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Receipt payload for download (same data as the receipt endpoint) */
+        /**
+         * Receipt payload for a client-side PDF; 403 when the school does not allow parent downloads
+         * @description One receipt for the client to render as a PDF; 403 when the school does
+         *     not allow parent downloads.
+         */
         get: operations["PaymentsController_downloadReceipt"];
         put?: never;
         post?: never;
@@ -5094,7 +6438,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Start a hosted checkout for selected fees */
+        /**
+         * Start a hosted checkout for selected fees (full or part payment, idempotent by key)
+         * @description Starts a hosted checkout (C3).
+         */
         post: operations["PaymentsController_initializePayment"];
         delete?: never;
         options?: never;
@@ -5109,10 +6456,53 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Confirm a payment after returning from checkout */
+        /**
+         * Confirm a payment after returning from checkout
+         * @description Confirms a payment after the checkout (payer or a linked parent only).
+         */
         get: operations["PaymentsController_verifyPayment"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/payments/parent/bank-details": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The child’s school account for bank transfers
+         * @description The school account to transfer to (C4).
+         */
+        get: operations["PaymentsController_getBankDetails"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/payments/parent/bank-transfer": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Report a bank transfer; pending until the bursary confirms it
+         * @description Reports a bank transfer; it stays pending until the bursary confirms it.
+         */
+        post: operations["PaymentsController_submitBankTransfer"];
         delete?: never;
         options?: never;
         head?: never;
@@ -5126,10 +6516,70 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Payment providers currently enabled for checkout */
+        /**
+         * Payment providers currently enabled for checkout
+         * @description Payment providers enabled for checkout.
+         */
         get: operations["PaymentsController_getEnabledProviders"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/payments/admin/bank-transfers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Bank transfers reported by parents (pending, confirmed, rejected) */
+        get: operations["PaymentsController_getBankTransfers"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/payments/admin/bank-transfers/{transactionId}/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Confirm a bank transfer reached the school account
+         * @description Confirms a bank transfer: ledger, receipt, then the parent is told.
+         */
+        post: operations["PaymentsController_confirmBankTransfer"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/payments/admin/bank-transfers/{transactionId}/reject": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Reject a bank transfer that did not arrive
+         * @description Rejects a bank transfer with a reason the parent sees.
+         */
+        post: operations["PaymentsController_rejectBankTransfer"];
         delete?: never;
         options?: never;
         head?: never;
@@ -5143,7 +6593,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Paged transactions for the school */
+        /**
+         * Paged transactions for the school
+         * @description Paged transactions for the school.
+         */
         get: operations["PaymentsController_getAdminTransactions"];
         put?: never;
         post?: never;
@@ -5160,7 +6613,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Transaction totals for the school */
+        /**
+         * Transaction totals for the school
+         * @description Transaction totals for the school.
+         */
         get: operations["PaymentsController_getAdminSummary"];
         put?: never;
         post?: never;
@@ -5177,7 +6633,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Payment providers currently enabled */
+        /**
+         * Payment providers currently enabled
+         * @description Payment providers currently enabled.
+         */
         get: operations["PaymentsController_getAdminProviders"];
         put?: never;
         post?: never;
@@ -5194,7 +6653,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Paged receipts for the school */
+        /**
+         * Paged receipts for the school
+         * @description Paged receipts for the school.
+         */
         get: operations["PaymentsController_getAdminReceipts"];
         put?: never;
         post?: never;
@@ -5211,7 +6673,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** One receipt belonging to the school */
+        /**
+         * One receipt belonging to the school
+         * @description One receipt belonging to the school.
+         */
         get: operations["PaymentsController_getAdminReceiptById"];
         put?: never;
         post?: never;
@@ -5230,7 +6695,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Record a payment received outside the platform */
+        /**
+         * Record a payment received outside the platform
+         * @description Record a payment received outside the platform.
+         */
         post: operations["PaymentsController_createManualPayment"];
         delete?: never;
         options?: never;
@@ -5247,7 +6715,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Refund a successful payment (full or partial) */
+        /**
+         * Refund a successful payment (full or partial)
+         * @description Refund a successful payment (full or partial).
+         */
         post: operations["PaymentsController_refundPayment"];
         delete?: never;
         options?: never;
@@ -5285,7 +6756,10 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Create or update a provider configuration */
+        /**
+         * Create or update a provider configuration
+         * @description Create or update a provider configuration.
+         */
         patch: operations["PaymentsController_updatePlatformProviderConfig"];
         trace?: never;
     };
@@ -5302,7 +6776,10 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Enable a provider for checkout */
+        /**
+         * Enable a provider for checkout
+         * @description Enable a provider for checkout.
+         */
         patch: operations["PaymentsController_enableProvider"];
         trace?: never;
     };
@@ -5319,7 +6796,10 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Disable a provider for checkout */
+        /**
+         * Disable a provider for checkout
+         * @description Disable a provider for checkout.
+         */
         patch: operations["PaymentsController_disableProvider"];
         trace?: never;
     };
@@ -5349,7 +6829,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** OPay webhook */
+        /**
+         * OPay webhook
+         * @description OPay webhook (public; authenticated by the provider's signature).
+         */
         post: operations["PaymentsController_opayWebhook"];
         delete?: never;
         options?: never;
@@ -5366,7 +6849,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Stripe webhook */
+        /**
+         * Stripe webhook
+         * @description Stripe webhook (public; authenticated by the provider's signature).
+         */
         post: operations["PaymentsController_stripeWebhook"];
         delete?: never;
         options?: never;
@@ -5817,94 +7303,6 @@ export interface paths {
         patch: operations["FinanceController_setRequire2fa"];
         trace?: never;
     };
-    "/settings/school-profile": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Read the school profile */
-        get: operations["SettingsController_getSchoolProfile"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /** Update the school profile */
-        patch: operations["SettingsController_updateSchoolProfile"];
-        trace?: never;
-    };
-    "/settings/receipt": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Read the receipt settings */
-        get: operations["SettingsController_getReceiptSettings"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /** Update the receipt settings */
-        patch: operations["SettingsController_updateReceiptSettings"];
-        trace?: never;
-    };
-    "/settings/finance": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Read the finance settings */
-        get: operations["SettingsController_getFinanceSettings"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /** Update the finance settings */
-        patch: operations["SettingsController_updateFinanceSettings"];
-        trace?: never;
-    };
-    "/settings/security/change-password": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Change your own password */
-        post: operations["SettingsController_changePassword"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/settings/data/export/{type}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Export this school’s students, staff or fees */
-        get: operations["SettingsController_exportData"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/transit/dashboard": {
         parameters: {
             query?: never;
@@ -6353,11 +7751,1754 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/support/tickets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Send a support ticket to Talim
+         * @description Any signed-in user. Stored apart from school complaints (the school never sees it) and emailed to Talim support (SUPPORT_EMAIL, default support@mytalim.com). A failed email doesn't fail the request.
+         */
+        post: operations["SupportController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        UpdateCourseDto: Record<string, never>;
+        TodayTermDto: {
+            id: string;
+            name: string;
+        };
+        SchoolDayDto: {
+            /** @enum {string|null} */
+            reason: "weekend" | "holiday" | "no_term" | null;
+            holidayTitle: string | null;
+            /** @description `HH:mm` when school closes early today. */
+            endsEarlyAt: string | null;
+            isSchoolDay: boolean;
+        };
+        PeriodDto: {
+            key: string;
+            label: string;
+            /** @description `HH:mm`. */
+            startTime: string;
+            /** @description `HH:mm`. */
+            endTime: string;
+            isBreak: boolean;
+        };
+        LessonCourseDto: {
+            id: string;
+            code: string;
+            title: string;
+        };
+        LessonSubjectDto: {
+            id: string;
+            name: string;
+        };
+        LessonClassDto: {
+            id: string;
+            name: string;
+        };
+        LessonTopicDto: {
+            /** @description ISO instant the week was marked taught. */
+            taughtAt: string | null;
+            week: number;
+            topic: string;
+            objectives: string;
+        };
+        LessonCancelledDto: {
+            reason: string;
+        };
+        TodayLessonDto: {
+            periodKey: string | null;
+            course: components["schemas"]["LessonCourseDto"];
+            subject: components["schemas"]["LessonSubjectDto"] | null;
+            class: components["schemas"]["LessonClassDto"];
+            /**
+             * @description The class-group chat room of the lesson's class that the teacher is in;
+             *     null when there is none.
+             */
+            classRoomId: string | null;
+            room: string | null;
+            topic: components["schemas"]["LessonTopicDto"] | null;
+            cancelled: components["schemas"]["LessonCancelledDto"] | null;
+            /** @enum {string} */
+            state: "done" | "now" | "later";
+            /** @description Minutes to the end of the lesson in progress; null otherwise. */
+            minutesLeft: number | null;
+            /** @description Timetable entry id. */
+            id: string;
+            /** @description `YYYY-MM-DD`. */
+            date: string;
+            day: string;
+            /** @description `HH:mm`. */
+            startTime: string;
+            /** @description `HH:mm`. */
+            endTime: string;
+            isClassTeacher: boolean;
+            studentCount: number;
+        };
+        RegisterStatusDto: {
+            /** @description ISO instant; null until submitted. */
+            submittedAt: string | null;
+            classId: string;
+            className: string;
+            /** @description Whether the caller is this class's class teacher. */
+            isClassTeacher: boolean;
+            /** @description Active students in the class. */
+            studentCount: number;
+            /** @description Students with an attendance row for the day. */
+            markedCount: number;
+            /** @description Students on approved leave covering the day. */
+            onLeaveCount: number;
+            /**
+             * @description True when there is no register document but every student has an
+             *     attendance row, on a day before the school's `registerTrackingSince`
+             *     (registers taken before submission existed); then `submittedAt` is the
+             *     latest row's `createdAt`. From that day on only a submission counts.
+             */
+            inferred: boolean;
+            /** @description ISO instant the register is due (`registerCloseTime` that day). */
+            closesAt: string;
+            /** @description ISO instant after which a teacher can no longer submit or change it. */
+            editableUntil: string;
+            /**
+             * @description Whether the caller may submit now: the class teacher before
+             *     `editableUntil`, staff at any time. Completeness is not considered;
+             *     an incomplete submission answers 409.
+             */
+            canSubmit: boolean;
+        };
+        AttentionTargetDto: {
+            /** @enum {string} */
+            page: "attendance" | "grading" | "messages" | "resources" | "subjects" | "leave";
+            classId?: string;
+            courseId?: string;
+            assessmentId?: string;
+            roomId?: string;
+            week?: number;
+            /** @description `YYYY-MM-DD`. */
+            date?: string;
+        };
+        AttentionActionDto: {
+            target: components["schemas"]["AttentionTargetDto"];
+            label: string;
+        };
+        AttentionItemDto: {
+            /** @enum {string} */
+            kind: "register" | "scores_start" | "scores_missing" | "scores_publish" | "reply" | "resource" | "leave_request";
+            /** @enum {string} */
+            tone: "warning" | "neutral" | "success" | "info" | "accent";
+            action: components["schemas"]["AttentionActionDto"];
+            /** @description Stable for the same underlying task, e.g. `register:<classId>`. */
+            id: string;
+            title: string;
+            description: string;
+        };
+        TodayClassRegisterDto: {
+            submittedAt: string | null;
+        };
+        TodayClassDto: {
+            /** @enum {string} */
+            role: "class_teacher" | "subject_teacher";
+            /** @description `Number(classCapacity)`, or null when that is not a number. */
+            capacity: number | null;
+            /** @description Percent of this term's attendance rows that are Present or Late. */
+            attendanceRateTerm: number | null;
+            /** @description Null for a class the teacher only teaches a subject in. */
+            register: components["schemas"]["TodayClassRegisterDto"] | null;
+            id: string;
+            name: string;
+            studentCount: number;
+        };
+        TodayEventDto: {
+            /** @enum {string} */
+            type: "holiday" | "event" | "early_close";
+            id: string;
+            title: string;
+            /** @description `YYYY-MM-DD`. */
+            startDate: string;
+            /** @description `YYYY-MM-DD`, inclusive. */
+            endDate: string;
+        };
+        SetupStepDto: {
+            /** @enum {string} */
+            key: "profile" | "register" | "publish" | "resource" | "plan" | "tour";
+            label: string;
+            done: boolean;
+        };
+        SetupDto: {
+            steps: components["schemas"]["SetupStepDto"][];
+            /** @description 0..100. */
+            percent: number;
+        };
+        TodayCountsDto: {
+            unreadMessages: number;
+            unreadNotifications: number;
+            /** @description Class-teacher registers not yet submitted today (0 on a non-school day). */
+            pendingRegisters: number;
+        };
+        TeacherTodayDto: {
+            /** @enum {string} */
+            greeting: "morning" | "afternoon" | "evening";
+            term: components["schemas"]["TodayTermDto"] | null;
+            weekNumber: number | null;
+            schoolDay: components["schemas"]["SchoolDayDto"];
+            periods: components["schemas"]["PeriodDto"][];
+            /** @description Today's lessons, by start time. */
+            lessons: components["schemas"]["TodayLessonDto"][];
+            nowLessonId: string | null;
+            nextLessonId: string | null;
+            /** @description `HH:mm` of the first lesson that takes place. */
+            firstLessonAt: string | null;
+            /** @description `HH:mm` the last lesson that takes place ends. */
+            lastLessonEndsAt: string | null;
+            registers: components["schemas"]["RegisterStatusDto"][];
+            attention: components["schemas"]["AttentionItemDto"][];
+            classes: components["schemas"]["TodayClassDto"][];
+            events: components["schemas"]["TodayEventDto"][];
+            setup: components["schemas"]["SetupDto"];
+            counts: components["schemas"]["TodayCountsDto"];
+            /** @description Today in the school, `YYYY-MM-DD`. */
+            date: string;
+            /** @description Weekday name. */
+            day: string;
+            timezone: string;
+            /** @description ISO instant. */
+            now: string;
+        };
+        SchoolOfficeHoursDto: {
+            /** @example 08:00 */
+            start: string;
+            /** @example 16:00 */
+            end: string;
+        };
+        SchoolContactDto: {
+            phone: string | null;
+            email: string | null;
+            address: string | null;
+            officeHours: components["schemas"]["SchoolOfficeHoursDto"] | null;
+            name: string;
+        };
+        ClassCourseDto: {
+            id: string;
+            code: string;
+            title: string;
+        };
+        MyClassDto: {
+            /** @enum {string} */
+            role: "class_teacher" | "subject_teacher";
+            /** @description `Number(classCapacity)`, or null when the stored value is not numeric. */
+            capacity: number | null;
+            /** @description The courses the caller teaches in this class; may be empty. */
+            courses: components["schemas"]["ClassCourseDto"][];
+            id: string;
+            name: string;
+            /** @description Active students in the class. */
+            studentCount: number;
+        };
+        RosterClassDto: {
+            /**
+             * @description `staff` for a school admin or sub-admin.
+             * @enum {string}
+             */
+            role: "class_teacher" | "subject_teacher" | "staff";
+            capacity: number | null;
+            id: string;
+            name: string;
+            studentCount: number;
+        };
+        RosterStatsDto: {
+            /**
+             * @description (present + late) / (present + late + absent) this term, in percent with
+             *     one decimal; Excused and approved leave are left out. Null with no
+             *     current term or no marks.
+             */
+            attendanceRateTerm: number | null;
+            /** @description Students marked absent today; null until today's register is submitted. */
+            absentToday: number | null;
+            /** @description Whether today's register counts as submitted. */
+            registerSubmitted: boolean;
+        };
+        RosterGuardianDto: {
+            /** @description The parent's login; start a direct chat with it. Null when unknown. */
+            userId: string | null;
+            /** @description As stored: `MOTHER`, `FATHER`, `GUARDIAN` or `OTHER`. */
+            relationship: string | null;
+            phone: string | null;
+            email: string | null;
+            name: string;
+        };
+        RosterStudentDto: {
+            admissionNumber: string | null;
+            email: string | null;
+            avatarUrl: string | null;
+            /** @description As `stats.attendanceRateTerm`, for this student. */
+            attendanceRateTerm: number | null;
+            guardian: components["schemas"]["RosterGuardianDto"] | null;
+            /** @description Student profile id. */
+            id: string;
+            name: string;
+            firstName: string;
+        };
+        ClassRosterDto: {
+            class: components["schemas"]["RosterClassDto"];
+            stats: components["schemas"]["RosterStatsDto"];
+            /** @description What the caller teaches in this class (none for staff). */
+            courses: components["schemas"]["ClassCourseDto"][];
+            /** @description Active students, by name. */
+            students: components["schemas"]["RosterStudentDto"][];
+        };
+        StudentClassDto: {
+            id: string;
+            name: string;
+        };
+        StudentRecordStudentDto: {
+            admissionNumber: string | null;
+            class: components["schemas"]["StudentClassDto"];
+            /** @description `YYYY-MM-DD`. */
+            dateOfBirth: string | null;
+            gender: string | null;
+            email: string | null;
+            avatarUrl: string | null;
+            /** @description Student profile id. */
+            id: string;
+            name: string;
+            firstName: string;
+        };
+        StudentRecordSchoolDto: {
+            name: string;
+        };
+        StudentRecordGuardianDto: {
+            /** @description The parent's login; start a direct chat with it. Null when unknown. */
+            userId: string | null;
+            /** @description As stored: `MOTHER`, `FATHER`, `GUARDIAN` or `OTHER`. */
+            relationship: string | null;
+            /** @description Not stored anywhere yet: always null. */
+            occupation: string | null;
+            email: string | null;
+            phone: string | null;
+            /** @description Not stored anywhere yet: always null. */
+            address: string | null;
+            name: string;
+        };
+        StudentAttendanceDto: {
+            /** @description (present + late) / (present + late + absent), percent, one decimal. */
+            rate: number | null;
+            /**
+             * @description School days of the current term up to today: the school's weekdays,
+             *     less holidays. 0 with no current term.
+             */
+            schoolDays: number;
+            present: number;
+            late: number;
+            absent: number;
+            /** @description Days marked Excused (approved leave is written as Excused). */
+            onLeave: number;
+        };
+        StudentAssessmentScoreDto: {
+            maxScore: number | null;
+            score: number | null;
+            /** @description Mean of the class's recorded scores, one decimal. */
+            classAverage: number | null;
+            /**
+             * @description `published` once the assessment's scores are published for the course;
+             *     `draft` when the student's score is recorded but not published;
+             *     `not_entered` when there is no score for the student.
+             * @enum {string}
+             */
+            status: "published" | "draft" | "not_entered";
+            id: string;
+            name: string;
+        };
+        StudentPositionDto: {
+            rank: number;
+            /** @description Students of the class with a complete set of scores for the course. */
+            of: number;
+        };
+        StudentCourseScoresDto: {
+            course: components["schemas"]["ClassCourseDto"];
+            /** @description The current term's assessments, by start date. */
+            assessments: components["schemas"]["StudentAssessmentScoreDto"][];
+            /** @description Sum of the recorded scores; null when none is recorded. */
+            total: number | null;
+            /** @description The grading module's grade for the percentage; only when complete. */
+            grade: string | null;
+            /** @description Only when complete. */
+            position: components["schemas"]["StudentPositionDto"] | null;
+            className: string;
+            /** @description Every assessment of the term has a score for the student. */
+            complete: boolean;
+        };
+        StudentRecordDto: {
+            student: components["schemas"]["StudentRecordStudentDto"];
+            school: components["schemas"]["StudentRecordSchoolDto"];
+            guardian: components["schemas"]["StudentRecordGuardianDto"] | null;
+            attendance: components["schemas"]["StudentAttendanceDto"];
+            /** @description Teacher: the courses they teach the student; staff: every course of the student's class. */
+            scores: components["schemas"]["StudentCourseScoresDto"][];
+        };
+        IdNameDto: {
+            id: string;
+            name: string;
+        };
+        LearnerTermDto: {
+            /** @description The session (academic year), e.g. "2026/2027". */
+            session: string | null;
+            id: string;
+            name: string;
+            startDate: string;
+            endDate: string;
+            totalWeeks: number;
+            isCurrent: boolean;
+        };
+        TodayStudentLessonDto: {
+            periodKey: string | null;
+            course: components["schemas"]["LessonCourseDto"];
+            subject: components["schemas"]["LessonSubjectDto"] | null;
+            class: components["schemas"]["LessonClassDto"];
+            /** @description The class group chat room the viewer is in; null when none. */
+            classRoomId: string | null;
+            room: string | null;
+            /** @description The course's teacher (user id and name). */
+            teacher: components["schemas"]["IdNameDto"] | null;
+            topic: components["schemas"]["LessonTopicDto"] | null;
+            cancelled: components["schemas"]["LessonCancelledDto"] | null;
+            /** @enum {string} */
+            state: "done" | "now" | "later";
+            minutesLeft: number | null;
+            /** @description Timetable entry id. */
+            id: string;
+            /** @description `YYYY-MM-DD`. */
+            date: string;
+            day: string;
+            /** @description `HH:mm`. */
+            startTime: string;
+            /** @description `HH:mm`. */
+            endTime: string;
+            /** @description Short label of the course, e.g. "Maths". */
+            courseShort: string;
+            /** @description The course's colour key (see `LearnerCourseDto.colourKey`). */
+            colourKey: number;
+            /** @description Outside the school's bell schedule (no matching period). */
+            offSchedule: boolean;
+        };
+        PositionDto: {
+            rank: number;
+            of: number;
+        };
+        GlanceAttendanceDto: {
+            /** @description (present + late) / (present + late + absent), percent; null before any mark. */
+            rate: number | null;
+            /** @description Days at school this term: present + late. */
+            present: number;
+            /** @description School days of the term so far. */
+            schoolDays: number;
+        };
+        GlanceUnreadDto: {
+            /** @description The room with the newest unread message. */
+            topRoom: components["schemas"]["IdNameDto"] | null;
+            count: number;
+        };
+        LearnerGlanceDto: {
+            /** @description Term percent from published scores (A7). */
+            average: number | null;
+            grade: string | null;
+            /** @description The stored, published term position (A8); null until published. */
+            position: components["schemas"]["PositionDto"] | null;
+            /** @description Rank change against the previous published term; positive is up. */
+            movement: number | null;
+            attendance: components["schemas"]["GlanceAttendanceDto"];
+            unread: components["schemas"]["GlanceUnreadDto"];
+        };
+        SubjectTotalDto: {
+            percent: number | null;
+            classAverage: number | null;
+            courseId: string;
+            title: string;
+            short: string;
+            colourKey: number;
+        };
+        ComingUpDto: {
+            /** @enum {string} */
+            kind: "assessment" | "event";
+            /** @description Assessments are school-wide, so this is null for them today. */
+            courseTitle: string | null;
+            /**
+             * @description The event's type, for `kind: 'event'`.
+             * @enum {string}
+             */
+            eventType?: "holiday" | "event" | "early_close";
+            id: string;
+            title: string;
+            /** @description `YYYY-MM-DD`: the due day of an assessment, the first day of an event. */
+            date: string;
+            /** @description Days from today (0 for today or an event already under way). */
+            daysAway: number;
+        };
+        NotificationTargetDto: {
+            /** @enum {string} */
+            page: "attendance" | "grading" | "messages" | "resources" | "subjects" | "leave" | "announcements" | "timetable" | "settings" | "payments" | "results" | "children";
+            classId?: string;
+            courseId?: string;
+            assessmentId?: string;
+            /** @description The term the page should open on (score and results publications). */
+            termId?: string;
+            roomId?: string;
+            week?: number;
+            date?: string;
+        };
+        FeedItemDto: {
+            /** @enum {string} */
+            category: "announcement" | "attendance" | "academics" | "grading" | "resources" | "messages" | "account" | "payments" | "leave" | "other";
+            senderName: string | null;
+            /** @description Where the item's button leads (§30 `metadata.target`). */
+            target: components["schemas"]["NotificationTargetDto"] | null;
+            actionLabel: string | null;
+            /** @description The school it came from (parents span several, A11). */
+            school?: components["schemas"]["IdNameDto"] | null;
+            metadata?: {
+                [key: string]: unknown;
+            };
+            id: string;
+            title: string;
+            message: string;
+            /** @description ISO instant. */
+            createdAt: string;
+            isRead: boolean;
+        };
+        LearnerCountsDto: {
+            unreadNotifications: number;
+            unreadMessages: number;
+        };
+        LearnerTodayDto: {
+            /** @enum {string} */
+            greeting: "morning" | "afternoon" | "evening";
+            class: components["schemas"]["IdNameDto"];
+            term: components["schemas"]["LearnerTermDto"] | null;
+            weekNumber: number | null;
+            schoolDay: components["schemas"]["SchoolDayDto"];
+            periods: components["schemas"]["PeriodDto"][];
+            lessons: components["schemas"]["TodayStudentLessonDto"][];
+            nowLessonId: string | null;
+            nextLessonId: string | null;
+            glance: components["schemas"]["LearnerGlanceDto"];
+            subjectTotals: components["schemas"]["SubjectTotalDto"][];
+            comingUp: components["schemas"]["ComingUpDto"][];
+            /** @description The five newest unread notifications ("New since you last signed in"). */
+            feed: components["schemas"]["FeedItemDto"][];
+            counts: components["schemas"]["LearnerCountsDto"];
+            /** @description Today in the school, `YYYY-MM-DD`. */
+            date: string;
+            day: string;
+            /** @description ISO instant. */
+            now: string;
+            timezone: string;
+            passMark: number;
+        };
+        WeekInfoDto: {
+            /** @description Term week (1 contains the term's start day); null outside the term. */
+            number: number | null;
+            /** @description Monday, `YYYY-MM-DD`. */
+            start: string;
+            /** @description Sunday, `YYYY-MM-DD`. */
+            end: string;
+            /** @description Whether this is the week the timetable opens on by default. */
+            isCurrent: boolean;
+            prevStart: string;
+            nextStart: string;
+            /** @description Whether the week overlaps the current term. */
+            inTerm: boolean;
+        };
+        HolidayDto: {
+            title: string;
+        };
+        DayEventDto: {
+            /** @enum {string} */
+            type: "holiday" | "event" | "early_close";
+            id: string;
+            title: string;
+        };
+        WeekDayDto: {
+            holiday: components["schemas"]["HolidayDto"] | null;
+            /** @description `HH:mm` when school closes early that day. */
+            endsEarlyAt: string | null;
+            events: components["schemas"]["DayEventDto"][];
+            /** @description `YYYY-MM-DD`. */
+            date: string;
+            /** @description Weekday name, e.g. `Monday`. */
+            day: string;
+            isToday: boolean;
+        };
+        StudentLessonDto: {
+            periodKey: string | null;
+            course: components["schemas"]["LessonCourseDto"];
+            subject: components["schemas"]["LessonSubjectDto"] | null;
+            class: components["schemas"]["LessonClassDto"];
+            /** @description The class group chat room the viewer is in; null when none. */
+            classRoomId: string | null;
+            room: string | null;
+            /** @description The course's teacher (user id and name). */
+            teacher: components["schemas"]["IdNameDto"] | null;
+            topic: components["schemas"]["LessonTopicDto"] | null;
+            cancelled: components["schemas"]["LessonCancelledDto"] | null;
+            /** @description Timetable entry id. */
+            id: string;
+            /** @description `YYYY-MM-DD`. */
+            date: string;
+            day: string;
+            /** @description `HH:mm`. */
+            startTime: string;
+            /** @description `HH:mm`. */
+            endTime: string;
+            /** @description Short label of the course, e.g. "Maths". */
+            courseShort: string;
+            /** @description The course's colour key (see `LearnerCourseDto.colourKey`). */
+            colourKey: number;
+            /** @description Outside the school's bell schedule (no matching period). */
+            offSchedule: boolean;
+        };
+        TimetableSubjectDto: {
+            teacher: components["schemas"]["IdNameDto"] | null;
+            courseId: string;
+            title: string;
+            short: string;
+            colourKey: number;
+        };
+        LearnerTimetableDto: {
+            term: components["schemas"]["LearnerTermDto"] | null;
+            week: components["schemas"]["WeekInfoDto"];
+            days: components["schemas"]["WeekDayDto"][];
+            periods: components["schemas"]["PeriodDto"][];
+            /** @enum {string} */
+            periodsSource: "school" | "derived";
+            lessons: components["schemas"]["StudentLessonDto"][];
+            subjects: components["schemas"]["TimetableSubjectDto"][];
+            timezone: string;
+            now: string;
+            today: string;
+        };
+        GradeBandDto: {
+            remark: string | null;
+            letter: string;
+            min: number;
+        };
+        LearnerCourseDto: {
+            id: string;
+            code: string;
+            title: string;
+            /** @description Short label, e.g. "Maths". */
+            short: string;
+            /** @description Stable small integer per course of the class (0..n-1), for its colour. */
+            colourKey: number;
+        };
+        SubjectTopicDto: {
+            week: number;
+            topic: string;
+        };
+        LearnerSubjectDto: {
+            course: components["schemas"]["LearnerCourseDto"];
+            subject: components["schemas"]["IdNameDto"] | null;
+            teacher: components["schemas"]["IdNameDto"] | null;
+            /** @description The subject group chat; null until it is first opened (B10). */
+            roomId: string | null;
+            /** @description Σ published scores. */
+            total: number | null;
+            percent: number | null;
+            grade: string | null;
+            /** @description The stored, published course position (A8); null until published. */
+            position: components["schemas"]["PositionDto"] | null;
+            classAverage: number | null;
+            currentTopic: components["schemas"]["SubjectTopicDto"] | null;
+            /** @description Every assessment of the term has a published score in this course. */
+            complete: boolean;
+            resourceCount: number;
+        };
+        LearnerSubjectsDto: {
+            term: components["schemas"]["LearnerTermDto"];
+            scale: components["schemas"]["GradeBandDto"][];
+            subjects: components["schemas"]["LearnerSubjectDto"][];
+            passMark: number;
+        };
+        SubjectAssessmentDto: {
+            score: number | null;
+            /** @description The class's mean published score on it, in the same units as `score`. */
+            classAverage: number | null;
+            id: string;
+            name: string;
+            maxScore: number;
+        };
+        SchemeWeekViewDto: {
+            taughtAt: string | null;
+            week: number;
+            topic: string;
+            objectives: string;
+        };
+        LearnerSchemeDto: {
+            currentWeek: number | null;
+            weeks: components["schemas"]["SchemeWeekViewDto"][];
+        };
+        LegacyCurriculumDto: {
+            updatedAt: string | null;
+            content: string;
+            attachments: string[];
+        };
+        LearnerFileCourseDto: {
+            id: string;
+            code: string;
+            title: string;
+            /** @description Short label, e.g. "Maths". */
+            short: string;
+            /** @description Stable small integer per course of the class (0..n-1), for its colour. */
+            colourKey: number;
+        };
+        LearnerFileDto: {
+            course: components["schemas"]["LearnerFileCourseDto"];
+            /** @description Who uploaded it. */
+            teacher: components["schemas"]["IdNameDto"] | null;
+            /** @enum {string} */
+            kind: "pdf" | "slides" | "video" | "doc" | "image" | "other";
+            sizeBytes: number | null;
+            mimeType: string | null;
+            week: number | null;
+            termId: string | null;
+            /** @description The file to open or download: its first file, else its image. */
+            downloadUrl: string | null;
+            id: string;
+            name: string;
+            /** @description ISO instant. */
+            createdAt: string;
+        };
+        LearnerSubjectDetailDto: {
+            course: components["schemas"]["LearnerCourseDto"];
+            term: components["schemas"]["LearnerTermDto"];
+            scale: components["schemas"]["GradeBandDto"][];
+            teacher: components["schemas"]["IdNameDto"] | null;
+            roomId: string | null;
+            assessments: components["schemas"]["SubjectAssessmentDto"][];
+            total: number | null;
+            percent: number | null;
+            grade: string | null;
+            position: components["schemas"]["PositionDto"] | null;
+            classAverage: number | null;
+            scheme: components["schemas"]["LearnerSchemeDto"];
+            legacyCurriculum: components["schemas"]["LegacyCurriculumDto"] | null;
+            resources: components["schemas"]["LearnerFileDto"][];
+            passMark: number;
+        };
+        ReportSchoolDto: {
+            logoUrl: string | null;
+            address: string | null;
+            phone: string | null;
+            email: string | null;
+            name: string;
+        };
+        ReportStudentDto: {
+            admissionNumber: string | null;
+            class: components["schemas"]["IdNameDto"];
+            name: string;
+        };
+        ReportColumnDto: {
+            id: string;
+            name: string;
+            maxScore: number;
+        };
+        ReportRowDto: {
+            course: components["schemas"]["LearnerCourseDto"];
+            teacher: components["schemas"]["IdNameDto"] | null;
+            /** @description One per assessment column, in `columns` order; null where the student has no published score. */
+            scores: (number | null)[];
+            total: number | null;
+            percent: number | null;
+            grade: string | null;
+            position: components["schemas"]["PositionDto"] | null;
+            classAverage: number | null;
+        };
+        ReportOverallDto: {
+            percent: number | null;
+            grade: string | null;
+            position: components["schemas"]["PositionDto"] | null;
+            previousPosition: components["schemas"]["PositionDto"] | null;
+        };
+        ReportHighlightDto: {
+            position: components["schemas"]["PositionDto"] | null;
+            courseId: string;
+            title: string;
+            short: string;
+            colourKey: number;
+            percent: number;
+        };
+        ReportAttendanceDto: {
+            schoolDays: number;
+            present: number;
+            late: number;
+            absent: number;
+            /** @description Excused marks (approved leave). */
+            excused: number;
+        };
+        ReportRemarksDto: {
+            classTeacher: string | null;
+            principal: string | null;
+            classTeacherName: string | null;
+        };
+        ReportCardDto: {
+            /** @enum {string} */
+            status: "none" | "partial" | "published";
+            /** @description When the term results were published (ISO). */
+            issuedAt: string | null;
+            school: components["schemas"]["ReportSchoolDto"];
+            student: components["schemas"]["ReportStudentDto"];
+            term: components["schemas"]["LearnerTermDto"];
+            session: string | null;
+            /** @description The next term's first day, `YYYY-MM-DD`. */
+            nextTermStart: string | null;
+            columns: components["schemas"]["ReportColumnDto"][];
+            rows: components["schemas"]["ReportRowDto"][];
+            overall: components["schemas"]["ReportOverallDto"];
+            /** @description The subject with the highest percent; null with no scored subject. */
+            strongest: components["schemas"]["ReportHighlightDto"] | null;
+            /**
+             * @description The subject with the lowest percent, never the same as `strongest`:
+             *     null with fewer than two scored subjects, or when every scored subject
+             *     has the same percent.
+             */
+            weakest: components["schemas"]["ReportHighlightDto"] | null;
+            scale: components["schemas"]["GradeBandDto"][];
+            attendance: components["schemas"]["ReportAttendanceDto"];
+            remarks: components["schemas"]["ReportRemarksDto"] | null;
+            /** @description When a parent acknowledged it (B8). */
+            acknowledgedAt: string | null;
+            passMark: number;
+        };
+        ReportTermDto: {
+            session: string | null;
+            /** @enum {string} */
+            status: "none" | "partial" | "published";
+            id: string;
+            name: string;
+            isCurrent: boolean;
+            /** @description `YYYY-MM-DD`. */
+            startDate: string;
+            /** @description `YYYY-MM-DD`. */
+            endDate: string;
+        };
+        AttendanceDayDto: {
+            /** @enum {string} */
+            status: "present" | "late" | "absent" | "on_leave" | "unmarked" | "holiday" | "weekend";
+            /** @description `YYYY-MM-DD`. */
+            date: string;
+        };
+        LearnerAttendanceDto: {
+            term: components["schemas"]["LearnerTermDto"] | null;
+            class: components["schemas"]["IdNameDto"];
+            rate: number | null;
+            /**
+             * @description `on_track` at 92% or more (or before any mark).
+             * @enum {string}
+             */
+            band: "on_track" | "watch";
+            /** @description Each day of `month`, when it is given. */
+            days?: components["schemas"]["AttendanceDayDto"][];
+            schoolDays: number;
+            present: number;
+            late: number;
+            absent: number;
+            /** @description Excused marks (approved leave). */
+            onLeave: number;
+        };
+        LearnerPageMetaDto: {
+            total: number;
+            page: number;
+            limit: number;
+            lastPage: number;
+        };
+        LearnerFilesPageDto: {
+            data: components["schemas"]["LearnerFileDto"][];
+            meta: components["schemas"]["LearnerPageMetaDto"];
+        };
+        LearnerGuidesDto: {
+            /** @description ISO instant the tour was finished; null until then. */
+            tourCompletedAt: string | null;
+        };
+        LearnerPreferencesDto: {
+            guides: components["schemas"]["LearnerGuidesDto"];
+        };
+        LearnerGuidesInputDto: {
+            /** @description True stamps `guides.tourCompletedAt` with now; false clears it. */
+            tourCompleted?: boolean;
+        };
+        UpdateLearnerPreferencesDto: {
+            guides?: components["schemas"]["LearnerGuidesInputDto"];
+        };
+        ParentAttentionTargetDto: {
+            /** @enum {string} */
+            page: "payments" | "attendance" | "leave" | "results";
+            termId?: string;
+            /** @description `YYYY-MM-DD`. */
+            date?: string;
+        };
+        ParentAttentionDto: {
+            /** @enum {string} */
+            kind: "fees" | "attendance" | "leave" | "report";
+            target: components["schemas"]["ParentAttentionTargetDto"];
+            title: string;
+            meta: string;
+        };
+        ChildFeesDto: {
+            /** @description Earliest due day of a fee still owed, `YYYY-MM-DD`. */
+            dueDate: string | null;
+            outstanding: number;
+        };
+        ParentDashboardDto: {
+            /** @enum {string} */
+            greeting: "morning" | "afternoon" | "evening";
+            class: components["schemas"]["IdNameDto"];
+            term: components["schemas"]["LearnerTermDto"] | null;
+            weekNumber: number | null;
+            schoolDay: components["schemas"]["SchoolDayDto"];
+            periods: components["schemas"]["PeriodDto"][];
+            lessons: components["schemas"]["TodayStudentLessonDto"][];
+            nowLessonId: string | null;
+            nextLessonId: string | null;
+            glance: components["schemas"]["LearnerGlanceDto"];
+            subjectTotals: components["schemas"]["SubjectTotalDto"][];
+            comingUp: components["schemas"]["ComingUpDto"][];
+            /** @description The five newest unread notifications ("New since you last signed in"). */
+            feed: components["schemas"]["FeedItemDto"][];
+            counts: components["schemas"]["LearnerCountsDto"];
+            attention: components["schemas"]["ParentAttentionDto"][];
+            fees: components["schemas"]["ChildFeesDto"];
+            /** @description Today in the school, `YYYY-MM-DD`. */
+            date: string;
+            day: string;
+            /** @description ISO instant. */
+            now: string;
+            timezone: string;
+            passMark: number;
+        };
+        AcknowledgeReportDto: {
+            termId: string;
+        };
+        AcknowledgedDto: {
+            /** @description ISO instant. */
+            acknowledgedAt: string;
+        };
+        CalendarEventDto: {
+            termId: string | null;
+            /** @enum {string} */
+            type: "holiday" | "event" | "early_close";
+            /** @description `HH:mm`; only for `early_close`. */
+            endsAt: string | null;
+            id: string;
+            title: string;
+            /** @description `YYYY-MM-DD`. */
+            startDate: string;
+            /** @description `YYYY-MM-DD`, inclusive. */
+            endDate: string;
+        };
+        CreateCalendarEventDto: {
+            /** @enum {string} */
+            type: "holiday" | "event" | "early_close";
+            /**
+             * @description First day, `YYYY-MM-DD`.
+             * @example 2026-10-01
+             */
+            startDate: string;
+            /**
+             * @description Last day (inclusive), `YYYY-MM-DD`; defaults to `startDate`.
+             * @example 2026-10-01
+             */
+            endDate?: string;
+            /**
+             * @description `HH:mm`; required for `early_close`, ignored otherwise.
+             * @example 12:00
+             */
+            endsAt?: string;
+            title: string;
+            termId?: string;
+        };
+        UpdateCalendarEventDto: {
+            /** @enum {string} */
+            type?: "holiday" | "event" | "early_close";
+            /** @example 2026-10-01 */
+            startDate?: string;
+            /** @example 2026-10-01 */
+            endDate?: string;
+            /** @example 12:00 */
+            endsAt?: string | null;
+            /** @description The term the event belongs to; `null` clears it. */
+            termId?: string | null;
+            title?: string;
+        };
+        TermSummaryDto: {
+            id: string;
+            name: string;
+            startDate: string;
+            endDate: string;
+            /** @description Weeks from the week of `startDate` to the week of `endDate` (max 30). */
+            totalWeeks: number;
+        };
+        LessonDto: {
+            periodKey: string | null;
+            course: components["schemas"]["LessonCourseDto"];
+            subject: components["schemas"]["LessonSubjectDto"] | null;
+            class: components["schemas"]["LessonClassDto"];
+            /**
+             * @description The class-group chat room of the lesson's class that the teacher is in;
+             *     null when there is none.
+             */
+            classRoomId: string | null;
+            room: string | null;
+            topic: components["schemas"]["LessonTopicDto"] | null;
+            cancelled: components["schemas"]["LessonCancelledDto"] | null;
+            /** @description Timetable entry id. */
+            id: string;
+            /** @description `YYYY-MM-DD`. */
+            date: string;
+            day: string;
+            /** @description `HH:mm`. */
+            startTime: string;
+            /** @description `HH:mm`. */
+            endTime: string;
+            isClassTeacher: boolean;
+            studentCount: number;
+        };
+        TimetableMeDto: {
+            term: components["schemas"]["TermSummaryDto"] | null;
+            week: components["schemas"]["WeekInfoDto"];
+            /** @description School days of the week only. */
+            days: components["schemas"]["WeekDayDto"][];
+            periods: components["schemas"]["PeriodDto"][];
+            /** @enum {string} */
+            periodsSource: "school" | "derived";
+            /** @description Every timetabled lesson of the teacher that week, one per date. */
+            lessons: components["schemas"]["LessonDto"][];
+            timezone: string;
+            /** @description ISO instant. */
+            now: string;
+            /** @description Today in the school, `YYYY-MM-DD`. */
+            today: string;
+        };
+        RegisterClassDto: {
+            id: string;
+            name: string;
+        };
+        RegisterTermDto: {
+            id: string;
+            name: string;
+            /** @description `YYYY-MM-DD`. */
+            startDate: string;
+            /** @description `YYYY-MM-DD`. */
+            endDate: string;
+        };
+        RegisterSchoolDayDto: {
+            /** @enum {string|null} */
+            reason: "weekend" | "holiday" | "no_term" | null;
+            holidayTitle: string | null;
+            isSchoolDay: boolean;
+        };
+        RegisterSubmitterDto: {
+            id: string;
+            name: string;
+        };
+        RegisterCountsDto: {
+            present: number;
+            late: number;
+            absent: number;
+            onLeave: number;
+            unmarked: number;
+        };
+        RegisterLeaveDto: {
+            /**
+             * @description Name of the student's parent: only parents can ask for leave, and the
+             *     request does not record which one did. Null when unknown.
+             */
+            requestedBy: string | null;
+            id: string;
+            /** @description The leave request's type, e.g. `Health Issue`. */
+            type: string;
+        };
+        RegisterStudentDto: {
+            admissionNumber: string | null;
+            avatarUrl: string | null;
+            /**
+             * @description `on_leave` for approved leave covering the day (and for a stored
+             *     Excused row); null while unmarked.
+             * @enum {string|null}
+             */
+            status: "present" | "late" | "absent" | "on_leave" | null;
+            absenceReason: string | null;
+            note: string | null;
+            leave: components["schemas"]["RegisterLeaveDto"] | null;
+            /** @description Student profile id. */
+            id: string;
+            name: string;
+            firstName: string;
+        };
+        RegisterSheetDto: {
+            class: components["schemas"]["RegisterClassDto"];
+            term: components["schemas"]["RegisterTermDto"] | null;
+            schoolDay: components["schemas"]["RegisterSchoolDayDto"];
+            submittedAt: string | null;
+            submittedBy: components["schemas"]["RegisterSubmitterDto"] | null;
+            lastEditedAt: string | null;
+            /** @enum {string} */
+            access: "edit" | "view";
+            /**
+             * @description Why `access` is `view`: the most specific reason that applies, in this
+             *     order: `not_school_day`, `future`, `past` (never for staff),
+             *     `not_class_teacher`, `after_edit_window`. Null when editable.
+             * @enum {string|null}
+             */
+            readOnlyReason: "past" | "future" | "not_class_teacher" | "after_edit_window" | "not_school_day" | null;
+            counts: components["schemas"]["RegisterCountsDto"];
+            /** @description By name. */
+            students: components["schemas"]["RegisterStudentDto"][];
+            /** @description `YYYY-MM-DD`. */
+            date: string;
+            /** @description Today in the school, `YYYY-MM-DD` (to clamp date pickers). */
+            today: string;
+            isToday: boolean;
+            /** @description ISO instant the register is due. */
+            closesAt: string;
+            /** @description ISO instant after which a teacher can no longer change it. */
+            editableUntil: string;
+            /** @description As in `GET /registers/status`: a legacy register, before tracking began. */
+            inferred: boolean;
+        };
+        RegisterMarkDto: {
+            /** @enum {string} */
+            status: "present" | "late" | "absent";
+            /** @description Student profile id; must be in the class. */
+            studentId: string;
+            /**
+             * @description Why the student is absent. Left out: an absent student keeps the stored
+             *     reason, a present or late one has none.
+             */
+            absenceReason?: string;
+            /** @description A note for the school office. Left out: the stored note is kept. */
+            note?: string;
+        };
+        SaveRegisterDto: {
+            /** @description Students on approved leave are ignored if they appear here. */
+            marks: components["schemas"]["RegisterMarkDto"][];
+            /**
+             * @description Also submit the register: every student not on leave must then be
+             *     marked (409 with `missing` otherwise).
+             */
+            submit: boolean;
+        };
+        RegisterSaveDto: {
+            class: components["schemas"]["RegisterClassDto"];
+            term: components["schemas"]["RegisterTermDto"] | null;
+            schoolDay: components["schemas"]["RegisterSchoolDayDto"];
+            submittedAt: string | null;
+            submittedBy: components["schemas"]["RegisterSubmitterDto"] | null;
+            lastEditedAt: string | null;
+            /** @enum {string} */
+            access: "edit" | "view";
+            /**
+             * @description Why `access` is `view`: the most specific reason that applies, in this
+             *     order: `not_school_day`, `future`, `past` (never for staff),
+             *     `not_class_teacher`, `after_edit_window`. Null when editable.
+             * @enum {string|null}
+             */
+            readOnlyReason: "past" | "future" | "not_class_teacher" | "after_edit_window" | "not_school_day" | null;
+            counts: components["schemas"]["RegisterCountsDto"];
+            /** @description By name. */
+            students: components["schemas"]["RegisterStudentDto"][];
+            /** @description `YYYY-MM-DD`. */
+            date: string;
+            /** @description Today in the school, `YYYY-MM-DD` (to clamp date pickers). */
+            today: string;
+            isToday: boolean;
+            /** @description ISO instant the register is due. */
+            closesAt: string;
+            /** @description ISO instant after which a teacher can no longer change it. */
+            editableUntil: string;
+            /** @description As in `GET /registers/status`: a legacy register, before tracking began. */
+            inferred: boolean;
+            /** @description Parents notified by this call; 0 unless it submitted the register. */
+            notified: number;
+        };
+        RegisterIncompleteDto: {
+            /** @description Students with no attendance row and no approved leave for the day. */
+            missing: number;
+        };
+        SubmitRegisterDto: {
+            /**
+             * @description The school day, `YYYY-MM-DD`; defaults to today in the school.
+             * @example 2026-09-28
+             */
+            date?: string;
+        };
+        SubjectCardCourseDto: {
+            id: string;
+            code: string;
+            title: string;
+        };
+        SubjectCardClassDto: {
+            id: string;
+            name: string;
+        };
+        SubjectCardCurriculumDto: {
+            /** @description ISO. */
+            updatedAt: string | null;
+            id: string;
+        };
+        SubjectCardDto: {
+            course: components["schemas"]["SubjectCardCourseDto"];
+            class: components["schemas"]["SubjectCardClassDto"];
+            /** @description Null outside the term. */
+            currentWeek: number | null;
+            /** @description The old text curriculum for this course and term, if any. */
+            legacyCurriculum: components["schemas"]["SubjectCardCurriculumDto"] | null;
+            /** @description Active students in the class. */
+            studentCount: number;
+            /** @description Timetabled lessons a week (entries of every term, or of this term). */
+            lessonsPerWeek: number;
+            totalWeeks: number;
+            /** @description Weeks of the term marked taught. */
+            taughtCount: number;
+            /** @description Resources of the course filed under the term. */
+            resourceCount: number;
+        };
+        SchemeCourseDto: {
+            id: string;
+            code: string;
+            title: string;
+            className: string;
+        };
+        SchemeTermDto: {
+            id: string;
+            name: string;
+        };
+        SchemeWeekDto: {
+            /** @description ISO instant the week was marked taught. */
+            taughtAt: string | null;
+            week: number;
+            topic: string;
+            objectives: string;
+            /** @description Resources of the course filed under this term and week. */
+            resourceCount: number;
+        };
+        SchemeOfWorkDto: {
+            course: components["schemas"]["SchemeCourseDto"];
+            term: components["schemas"]["SchemeTermDto"];
+            /** @description Term week of today; null when today is outside the term. */
+            currentWeek: number | null;
+            /** @description Weeks 1..totalWeeks, in order. */
+            weeks: components["schemas"]["SchemeWeekDto"][];
+            totalWeeks: number;
+        };
+        SchemeWeekInputDto: {
+            week: number;
+            topic: string;
+            objectives: string;
+        };
+        SaveSchemeWeeksDto: {
+            weeks: components["schemas"]["SchemeWeekInputDto"][];
+            /** @description Defaults to the current term. */
+            termId?: string;
+        };
+        SaveSchemeWeekDto: {
+            /** @description Defaults to the current term. */
+            termId?: string;
+            topic: string;
+            objectives: string;
+        };
+        MarkSchemeWeekTaughtDto: {
+            /** @description Defaults to the current term. */
+            termId?: string;
+            /** @description True stamps the week taught now; false clears it. */
+            taught: boolean;
+        };
+        SchemeWeekTaughtDto: {
+            /** @description ISO instant the week was marked taught; null when cleared. */
+            taughtAt: string | null;
+            week: number;
+        };
+        GradingCourseRefDto: {
+            id: string;
+            code: string;
+            title: string;
+        };
+        GradingClassRefDto: {
+            id: string;
+            name: string;
+        };
+        GradingTermRefDto: {
+            id: string;
+            name: string;
+        };
+        GradingScaleBandDto: {
+            remark: string | null;
+            letter: string;
+            /** @description Lowest percentage that earns the letter. */
+            min: number;
+        };
+        GradingAssessmentStatsDto: {
+            average: number | null;
+            highest: number | null;
+            lowest: number | null;
+            /** @description Share of the students with a score at or above the pass mark. */
+            passRate: number | null;
+            /** @description Students with a score. */
+            entered: number;
+            /** @description Active students in the class. */
+            total: number;
+        };
+        GradingSheetAssessmentDto: {
+            /** @description The assessment's type (`test`, `exam`, ...) when the school set one. */
+            type: string | null;
+            /** @description `YYYY-MM-DD`: the assessment's end date. */
+            dueDate: string | null;
+            /** @enum {string} */
+            status: "not_started" | "draft" | "published" | "unlocked";
+            /** @description When a score was last saved (ISO). */
+            savedAt: string | null;
+            /** @description When the scores were last published (ISO). */
+            publishedAt: string | null;
+            /** @description When the scores were last unlocked for a correction (ISO). */
+            unlockedAt: string | null;
+            stats: components["schemas"]["GradingAssessmentStatsDto"];
+            id: string;
+            name: string;
+            maxScore: number;
+        };
+        GradingPositionDto: {
+            rank: number;
+            /** @description How many were ranked. */
+            of: number;
+        };
+        GradingSheetStudentDto: {
+            admissionNumber: string | null;
+            /**
+             * @description Score per assessment id; null when none is entered.
+             * @example {
+             *       "66f1c0ffee0000000000abcd": 17.5
+             *     }
+             */
+            scores: {
+                [key: string]: number | null;
+            };
+            /** @description Sum of the entered scores; null when none is entered. */
+            total: number | null;
+            /** @description `total / totalMax`, in percent. */
+            percent: number | null;
+            /** @description Only when `complete`. */
+            grade: string | null;
+            /** @description Only when `complete`, among the students who are complete. */
+            position: components["schemas"]["GradingPositionDto"] | null;
+            /** @description Student profile id. */
+            id: string;
+            name: string;
+            /** @description Every assessment has a score. */
+            complete: boolean;
+        };
+        GradingSheetDto: {
+            course: components["schemas"]["GradingCourseRefDto"];
+            class: components["schemas"]["GradingClassRefDto"];
+            term: components["schemas"]["GradingTermRefDto"];
+            scale: components["schemas"]["GradingScaleBandDto"][];
+            /** @description Every assessment of the term, by start date then name. */
+            assessments: components["schemas"]["GradingSheetAssessmentDto"][];
+            /** @description Active students of the class, by name. */
+            students: components["schemas"]["GradingSheetStudentDto"][];
+            passMark: number;
+            /** @description Sum of the assessments' max scores. */
+            totalMax: number;
+        };
+        GradingScoreInputDto: {
+            /**
+             * @description 0..the assessment's max score, up to 2 decimals; `null` deletes the score.
+             * @example 17.5
+             */
+            score: number | null;
+            /** @description Student profile id. */
+            studentId: string;
+        };
+        SaveGradingScoresDto: {
+            /** @description The term of the sheet answered; the assessment's term when left out. */
+            termId?: string;
+            scores: components["schemas"]["GradingScoreInputDto"][];
+        };
+        GradingPublishResultDto: {
+            /** @description ISO. */
+            publishedAt: string;
+            /**
+             * @description Student ids whose scores this call published: every student on a first
+             *     publish; after an unlock, those whose score changed; none when the
+             *     scores were already published.
+             */
+            changed: string[];
+            /** @description In-app notifications created for those students and their parents. */
+            notified: number;
+        };
+        UnlockGradingScoresDto: {
+            /** @description Why the scores are being corrected. */
+            reason?: string;
+        };
+        GradingUnlockResultDto: {
+            /** @enum {string} */
+            status: "unlocked";
+            /** @description ISO. */
+            unlockedAt: string;
+        };
+        ReadinessAssessmentDto: {
+            id: string;
+            name: string;
+            maxScore: number;
+        };
+        GradingPersonDto: {
+            /** @description Their login (User) id. */
+            id: string;
+            name: string;
+        };
+        ReadinessCellDto: {
+            /** @enum {string} */
+            status: "not_started" | "draft" | "published" | "unlocked";
+            /** @description When the last reminder for it was sent (ISO). */
+            reminderSentAt: string | null;
+            assessmentId: string;
+        };
+        ReadinessSubjectDto: {
+            course: components["schemas"]["GradingCourseRefDto"];
+            /** @description The course teacher; `id` is their login. */
+            teacher: components["schemas"]["GradingPersonDto"] | null;
+            cells: components["schemas"]["ReadinessCellDto"][];
+            /** @description Whether the caller teaches the course. */
+            isMine: boolean;
+        };
+        ClassReadinessDto: {
+            class: components["schemas"]["GradingClassRefDto"];
+            term: components["schemas"]["GradingTermRefDto"];
+            assessments: components["schemas"]["ReadinessAssessmentDto"][];
+            subjects: components["schemas"]["ReadinessSubjectDto"][];
+        };
+        SendGradingReminderDto: {
+            courseId: string;
+            assessmentId: string;
+        };
+        GradingReminderSentDto: {
+            /** @description ISO. */
+            sentAt: string;
+        };
+        BroadsheetBasisDto: {
+            /**
+             * @description The assessment's max score; null for `total`, whose cells are
+             *     percents.
+             */
+            maxPerSubject: number | null;
+            /** @description `total` or the assessment id. */
+            key: string;
+            /** @description The assessment's name, or "Term total". */
+            label: string;
+        };
+        BroadsheetSubjectDto: {
+            courseId: string;
+            code: string;
+            title: string;
+            /** @description Its scores for the basis are published (and not unlocked). */
+            published: boolean;
+        };
+        BroadsheetStudentDto: {
+            admissionNumber: string | null;
+            /** @description Student profile id. */
+            id: string;
+            name: string;
+        };
+        BroadsheetRowDto: {
+            student: components["schemas"]["BroadsheetStudentDto"];
+            /** @description One per subject, in `subjects` order; null until published. */
+            cells: (number | null)[];
+            total: number | null;
+            /** @description Percent over the published subjects. */
+            average: number | null;
+            position: components["schemas"]["GradingPositionDto"] | null;
+            grade: string | null;
+            publishedCount: number;
+        };
+        BroadsheetWaitingDto: {
+            courseId: string;
+            title: string;
+        };
+        BroadsheetDto: {
+            class: components["schemas"]["GradingClassRefDto"];
+            term: components["schemas"]["GradingTermRefDto"];
+            basis: components["schemas"]["BroadsheetBasisDto"];
+            /** @description The school's grading scale, highest band first. */
+            scale: components["schemas"]["GradingScaleBandDto"][];
+            subjects: components["schemas"]["BroadsheetSubjectDto"][];
+            rows: components["schemas"]["BroadsheetRowDto"][];
+            /** @description The subjects not yet published for the basis. */
+            waitingOn: components["schemas"]["BroadsheetWaitingDto"][];
+            /** @description The school's pass mark, in percent. */
+            passMark: number;
+            /** @description Every subject is published for the basis. */
+            ready: boolean;
+        };
+        TermRemarkRowDto: {
+            student: components["schemas"]["BroadsheetStudentDto"];
+            /** @description From the term-total broadsheet. */
+            position: components["schemas"]["GradingPositionDto"] | null;
+            average: number | null;
+            publishedCount: number;
+            subjectCount: number;
+            classTeacherRemark: string;
+            principalRemark: string;
+        };
+        TermRemarksDto: {
+            rows: components["schemas"]["TermRemarkRowDto"][];
+        };
+        ClassTeacherRemarkInputDto: {
+            studentId: string;
+            classTeacherRemark: string;
+        };
+        SaveClassTeacherRemarksDto: {
+            termId?: string;
+            remarks: components["schemas"]["ClassTeacherRemarkInputDto"][];
+        };
+        SubmitTermResultsDto: {
+            termId?: string;
+            /**
+             * @description `total`, or an assessment id.
+             * @example total
+             */
+            basis: string;
+        };
+        TermResultBasisDto: {
+            /** @description `total` or the assessment id. */
+            key: string;
+            /** @description The assessment's name, or "Term total". */
+            label: string;
+        };
+        TermResultSubmissionDto: {
+            class: components["schemas"]["GradingClassRefDto"];
+            term: components["schemas"]["GradingTermRefDto"];
+            basis: components["schemas"]["TermResultBasisDto"];
+            /** @enum {string} */
+            status: "submitted" | "returned" | "published";
+            submittedBy: components["schemas"]["GradingPersonDto"] | null;
+            returnReason: string | null;
+            /** @description ISO. */
+            returnedAt: string | null;
+            returnedBy: components["schemas"]["GradingPersonDto"] | null;
+            /** @description ISO. */
+            publishedAt: string | null;
+            publishedBy: components["schemas"]["GradingPersonDto"] | null;
+            id: string;
+            /** @description ISO. */
+            submittedAt: string;
+            /** @description Active students in the class. */
+            studentCount: number;
+            /** @description Active students without a class-teacher remark. */
+            missingRemarks: number;
+        };
+        TermResultCountsDto: {
+            submitted: number;
+            returned: number;
+            published: number;
+        };
+        TermResultSubmissionDetailDto: {
+            class: components["schemas"]["GradingClassRefDto"];
+            term: components["schemas"]["GradingTermRefDto"];
+            basis: components["schemas"]["TermResultBasisDto"];
+            /** @enum {string} */
+            status: "submitted" | "returned" | "published";
+            submittedBy: components["schemas"]["GradingPersonDto"] | null;
+            returnReason: string | null;
+            /** @description ISO. */
+            returnedAt: string | null;
+            returnedBy: components["schemas"]["GradingPersonDto"] | null;
+            /** @description ISO. */
+            publishedAt: string | null;
+            publishedBy: components["schemas"]["GradingPersonDto"] | null;
+            id: string;
+            /** @description ISO. */
+            submittedAt: string;
+            /** @description Active students in the class. */
+            studentCount: number;
+            /** @description Active students without a class-teacher remark. */
+            missingRemarks: number;
+            classId: string;
+            termId: string;
+        };
+        ReturnTermResultsDto: {
+            /** @description Why the results go back to the class teacher. */
+            reason: string;
+        };
+        PrincipalRemarkInputDto: {
+            studentId: string;
+            principalRemark: string;
+        };
+        SavePrincipalRemarksDto: {
+            remarks: components["schemas"]["PrincipalRemarkInputDto"][];
+        };
+        CreateResourceDto: {
+            /**
+             * @description Name of the resource
+             * @example Mathematics Chapter 1 Notes
+             */
+            name: string;
+            /**
+             * @description Class ID the resource belongs to
+             * @example 60f7b1b3b3f3b3f3b3f3b3f3
+             */
+            classId: string;
+            /**
+             * @description Course ID the resource belongs to
+             * @example 60f7b1b3b3f3b3f3b3f3b3f4
+             */
+            courseId: string;
+            /**
+             * @description Ignored for teachers (the uploader is the caller). School staff may name a teacher of their school (User or Teacher profile id).
+             * @example 60f7b1b3b3f3b3f3b3f3b3f5
+             */
+            uploadedBy?: string;
+            /**
+             * @description Term ID the resource belongs to
+             * @example 60f7b1b3b3f3b3f3b3f3b3f6
+             */
+            termId: string;
+            /**
+             * @description Upload date (defaults to current date if not provided)
+             * @example 2025-05-27T10:30:00Z
+             */
+            uploadDate?: string;
+            /**
+             * @description Image URL or path related to the resource (optional)
+             * @example https://cloudinary.com/image/resource-image.jpg
+             */
+            image?: string;
+            /**
+             * @description Array of file URLs related to the resource
+             * @example [
+             *       "https://cloudinary.com/file/resource1.pdf",
+             *       "https://cloudinary.com/file/resource2.doc"
+             *     ]
+             */
+            files?: string[];
+            /**
+             * @description Term week (1..30) of the scheme of work this resource is for
+             * @example 3
+             */
+            week?: number;
+            /**
+             * @description Who may see it besides teachers and staff: students and their parents (default), or students only
+             * @default students_and_parents
+             * @enum {string}
+             */
+            visibility: "students" | "students_and_parents";
+            /**
+             * @description What sort of file; derived from mimeType, else the file extension, when left out
+             * @enum {string}
+             */
+            kind?: "pdf" | "slides" | "video" | "doc" | "image" | "other";
+            /**
+             * @description MIME type of the uploaded file
+             * @example application/pdf
+             */
+            mimeType?: string;
+            /** @description Size of the file in bytes */
+            sizeBytes?: number;
+        };
+        ResourceViewResultDto: {
+            /** @description Whether this was the caller's first view (and so counted). */
+            counted: boolean;
+            /** @description Unique students and parents who have opened the resource. */
+            viewCount: number;
+        };
+        UpdateResourceDto: {
+            name?: string;
+            classId?: string;
+            courseId?: string;
+            termId?: string;
+            /**
+             * @deprecated
+             * @description Ignored: the uploader of a resource never changes.
+             */
+            uploadedBy?: string;
+            uploadDate?: string;
+            image?: string;
+            files?: string[];
+            /**
+             * @description Term week (1..30) of the scheme of work this resource is for
+             * @example 3
+             */
+            week?: number;
+            /**
+             * @description Who may see it besides teachers and staff: students and their parents (default), or students only
+             * @default students_and_parents
+             * @enum {string}
+             */
+            visibility: "students" | "students_and_parents";
+            /**
+             * @description What sort of file; derived from mimeType, else the file extension, when left out
+             * @enum {string}
+             */
+            kind?: "pdf" | "slides" | "video" | "doc" | "image" | "other";
+            /**
+             * @description MIME type of the uploaded file
+             * @example application/pdf
+             */
+            mimeType?: string;
+            /** @description Size of the file in bytes */
+            sizeBytes?: number;
+        };
+        CreateCourseDto: {
+            /** @example Algebra 101 */
+            title: string;
+            /** @example Introduction to algebra */
+            description: string;
+            /** @example MTH-S11B */
+            courseCode: string;
+            /**
+             * @description Id of a subject in the caller's school
+             * @example 507f1f77bcf86cd799439017
+             */
+            subjectId: string;
+            /**
+             * @description A Teacher profile id, or the teacher's User id, in the caller's school
+             * @example 507f1f77bcf86cd799439011
+             */
+            teacherId: string;
+            /**
+             * @description Id of a class in the caller's school
+             * @example 507f191e810c19729de860ea
+             */
+            classId: string;
+            /** @deprecated */
+            schoolId?: string;
+        };
+        UpdateCourseDto: {
+            /** @example Algebra 101 */
+            title?: string;
+            /** @example Introduction to algebra */
+            description?: string;
+            /** @example MTH-S11B */
+            courseCode?: string;
+            /**
+             * @description A Teacher profile id, or the teacher's User id, in the caller's school
+             * @example 507f1f77bcf86cd799439011
+             */
+            teacherId?: string;
+            /**
+             * @description Id of a class in the caller's school
+             * @example 507f191e810c19729de860ea
+             */
+            classId?: string;
+        };
         UpdateSubjectDto: {
             /** @example Mathematics */
             name?: string;
@@ -6474,21 +9615,88 @@ export interface components {
              */
             isCurrent?: boolean;
         };
+        SchoolTermDto: {
+            /**
+             * @description The session (academic year), e.g. "2025/2026"; null when the year is missing.
+             * @example 2025/2026
+             */
+            session: string | null;
+            /** @description Same as `id`. */
+            _id: string;
+            id: string;
+            name: string;
+            /** @description ISO instant. */
+            startDate: string;
+            /** @description ISO instant. */
+            endDate: string;
+            academicYearId: string;
+            schoolId: string;
+            isCurrent: boolean;
+        };
+        SchoolTermsResponseDto: {
+            terms: components["schemas"]["SchoolTermDto"][];
+            message: string;
+        };
         CreateTimetableDto: {
-            classId: Record<string, never>;
-            courseId: Record<string, never>;
+            /**
+             * @description Id of the class this period belongs to
+             * @example 64d3c23f2a45b5c5678fghij
+             */
+            classId: string;
+            /**
+             * @description Id of the course taught in this period
+             * @example 64d3c23f2a45b5c5678abcde
+             */
+            courseId: string;
             /** @enum {string} */
             day: "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday";
-            startTime: string;
-            endTime: string;
+            startTime?: string;
+            /** @description Required unless `periodKey` is given. `"08:40"` or legacy `"08:40 AM"`. */
+            endTime?: string;
+            /** @description Where the lesson is taught, e.g. "Lab 2". */
+            room?: string;
+            /** @description Key of a school period (see `GET /settings/academic`), e.g. `p1`. */
+            periodKey?: string;
+            /** @description Term the entry applies to; leave out for every term. */
+            termId?: string;
         };
         Timetable: Record<string, never>;
+        ClassTimetableEntryDto: {
+            _id?: string;
+            courseId?: string;
+            subjectId?: string;
+            /** @description Course title. */
+            course?: string;
+            room: string | null;
+            /** @description Key of the school period the entry sits in, when set. */
+            periodKey: string | null;
+            /** @description `"<startTime> - <endTime>"`, as stored. */
+            time: string;
+            /** @description As stored (legacy rows may read `"08:00 AM"`). */
+            startTime: string;
+            /** @description Legacy misspelling kept for old clients; same as `startTime`. */
+            startTIme: string;
+            endTime: string;
+            /** @description Subject name, or `N/A`. */
+            subject: string;
+            /** @description Class name, or `N/A`. */
+            class: string;
+            /** @description The course teacher's name, or `Unassigned teacher`. */
+            teacherName: string;
+        };
         UpdateTimetableDto: {
             /** @enum {string} */
             day?: "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday";
             startTime?: string;
             endTime?: string;
             room?: string;
+            /**
+             * @description Key of a school period. When given without `startTime`/`endTime`, the
+             *     times are filled in from the period.
+             */
+            periodKey?: string;
+            /** @description Term the entry applies to. */
+            termId?: string;
             courseId?: string;
         };
         CurriculumKpiDto: {
@@ -6667,6 +9875,11 @@ export interface components {
              * @enum {string}
              */
             status?: "pending" | "active" | "completed" | "cancelled";
+            /**
+             * @description The most a student can score: a whole number, 1..1000. Every score recorded for the assessment is out of it.
+             * @example 20
+             */
+            maxScore: number;
         };
         UpdateAssessmentDto: {
             /**
@@ -6685,6 +9898,11 @@ export interface components {
              * @enum {string}
              */
             status?: "pending" | "active" | "completed" | "cancelled";
+            /**
+             * @description The most a student can score: a whole number, 1..1000. 409 once any course has published scores for the assessment, or when a recorded score is above the new value.
+             * @example 20
+             */
+            maxScore?: number;
         };
         CreateAssessmentGradeRecordDto: {
             /** @description Course ID */
@@ -6695,32 +9913,17 @@ export interface components {
             assessmentId: string;
             /** @description Actual score obtained by student */
             actualScore: number;
-            /** @description Maximum possible score */
-            maxScore: number;
+            /**
+             * @deprecated
+             * @description Deprecated: the assessment's max score is used. When sent it must equal it, otherwise 400.
+             */
+            maxScore?: number;
             /** @description Class ID (resolved automatically from course if not provided) */
             classId?: string;
         };
         ResponseMessageDto: {
             /** @description Response message */
             message: string;
-        };
-        BulkAssessmentGradeDto: {
-            /** @description Course ID */
-            courseId: string;
-            /** @description Student ID */
-            studentId: string;
-            /** @description Assessment ID */
-            assessmentId: string;
-            /** @description Actual score obtained by student */
-            actualScore: number;
-            /** @description Maximum possible score */
-            maxScore: number;
-            /** @description Class ID */
-            classId: string;
-        };
-        BulkCreateAssessmentGradeRecordDto: {
-            /** @description Array of assessment grades to create */
-            grades: components["schemas"]["BulkAssessmentGradeDto"][];
         };
         GradingKpiDto: {
             /** @description Total number of assessments */
@@ -6743,8 +9946,11 @@ export interface components {
         AssessmentScoreDto: {
             studentId: string;
             score: number;
-            /** @default 100 */
-            maxScore: number;
+            /**
+             * @deprecated
+             * @description Deprecated: the assessment's max score is used. When sent it must equal it, otherwise 400.
+             */
+            maxScore?: number;
         };
         SaveAssessmentScoresDto: {
             courseId: string;
@@ -6756,7 +9962,10 @@ export interface components {
         UpdateAssessmentGradeRecordDto: {
             /** @description Actual score obtained by student */
             actualScore?: number;
-            /** @description Maximum possible score */
+            /**
+             * @deprecated
+             * @description Deprecated: the assessment's max score is used. When sent it must equal it, otherwise 400.
+             */
             maxScore?: number;
             /** @description Active status */
             isActive?: boolean;
@@ -6848,29 +10057,6 @@ export interface components {
             /** @description Array of course grades to update */
             grades: components["schemas"]["BulkUpdateCourseGradeDto"][];
         };
-        CreateStudentCumulativeTermGradeRecordDto: {
-            /** @description Class ID */
-            classId: string;
-            /** @description Student ID */
-            studentId: string;
-            /** @description Term ID (defaults to current term) */
-            termId?: string;
-            /** @description Array of Course Grade Record IDs */
-            courseGradeRecords: string[];
-            /** @description Total score */
-            totalScore: number;
-            /** @description Percentage score */
-            percentage: number;
-            /**
-             * @description Overall grade
-             * @enum {string}
-             */
-            grade: "A+" | "A" | "B+" | "B" | "C+" | "C" | "D+" | "D" | "E" | "F";
-            /** @description Additional remarks */
-            remarks?: string;
-            /** @description Position in class */
-            position: number;
-        };
         StudentCumulativeTermGradeRecord: Record<string, never>;
         UpdateStudentCumulativeTermGradeRecordDto: {
             /** @description Array of Course Grade Record IDs */
@@ -6892,18 +10078,6 @@ export interface components {
             isActive?: boolean;
         };
         ClassCumulativeTermGradeRecord: Record<string, never>;
-        CreateClassCumulativeTermGradeRecordDto: {
-            /** @description Class ID */
-            classId: string;
-            /** @description Term ID (defaults to current term) */
-            termId?: string;
-            /** @description Array of Student Cumulative Term Grade Record IDs */
-            studentCumulativeTermGradeRecords: string[];
-            /** @description Class average percentage */
-            classAverage: number;
-            /** @description Total number of students */
-            totalStudents: number;
-        };
         UpdateClassCumulativeTermGradeRecordDto: {
             /** @description Array of Student Cumulative Term Grade Record IDs */
             studentCumulativeTermGradeRecords?: string[];
@@ -6935,6 +10109,12 @@ export interface components {
         AccessTokenResponseDto: {
             /** @description Send as `Authorization: Bearer <access_token>`. */
             access_token: string;
+            /**
+             * @description Native apps only: the refresh token to keep in secure storage and post to
+             *     `/auth/refresh`. Each refresh rotates it, so store the new one every time.
+             *     Never present for browser clients.
+             */
+            refresh_token?: string;
         };
         User: Record<string, never>;
         UpdateProfileDto: {
@@ -6953,6 +10133,10 @@ export interface components {
              * @example https://res.cloudinary.com/talim/image/upload/avatar.png
              */
             userAvatar?: string;
+        };
+        RefreshTokenDto: {
+            /** @description Native apps only: the `refresh_token` from the last login or refresh response. Ignored when the request carries the refresh cookie. */
+            refreshToken?: string;
         };
         ForgotPasswordDto: {
             /** @example admin@school.edu */
@@ -6988,17 +10172,172 @@ export interface components {
             newPassword: string;
             /** @description Must match newPassword */
             confirmPassword: string;
+            /**
+             * @description Native apps send `ios` or `android` to receive the replacement `refresh_token` in the response body (every session is revoked by a password change). Browsers omit it and keep the refresh cookie.
+             * @example ios
+             */
+            platform?: string;
+        };
+        IntrospectUserDto: {
+            /** @enum {string} */
+            role: "admin" | "school_admin" | "school_sub_admin" | "teacher" | "student" | "parent";
+            userId: string;
+            email: string;
+            firstName: string;
+            lastName: string;
+            schoolId: string | null;
+            schoolName: string | null;
+            schoolLogo: string | null;
+            phoneNumber: string | null;
+            userAvatar: string | null;
+            isActive: boolean;
+            isEmailVerified: boolean;
+            /** @description Students: their Student record id; null for other roles. */
+            studentId?: string | null;
+            /** @description Students: their admission number. */
+            admissionNumber?: string | null;
+            /** @description Students: their class. */
+            classId?: string | null;
+            /** @description Students: their class's name. */
+            className?: string | null;
+            /** @description Students only: the date of birth on their account (`YYYY-MM-DD`), null when not recorded. */
+            dateOfBirth?: string | null;
+            /** @description The school's current term, null when it has none. */
+            termId: string | null;
+            onboardingCompleted: boolean;
+            permissions: string[];
+            isSubAdmin: boolean;
+            mustChangePassword: boolean;
+        };
+        IntrospectResponseDto: {
+            active: boolean;
+            /** @description Expiry (seconds since the epoch), when active. */
+            exp?: number;
+            /** @description Issued at (seconds since the epoch), when active. */
+            iat?: number;
+            /** @description The account, when active. */
+            user?: components["schemas"]["IntrospectUserDto"];
         };
         UpdateAvatarDto: {
             /** @description Hosted image URL, or an empty string to remove the avatar */
             avatarUrl?: string;
         };
+        SessionDto: {
+            /** @example iPhone */
+            device: string | null;
+            /** @example Chrome 128 */
+            browser: string | null;
+            /** @example iOS */
+            os: string | null;
+            ip: string | null;
+            id: string;
+            /** Format: date-time */
+            lastUsedAt: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** @description The session of this request's refresh token. */
+            current: boolean;
+        };
+        RevokeOthersDto: {
+            revoked: number;
+        };
+        RevokeSessionDto: {
+            id: string;
+            revoked: boolean;
+            /** @description True when it was this request's own session (its cookie is cleared). */
+            current: boolean;
+        };
+        PasswordPolicyDto: {
+            minLength: number;
+            requireUppercase: boolean;
+            requireLowercase: boolean;
+            requireNumber: boolean;
+            requireSymbol: boolean;
+            /** @description Recent passwords a new one may not repeat (1: the current one). */
+            historyCount: number;
+            maxLength: number;
+            /** @description The characters that count as a symbol. */
+            symbols: string;
+        };
+        TeacherClassDto: {
+            _id: string;
+            name: string;
+            classDescription?: string;
+            classCapacity?: string;
+            studentCount: number;
+        };
+        TeacherCourseSlotDto: {
+            day: string;
+            startTime: string;
+            endTime: string;
+            /** @description `"<start> - <end>"`. */
+            time: string;
+            classId: string;
+        };
+        TeacherCourseDto: {
+            /** @description The course's class: populated (`{ _id, name, ... }`) on the profile, an id on the roster. */
+            classId?: string | {
+                [key: string]: unknown;
+            };
+            /** @description Profile only: the course's periods. */
+            timetable?: components["schemas"]["TeacherCourseSlotDto"][];
+            _id: string;
+            courseCode?: string;
+            title?: string;
+            description?: string;
+        };
+        TeacherClassRefDto: {
+            id: string;
+            name: string;
+        };
+        TeacherRosterProfileDto: {
+            staffNumber: string | null;
+            classTeacherClasses: components["schemas"]["TeacherClassDto"][];
+            assignedCourses: components["schemas"]["TeacherCourseDto"][];
+            classTeacherOf: components["schemas"]["TeacherClassRefDto"][];
+            hasTeacherProfile: boolean;
+            isFormTeacher: boolean;
+        };
+        TeacherRosterRowDto: {
+            userAvatar?: string | null;
+            /** @description Null until the teacher's profile is created. */
+            teacherProfile: components["schemas"]["TeacherRosterProfileDto"] | null;
+            _id: string;
+            userId: string;
+            email: string;
+            firstName: string;
+            lastName: string;
+            role: string;
+            phoneNumber?: string;
+            isActive?: boolean;
+            isEmailVerified?: boolean;
+            lastLogin?: string;
+            schoolId: string;
+            createdAt?: string;
+            updatedAt?: string;
+        };
+        TeacherRosterMetaDto: {
+            total: number;
+            page: number;
+            lastPage: number;
+            limit: number;
+        };
+        TeacherRosterResponseDto: {
+            data: components["schemas"]["TeacherRosterRowDto"][];
+            meta: components["schemas"]["TeacherRosterMetaDto"];
+            /** @description Total number of teachers. */
+            count: number;
+        };
         UpdateTeacherStatusDto: {
             /** @example false */
             isActive: boolean;
         };
-        ObjectId: Record<string, never>;
         CreateTeacherDto: {
+            /**
+             * @description Staff number. Left out, the school's next staff number is generated.
+             * @example TCH-0007
+             */
+            staffNumber?: string;
             /**
              * @description Highest academic qualification
              * @example Graduate
@@ -7060,9 +10399,6 @@ export interface components {
              *     ]
              */
             assignedCourses?: string[];
-            userId: components["schemas"]["ObjectId"];
-            schoolId?: components["schemas"]["ObjectId"];
-            staffNumber?: string;
         };
         TeacherProfileDto: {
             /** @enum {string} */
@@ -7088,6 +10424,28 @@ export interface components {
             createdAt: string;
             /** Format: date-time */
             updatedAt: string;
+        };
+        TeacherProfileResponseDto: {
+            availableTime?: {
+                [key: string]: unknown;
+            };
+            assignedCourses: components["schemas"]["TeacherCourseDto"][];
+            /** @description The classes the teacher leads or is assigned on the profile (mixed). */
+            classTeacherClasses: components["schemas"]["TeacherClassDto"][];
+            /** @description Only the classes whose `classTeacherId` is this teacher. */
+            classTeacherOf: components["schemas"]["TeacherClassRefDto"][];
+            /** @description The Teacher profile id. */
+            _id: string;
+            /** @description The teacher's user id. */
+            userId: string;
+            employmentType?: string;
+            employmentRole?: string;
+            availabilityDays?: string[];
+            highestAcademicQualification?: string;
+            yearsOfExperience?: number;
+            specialization?: string;
+            staffNumber?: string;
+            isFormTeacher?: boolean;
         };
         Class: Record<string, never>;
         UpdateTeacherEmploymentDto: {
@@ -7239,127 +10597,17 @@ export interface components {
              */
             yearsOfExperience: number;
         };
-        TeacherDashboardScheduleItemDto: {
-            /** @example 60d5ecb8b3b3a3001f3e9999 */
-            id: string;
-            /** @example Monday */
-            day: string;
-            /** @example 08:00 AM */
-            startTime: string;
-            /** @example 09:00 AM */
-            endTime: string;
-            /** @example 08:00 AM - 09:00 AM */
-            time: string;
-            /** @example 60d5ecb8b3b3a3001f3e1111 */
-            courseId: string;
-            /** @example Algebra */
-            course: string;
-            /** @example Mathematics */
-            subject: string;
-            /** @example 60d5ecb8b3b3a3001f3e2222 */
-            classId: string;
-            /** @example JSS 2A */
-            class: string;
-            /** @example Upcoming */
-            status?: Record<string, never>;
-        };
-        TeacherDashboardDaySummaryDto: {
-            /** @example Monday */
-            day: string;
-            /** @example Mon */
-            shortDay: string;
-            /** @example 4 */
-            classes: number;
-        };
-        TeacherDashboardGradingSummaryDto: {
-            /** @example 3 */
-            activeAssessments: number;
-            /** @example 18 */
-            pendingGrades: number;
-            /** @example 12 */
-            publishedResults: number;
-            /** @example 2 */
-            needsReview: number;
-            /** @example 45 */
-            recordedGrades: number;
-        };
-        TeacherDashboardAttendanceSummaryDto: {
-            /** @example 68 */
-            completionPercentage: number;
-            /** @example 2 */
-            completed: number;
-            /** @example 2 */
-            pending: number;
-            /** @example 0 */
-            notStarted: number;
-            /** @example 4 */
-            totalTodayClasses: number;
-        };
-        TeacherDashboardResourcesSummaryDto: {
-            /** @example 2 */
-            coursesMissingResources: number;
-            /** @example 1 */
-            coursesMissingCurriculum: number;
-            /** @example 6 */
-            recentlyUpdatedResources: number;
-            /** @example 23 */
-            totalResources: number;
-        };
-        TeacherDashboardActivityDto: {
-            /** @example resource */
-            type: string;
-            /** @example Resource "Algebra Worksheet" uploaded */
-            label: string;
-            /** @example 2026-06-11T09:30:00.000Z */
-            timestamp: string;
-            /** @example /resources */
-            href?: string;
-        };
-        TeacherDashboardSetupProgressDto: {
-            /** @example 80 */
-            percent: number;
+        LinkCodeResponseDto: {
             /**
-             * @example [
-             *       {
-             *         "label": "Profile Setup",
-             *         "done": true
-             *       },
-             *       {
-             *         "label": "Subjects",
-             *         "done": true
-             *       }
-             *     ]
+             * @description The code to give the parent, e.g. `ABCD-2345`.
+             * @example ABCD-2345
              */
-            checks: string[];
-        };
-        TeacherDashboardDto: {
+            code: string;
             /**
-             * @description Teacher user ID
-             * @example 60d5ecb8b3b3a3001f3e1234
+             * Format: date-time
+             * @description When it stops working (14 days after issue).
              */
-            teacherId: string;
-            /**
-             * @description Teacher profile document ID
-             * @example 60d5ecb8b3b3a3001f3e5678
-             */
-            teacherProfileId: string;
-            /**
-             * @description School ID
-             * @example 60d5ecb8b3b3a3001f3e0000
-             */
-            schoolId: string;
-            kpis: components["schemas"]["TeacherDashboardKpiDto"];
-            todaySchedule: components["schemas"]["TeacherDashboardScheduleItemDto"][];
-            weeklyTimetableSummary: components["schemas"]["TeacherDashboardDaySummaryDto"][];
-            /** @description Full weekly timetable grouped by day */
-            timetable: {
-                [key: string]: unknown;
-            };
-            gradingSummary: components["schemas"]["TeacherDashboardGradingSummaryDto"];
-            attendanceSummary: components["schemas"]["TeacherDashboardAttendanceSummaryDto"];
-            resourcesSummary: components["schemas"]["TeacherDashboardResourcesSummaryDto"];
-            recentActivity: components["schemas"]["TeacherDashboardActivityDto"][];
-            setupProgress: components["schemas"]["TeacherDashboardSetupProgressDto"];
+            expiresAt: string;
         };
         ParentContactDto: {
             fullName: string;
@@ -7377,6 +10625,12 @@ export interface components {
             admissionNumber?: string;
             isActive?: boolean;
         };
+        StudentParentLinkDto: {
+            /** @description The existing parent's name, when `existing`. */
+            parentName?: string;
+            /** @description True: the child was linked to that account (of any school, A11). */
+            existing: boolean;
+        };
         StudentParentContactDto: {
             /** @enum {string} */
             relationship: "MOTHER" | "FATHER" | "GUARDIAN" | "OTHER";
@@ -7384,7 +10638,8 @@ export interface components {
             phoneNumber: string;
             email: string;
         };
-        StudentProfileDto: {
+        CreatedStudentDto: {
+            parentLink: components["schemas"]["StudentParentLinkDto"] | null;
             _id: string;
             /** @description The student's user account. */
             userId: string;
@@ -7695,18 +10950,25 @@ export interface components {
             };
         };
         CreateLeaveRequestDto: {
+            /** @enum {string} */
+            leaveType: "illness" | "medical" | "family_travel" | "religious" | "other" | "Health Issue" | "Family Event" | "Fees Issue" | "Travel" | "Emergency" | "Other";
             child: string;
             /** Format: date-time */
             startDate: string;
             /** Format: date-time */
             endDate: string;
-            /** @enum {string} */
-            leaveType: "Health Issue" | "Family Event" | "Fees Issue" | "Travel" | "Emergency" | "Other";
             attachments?: string[];
             reason?: string;
             term: string;
         };
         LeaveRequestDto: {
+            /**
+             * @description As stored: a B9 type (`illness`, `medical`, `family_travel`,
+             *     `religious`, `other`) or, on older rows and rows the mobile app files,
+             *     a legacy type.
+             * @enum {string}
+             */
+            leaveType: "illness" | "medical" | "family_travel" | "religious" | "other" | "Health Issue" | "Family Event" | "Fees Issue" | "Travel" | "Emergency" | "Other";
             _id: string;
             schoolId?: string;
             /** @description The student's user id. */
@@ -7715,8 +10977,6 @@ export interface components {
             startDate: string;
             /** Format: date-time */
             endDate: string;
-            /** @enum {string} */
-            leaveType: "Health Issue" | "Family Event" | "Fees Issue" | "Travel" | "Emergency" | "Other";
             attachments: string[];
             reason?: string;
             /** @description The user id of the class teacher who reviews it. */
@@ -7760,6 +11020,13 @@ export interface components {
             userAvatar?: string;
         };
         LeaveRequestWithStudentDto: {
+            /**
+             * @description As stored: a B9 type (`illness`, `medical`, `family_travel`,
+             *     `religious`, `other`) or, on older rows and rows the mobile app files,
+             *     a legacy type.
+             * @enum {string}
+             */
+            leaveType: "illness" | "medical" | "family_travel" | "religious" | "other" | "Health Issue" | "Family Event" | "Fees Issue" | "Travel" | "Emergency" | "Other";
             /** @description The student profile document, or `null`. */
             studentProfile: {
                 [key: string]: unknown;
@@ -7773,8 +11040,6 @@ export interface components {
             startDate: string;
             /** Format: date-time */
             endDate: string;
-            /** @enum {string} */
-            leaveType: "Health Issue" | "Family Event" | "Fees Issue" | "Travel" | "Emergency" | "Other";
             attachments: string[];
             reason?: string;
             /** @description The user id of the class teacher who reviews it. */
@@ -7799,16 +11064,172 @@ export interface components {
             total: number;
         };
         ParentUpdateLeaveRequestDto: {
+            /** @enum {string} */
+            leaveType?: "illness" | "medical" | "family_travel" | "religious" | "other" | "Health Issue" | "Family Event" | "Fees Issue" | "Travel" | "Emergency" | "Other";
             /** Format: date-time */
             startDate?: string;
             /** Format: date-time */
             endDate?: string;
-            /** @enum {string} */
-            leaveType?: "Health Issue" | "Family Event" | "Fees Issue" | "Travel" | "Emergency" | "Other";
             reason?: string;
             attachments?: string[];
         };
+        LeaveDeciderDto: {
+            name: string;
+        };
+        LeaveRowDto: {
+            /** @enum {string} */
+            type: "illness" | "medical" | "family_travel" | "religious" | "other";
+            note: string | null;
+            /** @enum {string} */
+            status: "pending" | "approved" | "declined";
+            /** @description Who approved or declined it; null while pending. */
+            decidedBy: components["schemas"]["LeaveDeciderDto"] | null;
+            /** @description When it was decided (ISO instant); null while pending. */
+            decidedAt: string | null;
+            /** @description The reason given when declined; null otherwise. */
+            declineReason: string | null;
+            id: string;
+            /** @description First day, `YYYY-MM-DD`. */
+            startDate: string;
+            /** @description Last day (inclusive), `YYYY-MM-DD`; equal to `startDate` for one day. */
+            endDate: string;
+            /** @description School days covered: the school's weekdays in the span, less holidays. */
+            days: number;
+            /** @description ISO instant. */
+            createdAt: string;
+        };
+        ChildLeaveDto: {
+            /** @description Newest first. */
+            requests: components["schemas"]["LeaveRowDto"][];
+            /** @description The child's requests in the school's current session (academic year). */
+            countThisSession: number;
+        };
+        ParentLeaveCreateDto: {
+            /** @enum {string} */
+            type: "illness" | "medical" | "family_travel" | "religious" | "other";
+            /**
+             * @description First day, YYYY-MM-DD.
+             * @example 2026-10-05
+             */
+            startDate: string;
+            /**
+             * @description Last day (inclusive), YYYY-MM-DD; not before startDate.
+             * @example 2026-10-07
+             */
+            endDate: string;
+            note?: string | null;
+        };
+        ParentLeaveUpdateDto: {
+            /** @enum {string} */
+            type?: "illness" | "medical" | "family_travel" | "religious" | "other";
+            /** @example 2026-10-05 */
+            startDate?: string;
+            /** @example 2026-10-07 */
+            endDate?: string;
+            note?: string | null;
+        };
+        LeaveCancelledDto: {
+            id: string;
+            deleted: boolean;
+        };
+        LinkChildDto: {
+            /** @description The code the school gave, e.g. ABCD-2345 */
+            code: string;
+            /**
+             * @description How the parent is related to the child
+             * @enum {string}
+             */
+            relationship: "MOTHER" | "FATHER" | "GUARDIAN" | "OTHER";
+        };
+        ChildCardUserDto: {
+            _id: string;
+            firstName?: string;
+            lastName?: string;
+            userAvatar?: string;
+        };
+        ChildCardRefDto: {
+            id: string;
+            name: string;
+        };
+        ChildCardSchoolDto: {
+            city: string | null;
+            id: string;
+            name: string;
+        };
+        ChildCardPositionDto: {
+            rank: number;
+            of: number;
+        };
+        ParentChildCardDto: {
+            /** @description Older: the populated login. */
+            userId: components["schemas"]["ChildCardUserDto"];
+            /** @description Older: the populated class. */
+            classIdLegacy?: {
+                [key: string]: unknown;
+            };
+            admissionNumber: string | null;
+            class: components["schemas"]["ChildCardRefDto"] | null;
+            school: components["schemas"]["ChildCardSchoolDto"];
+            /** @description The current term's attendance rate (1 dp); null when nothing is marked. */
+            attendanceRate: number | null;
+            /** @description The current term's average (published scores, 1 dp); null without any. */
+            average: number | null;
+            /** @description The average's letter. */
+            averageGrade: string | null;
+            gradeLevel: string | null;
+            position: components["schemas"]["ChildCardPositionDto"] | null;
+            /** @enum {string|null} */
+            relationship: "MOTHER" | "FATHER" | "GUARDIAN" | "OTHER" | null;
+            avatarUrl: string | null;
+            /** @description Older: same as `id`. */
+            childId: string;
+            /** @description Older: the child's user id. */
+            childUserId?: string;
+            firstName?: string;
+            lastName?: string;
+            /** @description Older: same as `avatarUrl`. */
+            avatar?: string;
+            classId?: string;
+            className?: string;
+            /** @description Older: the grade level (not the average's letter; that is `averageGrade`). */
+            grade?: string;
+            schoolId?: string;
+            schoolName: string;
+            isActive: boolean;
+            isDefault: boolean;
+            /**
+             * @description Older: the current term's attendance (1 dp), **0** when nothing is
+             *     marked, because mobile shows it as a number. `attendanceRate` is null
+             *     in that case; new clients read `attendanceRate`.
+             */
+            attendancePercentage: number;
+            /** @description Older: the letter of the current term's average, `N/A` without published scores. */
+            currentGradeSummary: string;
+            subjectsCount: number;
+            teachersCount: number;
+            /** @description The Student id. */
+            id: string;
+            name: string;
+            /** @description Fees still owed, naira (the family fees, C2). */
+            outstanding: number;
+        };
+        LinkedChildResponseDto: {
+            /** @enum {string} */
+            relationship: "MOTHER" | "FATHER" | "GUARDIAN" | "OTHER";
+            /** @description The card `GET /parents/me/children` lists; null only if it could not be built. */
+            child: components["schemas"]["ParentChildCardDto"] | null;
+            /** @description The Student id. */
+            childId: string;
+            schoolId: string;
+            /** Format: date-time */
+            linkedAt: string;
+        };
         UpdateChildProfileDto: {
+            /**
+             * @description How the parent is related to the child (B13: stored on the link).
+             * @enum {string}
+             */
+            relationship?: "MOTHER" | "FATHER" | "GUARDIAN" | "OTHER";
             /** @description Student first name */
             firstName?: string;
             /** @description Student last name */
@@ -7816,12 +11237,13 @@ export interface components {
             /** @description Date of birth (ISO string) */
             dateOfBirth?: string;
         };
+        ObjectId: Record<string, never>;
         CreateParentDto: {
             /** @description Parent user ID */
             userId: components["schemas"]["ObjectId"];
             /** @description School ID */
             schoolId: components["schemas"]["ObjectId"];
-            /** @description Array of child IDs */
+            /** @description Children's user ids; each becomes a link (A11) with the child's school */
             children?: string[];
         };
         Parent: Record<string, never>;
@@ -7830,14 +11252,91 @@ export interface components {
             userId?: components["schemas"]["ObjectId"];
             /** @description School ID */
             schoolId?: components["schemas"]["ObjectId"];
-            /** @description Array of child IDs */
+            /** @description Children's user ids; each becomes a link (A11) with the child's school */
             children?: string[];
+        };
+        ParentSettingsProfileDto: {
+            avatar?: string | null;
+            occupation: string | null;
+            address: string | null;
+            id: string;
+            fullName: string;
+            firstName: string;
+            lastName: string;
+            email: string;
+            phoneNumber?: string;
+            role: string;
+            isEmailVerified: boolean;
+            isPhoneVerified: boolean;
+        };
+        ParentSettingsChildDto: {
+            avatar: string | null;
+            /** @enum {string} */
+            status: "Active" | "Inactive";
+            /** @description Older: the populated login. */
+            userId: {
+                [key: string]: unknown;
+            };
+            /** @description Older: the populated class. */
+            classId: {
+                [key: string]: unknown;
+            };
+            /** @description The Student id. */
+            id: string;
+            fullName: string;
+            className: string;
+            grade: string;
+            schoolName: string;
+        };
+        ParentNotificationSwitchesDto: {
+            attendanceAlerts: boolean;
+            academicUpdates: boolean;
+            schoolAnnouncements: boolean;
+            messages: boolean;
+            paymentReminders: boolean;
+            feeDueDateReminders: boolean;
+            resultsPublishedAlerts: boolean;
+            leaveRequestUpdates: boolean;
+        };
+        ParentGuidesDto: {
+            /**
+             * Format: date-time
+             * @description When the tour was finished; null until then.
+             */
+            tourCompletedAt: string | null;
+        };
+        ParentSettingsPreferencesDto: {
+            notifications: components["schemas"]["ParentNotificationSwitchesDto"];
+            /** @enum {string} */
+            theme: "light" | "dark" | "system";
+            /**
+             * @description The payment method the parents app offers first (C7); null for none.
+             * @enum {string|null}
+             */
+            preferredProvider: "paystack" | "opay" | "stripe" | "bank_transfer" | null;
+            guides: components["schemas"]["ParentGuidesDto"];
+            language: string;
+        };
+        ParentSettingsSecurityDto: {
+            lastPasswordChangedAt: string | null;
+            twoFactorEnabled: boolean;
+            emailOtpEnabled: boolean;
+        };
+        ParentSettingsResponseDto: {
+            profile: components["schemas"]["ParentSettingsProfileDto"];
+            children: components["schemas"]["ParentSettingsChildDto"][];
+            preferences: components["schemas"]["ParentSettingsPreferencesDto"];
+            security: components["schemas"]["ParentSettingsSecurityDto"];
         };
         UpdateParentProfileDto: {
             /** @description Full display name of the parent */
             fullName?: string;
             /** @description Avatar URL (Cloudinary or similar) */
             avatar?: string;
+            /** @description What the parent does (B13); empty clears it */
+            occupation?: string;
+            /** @description The parent's address (B13); empty clears it */
+            address?: string;
         };
         SendPhoneOtpDto: {
             /** @description New Nigerian phone number (+234 or 0 prefix) */
@@ -7866,27 +11365,112 @@ export interface components {
              */
             theme: "light" | "dark" | "system";
         };
+        UpdatePreferredProviderDto: {
+            /**
+             * @description How the parent prefers to pay; null clears the choice.
+             * @enum {string|null}
+             */
+            preferredProvider: "paystack" | "opay" | "stripe" | "bank_transfer" | null;
+        };
+        PreferredProviderUpdatedDto: {
+            /** @enum {string|null} */
+            preferredProvider: "paystack" | "opay" | "stripe" | "bank_transfer" | null;
+            success: boolean;
+            message: string;
+        };
+        ParentGuidesInputDto: {
+            /** @description True stamps `guides.tourCompletedAt` with now; false clears it. */
+            tourCompleted?: boolean;
+        };
+        UpdateParentPreferencesDto: {
+            guides?: components["schemas"]["ParentGuidesInputDto"];
+        };
+        ParentPreferencesUpdatedDto: {
+            guides: components["schemas"]["ParentGuidesDto"];
+            success: boolean;
+            message: string;
+        };
+        TeacherSettingsProfileDto: {
+            phoneNumber: string | null;
+            avatar: string | null;
+            id: string;
+            userId: string;
+            fullName: string;
+            firstName: string;
+            lastName: string;
+            /** @description Read-only for teachers. */
+            email: string;
+            role: string;
+            isActive: boolean;
+            isEmailVerified: boolean;
+            /** Format: date-time */
+            joinedAt: string;
+            schoolId: string;
+            schoolName: string;
+            schoolIdentifier: string;
+        };
+        TeacherMessagePreferencesViewDto: {
+            /** @enum {string} */
+            defaultFilter: "all" | "private" | "groups";
+            showOnlineStatus: boolean;
+            readReceipts: boolean;
+            soundEnabled: boolean;
+            groupNotifications: boolean;
+            unreadBadge: boolean;
+        };
+        TeacherTeachingPreferencesViewDto: {
+            landingPage: string;
+            gradingView: string;
+            attendanceMode: string;
+            timetableDisplay: string;
+            resourceDisplay: string;
+        };
+        TeacherGuidePreferencesViewDto: {
+            /** Format: date-time */
+            tourCompletedAt: string | null;
+            showAppTips: boolean;
+        };
+        TeacherPreferencesViewDto: {
+            messages: components["schemas"]["TeacherMessagePreferencesViewDto"];
+            teaching: components["schemas"]["TeacherTeachingPreferencesViewDto"];
+            guides: components["schemas"]["TeacherGuidePreferencesViewDto"];
+            /** @enum {string} */
+            theme: "light" | "dark" | "system";
+        };
+        TeacherSettingsDto: {
+            profile: components["schemas"]["TeacherSettingsProfileDto"];
+            /** @description teacherId, employeeId, staffNumber, employmentType, employmentRole, isFormTeacher */
+            employment: {
+                [key: string]: unknown;
+            };
+            /** @description classesAssigned, subjectsTeaching, studentsTeaching, accountStatus */
+            summary: {
+                [key: string]: unknown;
+            };
+            preferences: components["schemas"]["TeacherPreferencesViewDto"];
+        };
         UpdateTeacherProfileDto: {
+            /** @example Tolu */
+            firstName?: string;
+            /** @example Adebayo */
+            lastName?: string;
+            /**
+             * @description Stored as sent after trimming: 7 to 20 characters of "+", digits, spaces and dashes.
+             * @example +234 803 123 4567
+             */
+            phoneNumber?: string;
             /** @description Avatar URL */
             avatarUrl?: string;
         };
-        TeacherNotificationPreferencesDto: {
-            announcements?: boolean;
-            attendance?: boolean;
-            grading?: boolean;
-            resources?: boolean;
-            messages?: boolean;
-            inApp?: boolean;
-            email?: boolean;
-            quietHoursEnabled?: boolean;
-            quietStart?: string;
-            quietEnd?: string;
-        };
         TeacherMessagePreferencesDto: {
+            /** @description Whether others may see this teacher online (ChatPreference). */
+            showOnlineStatus?: boolean;
+            /** @description Whether others see when this teacher read their messages (ChatPreference). */
+            readReceipts?: boolean;
+            /** @description Play a sound for new messages in the app. */
+            soundEnabled?: boolean;
             groupNotifications?: boolean;
             unreadBadge?: boolean;
-            soundEnabled?: boolean;
-            showOnlineStatus?: boolean;
             /** @enum {string} */
             defaultFilter?: "all" | "private" | "groups";
         };
@@ -7904,14 +11488,23 @@ export interface components {
         };
         TeacherGuidePreferencesDto: {
             showAppTips?: boolean;
+            /**
+             * @description True stamps `guides.tourCompletedAt` with the current time (the Today
+             *     setup step "tour" is then done); false clears it. Not stored itself.
+             */
+            tourCompleted?: boolean;
         };
         UpdateTeacherPreferencesDto: {
-            notifications?: components["schemas"]["TeacherNotificationPreferencesDto"];
             messages?: components["schemas"]["TeacherMessagePreferencesDto"];
             teaching?: components["schemas"]["TeacherTeachingPreferencesDto"];
             guides?: components["schemas"]["TeacherGuidePreferencesDto"];
             /** @enum {string} */
             theme?: "light" | "dark" | "system";
+        };
+        TeacherPreferencesResponseDto: {
+            preferences: components["schemas"]["TeacherPreferencesViewDto"];
+            success: boolean;
+            message?: string;
         };
         FileUploadDto: Record<string, never>;
         RegisterDeviceTokenDto: {
@@ -7930,6 +11523,34 @@ export interface components {
         DeactivateDeviceTokenDto: {
             deviceId: string;
         };
+        InboxCountDto: {
+            all: number;
+            unread: number;
+        };
+        InboxCountsByCategoryDto: {
+            announcement: components["schemas"]["InboxCountDto"];
+            attendance: components["schemas"]["InboxCountDto"];
+            academics: components["schemas"]["InboxCountDto"];
+            grading: components["schemas"]["InboxCountDto"];
+            resources: components["schemas"]["InboxCountDto"];
+            messages: components["schemas"]["InboxCountDto"];
+            account: components["schemas"]["InboxCountDto"];
+            /** @description B11: every payment event. */
+            payments: components["schemas"]["InboxCountDto"];
+            /** @description B11: leave requests and their decisions. */
+            leave: components["schemas"]["InboxCountDto"];
+            other: components["schemas"]["InboxCountDto"];
+        };
+        InboxCountsDto: {
+            byCategory: components["schemas"]["InboxCountsByCategoryDto"];
+            all: number;
+            unread: number;
+        };
+        ReadAllResponseDto: {
+            /** @description Notifications and announcements newly marked read. */
+            updated: number;
+            message: string;
+        };
         NotificationPreference: Record<string, never>;
         UpdateNotificationPreferenceDto: {
             pushEnabled?: boolean;
@@ -7943,6 +11564,12 @@ export interface components {
             resultsEnabled?: boolean;
             timetableEnabled?: boolean;
             resourcesEnabled?: boolean;
+            /** @description Grading alerts: assessment deadline reminders (7 days and 1 day before the end) and "scores awaited" reminders. Default true. */
+            gradingEnabled?: boolean;
+            /** @description Teachers: the register reminder 30 minutes before the register closes when the class's register is not in. Default true. */
+            registerReminderEnabled?: boolean;
+            /** @description Teachers: the 16:00 digest "N students opened '{name}' today". Default true. */
+            resourceOpenedEnabled?: boolean;
             /** @description Leave-request status updates. */
             leaveRequestsEnabled?: boolean;
             securityEnabled?: boolean;
@@ -7991,7 +11618,7 @@ export interface components {
             audience?: string[];
             attachments?: string[];
             /** @enum {string} */
-            category?: "announcement" | "attendance" | "academics" | "grading" | "resources" | "messages" | "account" | "other";
+            category?: "announcement" | "attendance" | "academics" | "grading" | "resources" | "messages" | "account" | "payments" | "leave" | "other";
             targetAudience?: string[];
             /** @enum {string} */
             status?: "PENDING" | "DRAFT" | "SCHEDULED" | "PUBLISHED" | "ARCHIVED";
@@ -8003,7 +11630,6 @@ export interface components {
             reaction: string;
             userId: string;
         };
-        Announcement: Record<string, never>;
         EditAnnouncementDto: {
             title?: string;
             content?: string;
@@ -8013,7 +11639,7 @@ export interface components {
             attachments?: string[];
             audience?: string[];
             /** @enum {string} */
-            category?: "announcement" | "attendance" | "academics" | "grading" | "resources" | "messages" | "account" | "other";
+            category?: "announcement" | "attendance" | "academics" | "grading" | "resources" | "messages" | "account" | "payments" | "leave" | "other";
             /** @enum {string} */
             status?: "PENDING" | "DRAFT" | "SCHEDULED" | "PUBLISHED" | "ARCHIVED";
             scheduledFor?: string;
@@ -8033,6 +11659,19 @@ export interface components {
         SetUserOnlineDto: {
             userId: string;
             isOnline: boolean;
+        };
+        NotificationSenderDto: {
+            role: string | null;
+            id: string;
+            name: string;
+        };
+        NotificationSenderAccountDto: {
+            userAvatar?: string | null;
+            _id: string;
+            firstName?: string;
+            lastName?: string;
+            email?: string;
+            role?: string;
         };
         CreateNotificationDto: {
             /** @example Important Announcement */
@@ -8057,7 +11696,7 @@ export interface components {
             /** @enum {string} */
             source?: "school" | "talim" | "system";
             /** @enum {string} */
-            category?: "announcement" | "attendance" | "academics" | "grading" | "resources" | "messages" | "account" | "other";
+            category?: "announcement" | "attendance" | "academics" | "grading" | "resources" | "messages" | "account" | "payments" | "leave" | "other";
             /** @description Extra context used by clients to link notifications to modules. */
             metadata?: Record<string, never>;
             recipientId?: string;
@@ -8066,7 +11705,88 @@ export interface components {
             isScheduled?: boolean;
             deliveryChannels?: ("inApp" | "email" | "push" | "webPush")[];
         };
-        Notification: Record<string, never>;
+        NotificationAttachmentFileDto: {
+            /** @enum {string} */
+            kind: "pdf" | "image" | "doc" | "slides" | "video" | "other";
+            /** @description Unknown from a URL alone; always null for now. */
+            size: number | null;
+            url: string;
+            /** @description The last path segment, URL-decoded. */
+            name: string;
+        };
+        NotificationSchoolDto: {
+            id: string;
+            name: string;
+        };
+        NotificationItemDto: {
+            /** @enum {string} */
+            source: "school" | "talim" | "system";
+            /** @enum {string} */
+            category: "announcement" | "attendance" | "academics" | "grading" | "resources" | "messages" | "account" | "payments" | "leave" | "other";
+            /** @enum {string} */
+            priority?: "low" | "medium" | "high";
+            metadata?: {
+                target?: components["schemas"]["NotificationTargetDto"];
+                actionLabel?: string;
+                childId?: string;
+                studentId?: string;
+            } & {
+                [key: string]: unknown;
+            };
+            attachmentFiles: components["schemas"]["NotificationAttachmentFileDto"][];
+            /** @description Parents' own list only: the school the row came from. */
+            school?: components["schemas"]["NotificationSchoolDto"] | null;
+            /** @description `{ id, name, role }` for teachers, students and parents; the populated account for staff. */
+            senderId: (components["schemas"]["NotificationSenderDto"] | components["schemas"]["NotificationSenderAccountDto"]) | null;
+            /** @description Staff only: the push and email delivery state. */
+            delivery?: {
+                [key: string]: unknown;
+            };
+            /**
+             * @description Staff only.
+             * @enum {string}
+             */
+            status?: "pending" | "sent" | "failed";
+            /** @description Staff only: who has read it. */
+            readBy?: {
+                [key: string]: unknown;
+            }[];
+            /** @description Staff only. */
+            targetSchools?: {
+                [key: string]: unknown;
+            }[];
+            _id: string;
+            /** @description Same as `_id`. */
+            id: string;
+            title: string;
+            message: string;
+            type?: string;
+            sourceLabel: string;
+            attachments?: string[];
+            /** @description The reader (absent on broadcasts). */
+            recipientId?: string;
+            schoolId?: string;
+            /** @description Whether the caller (or, for staff, the listed recipient) has read it. */
+            isRead: boolean;
+            senderName: string;
+            scheduledFor?: string;
+            createdAt: string;
+            updatedAt?: string;
+            /** @description Staff only. */
+            deliveryChannels?: string[];
+            /** @description Staff only. */
+            recipientRoles?: string[];
+        };
+        NotificationPageMetaDto: {
+            total: number;
+            page: number;
+            lastPage: number;
+            limit: number;
+        };
+        NotificationListResponseDto: {
+            data: components["schemas"]["NotificationItemDto"][];
+            meta: components["schemas"]["NotificationPageMetaDto"];
+        };
         UpdateNotificationDto: {
             /** @example Important Announcement */
             title?: string;
@@ -8084,7 +11804,7 @@ export interface components {
             /** @enum {string} */
             source?: "school" | "talim" | "system";
             /** @enum {string} */
-            category?: "announcement" | "attendance" | "academics" | "grading" | "resources" | "messages" | "account" | "other";
+            category?: "announcement" | "attendance" | "academics" | "grading" | "resources" | "messages" | "account" | "payments" | "leave" | "other";
             /** @description Extra context used by clients to link notifications to modules. */
             metadata?: Record<string, never>;
             /** Format: date-time */
@@ -8092,17 +11812,66 @@ export interface components {
             isScheduled?: boolean;
             deliveryChannels?: ("inApp" | "email" | "push" | "webPush")[];
         };
+        Notification: Record<string, never>;
         ScheduleNotificationDto: {
             notification: components["schemas"]["CreateNotificationDto"];
             /** Format: date-time */
             scheduledDate: string;
+        };
+        TeacherContactDto: {
+            /** @enum {string} */
+            role: "parent" | "teacher" | "school_admin" | "sub_admin";
+            avatarUrl: string | null;
+            /** @enum {string} */
+            group: "parent" | "colleague" | "office";
+            /** @description Parents only; null for everyone else. */
+            phone: string | null;
+            /** @description A user id, or `office` for the school office (open it with `POST /chat/office`). */
+            userId: string;
+            name: string;
+            /** @description "Parent of Ada Obi · Grade 5A", "Mathematics · colleague". */
+            subtitle: string;
+        };
+        ChatStudentParentContactDto: {
+            userAvatar: string | null;
+            userId: string;
+            firstName: string;
+            lastName: string;
+            role: string;
+            /** @description "Class teacher", or the subjects they teach the caller's class. */
+            subtitle: string;
+        };
+        ParentChildContactDto: {
+            /** @enum {string} */
+            role: "teacher" | "school_admin";
+            avatarUrl: string | null;
+            /** @enum {string} */
+            group: "class_teacher" | "teacher" | "office";
+            /**
+             * @description The office entry: the school's office number (its first primary
+             *     contact's, as `GET /parents/me/children/:childId/school` shows it), null
+             *     when the school has none. Teachers: always null, their numbers are not
+             *     shared with parents.
+             */
+            phone: string | null;
+            /** @description Older field: the same as `avatarUrl`. */
+            userAvatar: string | null;
+            /** @description A teacher's user id, or `office` for the school office (open it with `POST /chat/office`). */
+            userId: string;
+            name: string;
+            /** @description "Class teacher · Mathematics", "English · teacher", "School office · Easy Sparks". */
+            subtitle: string;
+            /** @description Older field: the first name ("School office" for the office). */
+            firstName: string;
+            /** @description Older field. */
+            lastName: string;
         };
         CreateChatRoomDto: {
             /**
              * @description Type of chat room
              * @enum {string}
              */
-            type: "class_group" | "course_group" | "one_to_one" | "admin_parent_group" | "parent_group" | "custom_group";
+            type: "class_group" | "course_group" | "one_to_one" | "admin_parent_group" | "parent_group" | "custom_group" | "office";
             /** @description Class ID for class group chat */
             classId?: string;
             /** @description Course ID for course group chat */
@@ -8112,67 +11881,13 @@ export interface components {
             /** @description Participant user IDs */
             participants: string[];
         };
-        ChatRoomResponseDto: {
-            _id: string;
-            /** @enum {string} */
-            type: "class_group" | "course_group" | "one_to_one" | "admin_parent_group" | "parent_group" | "custom_group";
-            schoolId?: string;
-            name?: string;
-            classId?: string;
-            courseId?: string;
-            termId?: string;
-            participants: string[];
-            lastMessageId?: string;
-            createdBy?: string;
-            isActive?: boolean;
-            /** @description Create endpoints only: true when an existing room was returned instead of a new one. */
-            reused?: boolean;
-            /** Format: date-time */
-            createdAt: string;
-            /** Format: date-time */
-            updatedAt: string;
+        ChatRoomAdminDto: {
+            id: string;
+            name: string;
         };
-        CreateGroupChatDto: {
-            /**
-             * @description Type of group chat room (class_group, course_group, parent_group, or admin_parent_group)
-             * @example admin_parent_group
-             * @enum {string}
-             */
-            type: "class_group" | "course_group" | "parent_group" | "admin_parent_group";
-            /** @description Class ID for class group chat (required if type is class_group) */
-            classId?: string;
-            /** @description Course ID for course group chat (required if type is course_group) */
-            courseId?: string;
-            /** @description Term ID for group chats */
-            termId?: string;
-            /** @description Custom name for the group chat */
-            name?: string;
-            /**
-             * @description Array of user IDs to be added as participants (including teacher creating the group)
-             * @example [
-             *       "user_id"
-             *     ]
-             */
-            participants?: string[];
-        };
-        UpdateChatRoomDto: {
-            /** @example JSS1 A Parents */
-            name?: string;
-            /** @description Group description; null or an empty string clears it. */
-            description?: string | null;
-            /** @description Group picture URL from POST /upload/chat-attachment; null clears it. */
-            avatarUrl?: string | null;
-        };
-        ChatParticipantDto: {
-            _id: string;
-            /** @description Same as `_id`. */
-            userId: string;
-            firstName: string;
-            lastName: string;
-            role: string;
-            userAvatar: string | null;
-            isActive: boolean;
-            isOnline: boolean;
+        RoomSchoolDto: {
+            id: string;
+            name: string;
         };
         ChatAttachmentViewDto: {
             /** @enum {string} */
@@ -8202,20 +11917,166 @@ export interface components {
             attachments: components["schemas"]["ChatAttachmentViewDto"][];
             duration?: number;
         };
+        ChatRoomCreatedDto: {
+            /** @enum {string} */
+            type: "class_group" | "course_group" | "one_to_one" | "admin_parent_group" | "parent_group" | "custom_group" | "office";
+            /** @description The group description; null when there is none, and always for direct and office rooms. */
+            description: string | null;
+            /** @description Group admins (the creator first): they and school staff edit the name and description. */
+            admins: components["schemas"]["ChatRoomAdminDto"][];
+            /**
+             * @description Office rooms only (B10).
+             * @enum {string}
+             */
+            ownerRole?: "teacher" | "parent";
+            /**
+             * @description How the viewer's Messages screen groups the room.
+             * @enum {string}
+             */
+            category: "parent" | "colleague" | "class_group" | "office" | "group";
+            /**
+             * @description The number the Voice button dials (`tel:`): set only for a teacher in a
+             *     direct message with a parent of one of their students.
+             */
+            callPhone: string | null;
+            _id: string;
+            schoolId?: string;
+            name?: string;
+            classId?: string;
+            courseId?: string;
+            termId?: string;
+            participants: string[];
+            lastMessageId?: string;
+            createdBy?: string;
+            isActive?: boolean;
+            /** @description Create endpoints only: true when an existing room was returned instead of a new one. */
+            reused?: boolean;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+            /** @description Same as `_id`. */
+            roomId: string;
+            avatarUrl?: string;
+            /** @description The room's school; on a parent's list, which spans schools (A11). */
+            school?: components["schemas"]["RoomSchoolDto"] | null;
+            /** @description Office rooms only (B10): whose thread it is, a teacher or a parent. */
+            officeOwnerId?: string;
+            /** @description Teacher office rooms only: the teacher, the same as `officeOwnerId`. */
+            officeTeacherId?: string;
+            lastMessage: components["schemas"]["ChatLastMessageDto"] | null;
+            /** @description Messages the caller has not read. */
+            unreadCount: number;
+            /** Format: date-time */
+            lastReadAt?: string;
+            /**
+             * @description For the viewer, e.g. "Parent of Ada Obi · Grade 5A", "Class group · 12
+             *     students", "Mathematics · colleague", "School office · Easy Sparks"; an
+             *     admin sees an office room as "Office thread · {teacher name}", or
+             *     "Office thread · {parent name} (parent of {child first names})".
+             */
+            subtitle: string;
+        };
+        CreateGroupChatDto: {
+            /**
+             * @description Type of group chat room (class_group, course_group, parent_group, admin_parent_group or custom_group)
+             * @example admin_parent_group
+             * @enum {string}
+             */
+            type: "class_group" | "course_group" | "parent_group" | "admin_parent_group" | "custom_group";
+            /** @description Class ID for class group chat (required if type is class_group) */
+            classId?: string;
+            /** @description Course ID for course group chat (required if type is course_group) */
+            courseId?: string;
+            /** @description Term ID for group chats */
+            termId?: string;
+            /** @description Custom name for the group chat */
+            name?: string;
+            /**
+             * @description Array of user IDs to be added as participants (including teacher creating the group)
+             * @example [
+             *       "user_id"
+             *     ]
+             */
+            participants?: string[];
+        };
+        ChatRoomResponseDto: {
+            _id: string;
+            /** @enum {string} */
+            type: "class_group" | "course_group" | "one_to_one" | "admin_parent_group" | "parent_group" | "custom_group" | "office";
+            schoolId?: string;
+            name?: string;
+            classId?: string;
+            courseId?: string;
+            termId?: string;
+            participants: string[];
+            lastMessageId?: string;
+            createdBy?: string;
+            isActive?: boolean;
+            /** @description Create endpoints only: true when an existing room was returned instead of a new one. */
+            reused?: boolean;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        UpdateChatRoomDto: {
+            /** @example JSS1 A Parents */
+            name?: string;
+            /** @description Group description; null or an empty string clears it. */
+            description?: string | null;
+            /** @description Group picture URL from POST /upload/chat-attachment; null clears it. */
+            avatarUrl?: string | null;
+        };
+        ChatParticipantDto: {
+            _id: string;
+            /** @description Same as `_id`. */
+            userId: string;
+            firstName: string;
+            lastName: string;
+            role: string;
+            userAvatar: string | null;
+            isActive: boolean;
+            isOnline: boolean;
+        };
         ChatRoomViewDto: {
             /** @enum {string} */
-            type: "class_group" | "course_group" | "one_to_one" | "admin_parent_group" | "parent_group" | "custom_group";
+            type: "class_group" | "course_group" | "one_to_one" | "admin_parent_group" | "parent_group" | "custom_group" | "office";
+            /** @description The group description; null when there is none, and always for direct and office rooms. */
+            description: string | null;
+            /** @description Group admins (the creator first): they and school staff edit the name and description. */
+            admins: components["schemas"]["ChatRoomAdminDto"][];
+            /**
+             * @description Office rooms only (B10).
+             * @enum {string}
+             */
+            ownerRole?: "teacher" | "parent";
+            /**
+             * @description How the viewer's Messages screen groups the room.
+             * @enum {string}
+             */
+            category: "parent" | "colleague" | "class_group" | "office" | "group";
+            /**
+             * @description The number the Voice button dials (`tel:`): set only for a teacher in a
+             *     direct message with a parent of one of their students.
+             */
+            callPhone: string | null;
             _id: string;
             /** @description Same as `_id`. */
             roomId: string;
             /** @description Empty for one-to-one rooms: show the other participant instead. */
             name: string;
-            description?: string;
             avatarUrl?: string;
             classId?: string;
             courseId?: string;
             termId?: string;
             createdBy?: string;
+            /** @description The room's school; on a parent's list, which spans schools (A11). */
+            school?: components["schemas"]["RoomSchoolDto"] | null;
+            /** @description Office rooms only (B10): whose thread it is, a teacher or a parent. */
+            officeOwnerId?: string;
+            /** @description Teacher office rooms only: the teacher, the same as `officeOwnerId`. */
+            officeTeacherId?: string;
             participants: components["schemas"]["ChatParticipantDto"][];
             lastMessage: components["schemas"]["ChatLastMessageDto"] | null;
             /** @description Messages the caller has not read. */
@@ -8226,6 +12087,40 @@ export interface components {
             createdAt?: string;
             /** Format: date-time */
             updatedAt?: string;
+            /**
+             * @description For the viewer, e.g. "Parent of Ada Obi · Grade 5A", "Class group · 12
+             *     students", "Mathematics · colleague", "School office · Easy Sparks"; an
+             *     admin sees an office room as "Office thread · {teacher name}", or
+             *     "Office thread · {parent name} (parent of {child first names})".
+             */
+            subtitle: string;
+        };
+        ChatMediaItemDto: {
+            /** @enum {string} */
+            kind: "image" | "video" | "document" | "link";
+            name: string | null;
+            mimeType: string | null;
+            size: number | null;
+            sender: {
+                id?: string;
+                name?: string;
+            };
+            messageId: string;
+            url: string;
+            /** Format: date-time */
+            sentAt: string;
+        };
+        ChatMediaCountsDto: {
+            image: number;
+            /** @description Video attachments (B10); they are no longer counted as documents. */
+            video: number;
+            document: number;
+            link: number;
+        };
+        ChatMediaPageDto: {
+            items: components["schemas"]["ChatMediaItemDto"][];
+            nextCursor: string | null;
+            counts: components["schemas"]["ChatMediaCountsDto"];
         };
         MarkRoomReadDto: {
             /** @description Newest message read; defaults to the newest in the room. */
@@ -8292,17 +12187,35 @@ export interface components {
              */
             participantIds: string[];
         };
+        ChatPreferencesResponseDto: {
+            /** @description The user. */
+            userId: string;
+            /** @description Teachers may start direct messages. */
+            allowTeacherMessages: boolean;
+            /** @description Others see when this user has read. */
+            readReceipts: boolean;
+            /** @description Others see this user as online / last seen. */
+            showOnlineStatus: boolean;
+            /** @description Chat pushes show the message text; off, they read "New message" (B10). */
+            messagePreview: boolean;
+            /** @description Notifications for new messages: the notification preference messagesEnabled. */
+            messageNotifications: boolean;
+            /** @description School announcements: the notification preference announcementsEnabled. */
+            schoolAnnouncements: boolean;
+        };
         UpdateChatPreferencesDto: {
-            /** @description Receive notifications for new messages */
+            /** @description Receive notifications for new messages. Stored as the notification preference messagesEnabled. */
             messageNotifications?: boolean;
             /** @description Allow teachers to send direct messages */
             allowTeacherMessages?: boolean;
-            /** @description Receive school-wide announcement messages */
+            /** @description Receive school announcements. Stored as the notification preference announcementsEnabled. */
             schoolAnnouncements?: boolean;
             /** @description Send and display read receipts */
             readReceipts?: boolean;
             /** @description Let other members see this user as online / last seen. When off, this user always shows offline to others (their own view of others is unaffected). */
             showOnlineStatus?: boolean;
+            /** @description Show the message text in this user's chat pushes; off, a push reads "New message" and says only who wrote. */
+            messagePreview?: boolean;
         };
         CreateClassDto: {
             /**
@@ -8660,65 +12573,6 @@ export interface components {
             /** @example https://example.com/attachment.pdf */
             attachment?: string;
         };
-        CreateResourceDto: {
-            /**
-             * @description Name of the resource
-             * @example Mathematics Chapter 1 Notes
-             */
-            name: string;
-            /**
-             * @description Class ID the resource belongs to
-             * @example 60f7b1b3b3f3b3f3b3f3b3f3
-             */
-            classId: string;
-            /**
-             * @description Course ID the resource belongs to
-             * @example 60f7b1b3b3f3b3f3b3f3b3f4
-             */
-            courseId: string;
-            /**
-             * @description Ignored for teachers (the uploader is the caller). School staff may name a teacher of their school (User or Teacher profile id).
-             * @example 60f7b1b3b3f3b3f3b3f3b3f5
-             */
-            uploadedBy?: string;
-            /**
-             * @description Term ID the resource belongs to
-             * @example 60f7b1b3b3f3b3f3b3f3b3f6
-             */
-            termId: string;
-            /**
-             * @description Upload date (defaults to current date if not provided)
-             * @example 2025-05-27T10:30:00Z
-             */
-            uploadDate?: string;
-            /**
-             * @description Image URL or path related to the resource
-             * @example https://cloudinary.com/image/resource-image.jpg
-             */
-            image: string;
-            /**
-             * @description Array of file URLs related to the resource
-             * @example [
-             *       "https://cloudinary.com/file/resource1.pdf",
-             *       "https://cloudinary.com/file/resource2.doc"
-             *     ]
-             */
-            files?: string[];
-        };
-        UpdateResourceDto: {
-            name?: string;
-            classId?: string;
-            courseId?: string;
-            termId?: string;
-            /**
-             * @deprecated
-             * @description Ignored: the uploader of a resource never changes.
-             */
-            uploadedBy?: string;
-            uploadDate?: string;
-            image?: string;
-            files?: string[];
-        };
         FeeDashboardSummaryDto: {
             totalFeeItems: number;
             activeFeeItems: number;
@@ -8744,17 +12598,22 @@ export interface components {
             updatedAt: string;
         };
         ReceiptSettingsDto: {
-            _id?: string;
+            /** @description Who last changed them (user id); absent until first saved. */
+            updatedBy?: string | null;
+            /** @description ISO instant; absent until first saved. */
+            updatedAt?: string;
+            /** @description The school (string id). */
             schoolId: string;
             signatureUrl: string;
             signatureName: string;
             signatureTitle: string;
             showSchoolLogo: boolean;
+            /** @description Parents may download their receipts (C5 enforces it). */
             allowParentDownload: boolean;
-            /** Format: date-time */
-            createdAt?: string;
-            /** Format: date-time */
-            updatedAt?: string;
+            showQrVerification: boolean;
+            showAuthorizedSignature: boolean;
+            /** @description Up to 250 characters. */
+            footerNote: string;
         };
         UpdateReceiptSettingsDto: {
             showSchoolLogo?: boolean;
@@ -8937,82 +12796,53 @@ export interface components {
             paidAt?: string;
             notes?: string;
         };
-        StudentNameRefDto: {
-            _id: string;
-            firstName: string;
-            lastName: string;
+        PaymentAllocationDto: {
+            feeAssignmentId: string;
+            /** @description Integer kobo. */
+            amountKobo: number;
         };
-        FeePaymentDto: {
-            studentId: string | components["schemas"]["StudentNameRefDto"];
-            feeAssignmentId: string | components["schemas"]["FeeAssignmentDto"];
-            _id: string;
-            schoolId: string;
-            parentId?: string;
-            classId?: string;
-            amountExpected: number;
-            amountPaid: number;
-            balance: number;
+        PaymentReviewFlagDto: {
             /** @enum {string} */
-            paymentMethod: "cash" | "bank_transfer" | "card" | "cheque" | "mobile_money" | "other";
-            /** @enum {string} */
-            paymentStatus: "pending" | "successful" | "failed" | "refunded" | "partial";
-            transactionReference: string;
-            receiptNumber: string;
+            reason: "amount_mismatch" | "currency_mismatch" | "overpaid";
+            /** @description `verify`, `webhook` or `settlement`. */
+            source: string;
+            /** @description Kobo the transaction expected. */
+            expectedMinor?: number;
+            /** @description Kobo the provider reported. */
+            receivedMinor?: number;
+            expectedCurrency?: string;
+            receivedCurrency?: string;
             /** Format: date-time */
-            paidAt: string;
-            metadata?: Record<string, never>;
-            recordedBy: string;
+            flaggedAt: string;
+        };
+        BankTransferInfoDto: {
+            transferReference: string;
             /** Format: date-time */
-            createdAt: string;
+            paidOn: string;
+            proofUrl: string;
+            reviewedBy?: string;
             /** Format: date-time */
-            updatedAt: string;
-        };
-        FeePaymentListResponseDto: {
-            data: components["schemas"]["FeePaymentDto"][];
-            total: number;
-        };
-        DueFeeDto: {
-            /** @enum {string} */
-            status: "overdue" | "due";
-            /** @description The fee assignment id: pass it in `feeAssignmentIds` when initialising a payment. */
-            _id: string;
-            feeName: string;
-            category: string;
-            feeType: string;
-            description: string;
-            amount: number;
-            /** Format: date-time */
-            dueDate: string;
-            lateFeeAmount: number;
-            isOverdue: boolean;
-        };
-        DueFeesResponseDto: {
-            fees: components["schemas"]["DueFeeDto"][];
-        };
-        PaymentSummaryDto: {
-            /** @example true */
-            success: boolean;
-            /** @description Sum of the parent's SUCCESSFUL payments. */
-            totalPaid: number;
-            /** @description Sum of the parent's payments still PENDING at the provider (checkouts started but not completed). It is not what the parent owes: for that, use the due-fees list. */
-            pendingCheckoutTotal: number;
-            /**
-             * @deprecated
-             * @description Deprecated: same value as `pendingCheckoutTotal`. It is misnamed - it is the sum of PENDING checkouts, not the amount owed. Read `pendingCheckoutTotal` instead; this alias will be removed once no client reads it.
-             */
-            totalOutstanding: number;
-            /** @description Number of receipts issued to the parent. */
-            totalReceipts: number;
+            reviewedAt?: string;
+            rejectionReason?: string;
         };
         PaymentTransactionDto: {
+            /** @enum {string} */
+            method: "online" | "manual" | "bank_transfer";
             _id: string;
             schoolId: string;
             parentId: string;
+            /** @description The child's Student profile id. */
             studentId: string;
             classId?: string;
+            termId?: string;
             feeAssignmentIds: string[];
-            /** @enum {string} */
-            providerName: "paystack" | "opay" | "stripe";
+            /** @description Which fees the payment pays, in kobo. */
+            allocations: components["schemas"]["PaymentAllocationDto"][];
+            /**
+             * @description Online checkouts only.
+             * @enum {string}
+             */
+            providerName?: "paystack" | "opay" | "stripe";
             providerReference: string;
             /** @description The reference clients pass to `GET /payments/parent/verify/:reference`. */
             internalReference: string;
@@ -9024,9 +12854,15 @@ export interface components {
             schoolAmount: number;
             /** @description What the parent is charged. */
             totalAmount: number;
+            /** @description `totalAmount` in integer kobo: what the provider must report back. */
+            totalKobo?: number;
             currency: string;
             /** @enum {string} */
             status: "pending" | "successful" | "failed" | "cancelled" | "refunded" | "partial";
+            /** @description Set when the provider reported another amount or currency (nothing settled), or money exceeded what was owed. */
+            reviewFlag?: components["schemas"]["PaymentReviewFlagDto"];
+            /** @description Bank transfers only. */
+            bankTransfer?: components["schemas"]["BankTransferInfoDto"];
             /** @enum {string} */
             paymentChannel?: "card" | "bank_transfer" | "ussd" | "wallet" | "bank" | "mobile_money";
             checkoutUrl: string;
@@ -9044,12 +12880,8 @@ export interface components {
             /** Format: date-time */
             updatedAt: string;
         };
-        PaymentHistoryResponseDto: {
-            data: components["schemas"]["PaymentTransactionDto"][];
-            /** @description Total matching transactions across all pages. */
-            total: number;
-        };
         ReceiptFeeItemDto: {
+            feeAssignmentId?: string;
             feeName: string;
             category: string;
             description: string;
@@ -9062,6 +12894,8 @@ export interface components {
             studentId: string;
             classId?: string;
             transactionId: string;
+            /** @description The term of the fees paid. */
+            termId?: string;
             receiptNumber: string;
             feeItems: components["schemas"]["ReceiptFeeItemDto"][];
             subtotal: number;
@@ -9086,28 +12920,482 @@ export interface components {
             /** Format: date-time */
             updatedAt: string;
         };
-        ReceiptListResponseDto: {
-            data: components["schemas"]["PaymentReceiptDto"][];
-            /** @description Total matching receipts across all pages. */
+        AllocationDto: {
+            feeAssignmentId: string;
+            /** @description Naira. */
+            amount: number;
+        };
+        ManualPaymentResponseDto: {
+            success: boolean;
+            transaction: components["schemas"]["PaymentTransactionDto"];
+            receipt?: components["schemas"]["PaymentReceiptDto"];
+            /** @description How the amount was spread over the fees, by due date (naira). */
+            allocations: components["schemas"]["AllocationDto"][];
+        };
+        FeePaymentDto: {
+            /** @description The ledger row; null for a fee nobody has paid towards yet (`recorded: false`). */
+            _id: string | null;
+            feeAssignmentId: string | components["schemas"]["FeeAssignmentDto"];
+            /** @enum {string} */
+            status: "unpaid" | "part_paid" | "paid";
+            /** @description The late fee was added (it stays once added). */
+            lateFeeApplied?: boolean;
+            /**
+             * @description `GET /fees/payments/student/:studentId`: the late fee inside
+             *     `amountDue` (0 until it applies).
+             */
+            lateFee?: number;
+            /**
+             * @description `GET /fees/payments/student/:studentId`: false for a fee of the child's
+             *     class nobody has paid towards yet (no ledger row; the figures are
+             *     computed as the family fees compute them).
+             */
+            recorded?: boolean;
+            schoolId: string;
+            /** @description The child's Student id. */
+            studentId: string;
+            classId?: string;
+            termId?: string;
+            /** @description What is due: the fee, plus its late fee once that applies. */
+            amountDue: number;
+            amountPaid: number;
+            balance: number;
+            /** Format: date-time */
+            lastPaymentAt?: string;
+            /** @description Deprecated alias of `amountDue`. */
+            amountExpected: number;
+            /**
+             * @description Deprecated: `successful`, `partial` or `pending`.
+             * @enum {string}
+             */
+            paymentStatus: "pending" | "successful" | "failed" | "refunded" | "partial";
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        FeePaymentListResponseDto: {
+            data: components["schemas"]["FeePaymentDto"][];
             total: number;
         };
-        ReceiptResponseDto: {
+        UpdateSchoolProfileDto: {
+            physicalAddress?: string;
+            logo?: string;
+            contactPhone?: string;
+            website?: string;
+            primaryContacts?: components["schemas"]["UpdatePrimaryContactDto"][];
+        };
+        ReceiptSettingsResponseDto: {
+            settings: components["schemas"]["ReceiptSettingsDto"];
             success: boolean;
-            receipt: components["schemas"]["PaymentReceiptDto"];
+        };
+        FinanceSettingsDto: {
+            defaultBankAccountId: string | null;
+            /** @description Absent until the school first saves its finance settings. */
+            _id?: string;
+            schoolId: string;
+            /** @description Withdrawals need an emailed one-time code. */
+            requireEmailOtpForWithdrawals: boolean;
+            minimumWithdrawalAmount: number;
+            /** @description The least a parent may pay towards a fee that allows part payment; 0 for no minimum. */
+            minimumPartPayment: number;
+            updatedBy?: string;
+            createdAt?: string;
+            updatedAt?: string;
+        };
+        FinanceSettingsResponseDto: {
+            settings: components["schemas"]["FinanceSettingsDto"];
+            success: boolean;
+        };
+        UpdateFinanceSettingsDto: {
+            requireEmailOtpForWithdrawals?: boolean;
+            minimumWithdrawalAmount?: number;
+            defaultBankAccountId?: string;
+            /** @description Smallest part payment parents may make, in naira (0: no minimum). */
+            minimumPartPayment?: number;
+        };
+        AcademicPeriodResponseDto: {
+            key: string;
+            label: string;
+            /** @description `HH:mm`. */
+            startTime: string;
+            /** @description `HH:mm`. */
+            endTime: string;
+            isBreak: boolean;
+        };
+        GradeScaleBandResponseDto: {
+            remark: string | null;
+            letter: string;
+            /** @description Lowest percentage (0..100) that earns the letter. */
+            min: number;
+        };
+        OfficeHoursDto: {
+            /** @example 08:00 */
+            start: string;
+            /** @example 16:00 */
+            end: string;
+        };
+        AcademicSettingsDto: {
+            schoolDays: ("Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday" | "Sunday")[];
+            /** @description Ordered by start time; empty when the school has not set any. */
+            periods: components["schemas"]["AcademicPeriodResponseDto"][];
+            /**
+             * @description `YYYY-MM-DD`. From this day on a register counts as submitted only when
+             *     it was submitted; before it, a full set of attendance rows counts
+             *     (`inferred`). Set by the server, never by PATCH.
+             * @example 2026-09-28
+             */
+            registerTrackingSince: string;
+            /**
+             * @description The grading scale, highest band first. The default until the school
+             *     sets one: A 70 Excellent, B 60 Very good, C 50 Good, D 45 Fair,
+             *     E 40 Pass, F 0 Fail.
+             */
+            gradeScale: components["schemas"]["GradeScaleBandResponseDto"][];
+            /** @description When the school office answers; null when not set. Always sent. */
+            officeHours: components["schemas"]["OfficeHoursDto"] | null;
+            schoolId: string;
+            timezone: string;
+            /** @description `HH:mm`. */
+            registerCloseTime: string;
+            /** @description `HH:mm`. */
+            registerEditUntil: string;
+            /** @description Percentage at or above which a score passes; 50 by default. */
+            passMark: number;
+        };
+        AcademicSettingsResponseDto: {
+            settings: components["schemas"]["AcademicSettingsDto"];
+            success: boolean;
+        };
+        AcademicPeriodDto: {
+            /**
+             * @description `HH:mm`, 24-hour.
+             * @example 08:00
+             */
+            startTime: string;
+            /**
+             * @description `HH:mm`, 24-hour.
+             * @example 08:40
+             */
+            endTime: string;
+            /** @description Stable key timetable entries point at, e.g. `p1` or `brk`. */
+            key: string;
+            /** @description Shown to people, e.g. "Period 1" or "Break". */
+            label: string;
+            isBreak?: boolean;
+        };
+        GradeScaleBandDto: {
+            /**
+             * @description The letter, 1..4 characters, e.g. `A` or `B2`; unique ignoring case.
+             * @example A
+             */
+            letter: string;
+            /**
+             * @description Lowest percentage (0..100) that earns the letter.
+             * @example 70
+             */
+            min: number;
+            /**
+             * @description Shown beside the letter, up to 60 characters, e.g. "Excellent".
+             * @example Excellent
+             */
+            remark?: string;
+        };
+        UpdateAcademicSettingsDto: {
+            /**
+             * @example [
+             *       "Monday",
+             *       "Tuesday",
+             *       "Wednesday",
+             *       "Thursday",
+             *       "Friday"
+             *     ]
+             */
+            schoolDays?: ("Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday" | "Sunday")[];
+            periods?: components["schemas"]["AcademicPeriodDto"][];
+            /** @description The grading scale, highest band first. Replaces the whole scale. */
+            gradeScale?: components["schemas"]["GradeScaleBandDto"][];
+            /**
+             * @description Percentage (0..100) at or above which a score passes.
+             * @example 50
+             */
+            passMark?: number;
+            /**
+             * @description When the school office answers, shown to teachers (§36); `null`
+             *     clears it. The end must be after the start.
+             */
+            officeHours?: components["schemas"]["OfficeHoursDto"] | null;
+            /** @description IANA timezone, e.g. `Africa/Lagos`. */
+            timezone?: string;
+            /** @description `HH:mm`; the morning register is due by this time. */
+            registerCloseTime?: string;
+            /** @description `HH:mm`; after this a teacher can no longer change the day's register. */
+            registerEditUntil?: string;
+        };
+        SessionTermRefDto: {
+            /** @description The session (academic year), e.g. "2026/2027"; null when unknown. */
+            session: string | null;
+            id: string;
+            name: string;
+        };
+        SchoolRefDto: {
+            id: string;
+            name: string;
+        };
+        FamilyChildRefDto: {
+            id: string;
+            name: string;
+            school: components["schemas"]["SchoolRefDto"] | null;
+        };
+        FeePartDto: {
+            label: string;
+            amount: number;
+        };
+        FamilyFeeItemDto: {
+            /** @enum {string} */
+            status: "paid" | "part_paid" | "overdue" | "due";
+            /** @description The fee assignment id. */
+            id: string;
+            label: string;
+            category: string;
+            /** Format: date-time */
+            dueDate: string | null;
+            /** @description Due: the fee, plus its late fee once that applies. */
+            amount: number;
+            paid: number;
+            balance: number;
+            allowPartial: boolean;
+            parts: components["schemas"]["FeePartDto"][];
+            /** @description A checkout or bank transfer already holds this fee. */
+            pendingPayment: boolean;
+            termId: string | null;
+            /** @description The late fee inside `amount` (naira); 0 until it applies. */
+            lateFee: number;
+        };
+        FamilyChildFeesDto: {
+            /** @description The term the bill is for: the one asked for, else the school's current one. */
+            term: components["schemas"]["SessionTermRefDto"] | null;
+            child: components["schemas"]["FamilyChildRefDto"];
+            outstanding: number;
+            paid: number;
+            billTotal: number;
+            /** @description Balance of fees past their due date. */
+            overdue: number;
+            items: components["schemas"]["FamilyFeeItemDto"][];
+            /** @description The school's minimum part payment (naira); 0 when it has none. */
+            minimumPartPayment: number;
+        };
+        FamilyTotalsDto: {
+            outstanding: number;
+            /** @description Paid on fees of each school's current session. */
+            paidThisSession: number;
+            /** @description Issued receipts (in the term, when one is given). */
+            receipts: number;
+            overdue: number;
+        };
+        FamilyFeesResponseDto: {
+            children: components["schemas"]["FamilyChildFeesDto"][];
+            totals: components["schemas"]["FamilyTotalsDto"];
+        };
+        DueFeeDto: {
+            /** @enum {string} */
+            status: "overdue" | "due";
+            /** @description The fee assignment id: pass it in `feeAssignmentIds` when initialising a payment. */
+            _id: string;
+            feeName: string;
+            category: string;
+            feeType: string;
+            description: string;
+            /** @description What is left of the fee itself. */
+            amount: number;
+            /** Format: date-time */
+            dueDate: string;
+            /** @description What is left of the late fee; it counts only when `isOverdue`. */
+            lateFeeAmount: number;
+            isOverdue: boolean;
+            /** @description Paid so far. */
+            paid: number;
+            /** @description Still owed (fee plus any late fee that applies). */
+            balance: number;
+            allowPartial: boolean;
+            /** @description A checkout or bank transfer already holds this fee. */
+            pendingPayment: boolean;
+        };
+        DueFeesResponseDto: {
+            fees: components["schemas"]["DueFeeDto"][];
+        };
+        PaymentSummaryDto: {
+            /** @example true */
+            success: boolean;
+            /** @description Sum of the SUCCESSFUL payments for the linked children. */
+            totalPaid: number;
+            /** @description The money still owed on every linked child’s active fees (balances from the fee ledger, late fees included once they apply). */
+            totalOutstanding: number;
+            /** @description Checkouts started but not finished (PENDING online payments). Not money owed. */
+            pendingCheckout: number;
+            /** @description Bank transfers reported and awaiting the bursary. */
+            pendingBankTransfer: number;
+            /**
+             * @deprecated
+             * @description Deprecated alias of `pendingCheckout`, kept for older clients.
+             */
+            pendingCheckoutTotal: number;
+            /** @description Number of receipts issued for the linked children. */
+            totalReceipts: number;
+        };
+        PersonRefDto: {
+            id: string;
+            name: string;
+        };
+        PaidItemDto: {
+            feeAssignmentId: string;
+            label: string;
+            amount: number | null;
+        };
+        ParentHistoryRowDto: {
+            /** @enum {string} */
+            methodKind: "online" | "manual" | "bank_transfer";
+            id: string;
+            /**
+             * Format: date-time
+             * @description When it was paid (or created, while pending).
+             */
+            date: string;
+            child: components["schemas"]["PersonRefDto"];
+            items: components["schemas"]["PaidItemDto"][];
+            amount: number;
+            /** @description `paystack`, `opay`, `stripe`, `bank_transfer`, or the manual method (`cash`...). */
+            method: string;
+            reference: string;
+            /** @enum {string} */
+            status: "pending" | "successful" | "failed" | "cancelled" | "refunded" | "partial";
+            receiptId: string | null;
+            _id: string;
+            studentId: string;
+            internalReference: string;
+            totalAmount: number;
+            currency: string;
+            /** @enum {string} */
+            providerName?: "paystack" | "opay" | "stripe";
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            paidAt?: string;
+            /** @description Bank transfers only: the reported transfer and the bursary's decision. */
+            bankTransfer?: components["schemas"]["BankTransferInfoDto"];
+        };
+        ParentHistoryResponseDto: {
+            data: components["schemas"]["ParentHistoryRowDto"][];
+            total: number;
+            page: number;
+            limit: number;
+        };
+        ReceiptSchoolDto: {
+            id: string;
+            name: string;
+            logo: string;
+            address: string;
+        };
+        ReceiptLineDto: {
+            feeAssignmentId: string | null;
+            label: string;
+            category: string;
+            amount: number;
+        };
+        ParentReceiptDto: {
+            term: components["schemas"]["SessionTermRefDto"] | null;
+            id: string;
+            school: components["schemas"]["ReceiptSchoolDto"] | null;
+            child: components["schemas"]["PersonRefDto"];
+            items: components["schemas"]["ReceiptLineDto"][];
+            /** @description False when the school does not let parents download receipts (the download route answers 403). */
+            downloadAllowed: boolean;
+            _id: string;
+            schoolId: string;
+            parentId: string;
+            studentId: string;
+            classId?: string;
+            transactionId: string;
+            /** @description The term of the fees paid. */
+            termId?: string;
+            receiptNumber: string;
+            feeItems: components["schemas"]["ReceiptFeeItemDto"][];
+            subtotal: number;
+            lateFee: number;
+            discount: number;
+            totalPaid: number;
+            currency: string;
+            paymentMethod: string;
+            paymentProvider: string;
+            transactionReference: string;
+            /** Format: date-time */
+            paymentDate: string;
+            receiptPdfUrl: string;
+            verificationCode: string;
+            verificationQrUrl: string;
+            /** @enum {string} */
+            status: "issued" | "voided";
+            /** Format: date-time */
+            issuedAt: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        ParentReceiptListResponseDto: {
+            data: components["schemas"]["ParentReceiptDto"][];
+            total: number;
+            page: number;
+            limit: number;
+            /** @description The terms the children (or the one child) have receipts in, newest first: the term picker. */
+            terms: components["schemas"]["SessionTermRefDto"][];
+        };
+        ParentReceiptResponseDto: {
+            success: boolean;
+            receipt: components["schemas"]["ParentReceiptDto"];
         };
         InitializePaymentDto: {
-            studentId: string;
+            /** @description The child's Student profile id; optional when `X-Talim-Child` names the child. */
+            childId?: string;
+            /** @description Deprecated alias of `childId`. */
+            studentId?: string;
             feeAssignmentIds: string[];
+            /**
+             * @description What to pay now, in naira (at most two decimals). Omit to pay every
+             *     selected balance in full. Less than the total needs every selected fee
+             *     to allow part payment and at least the school's minimum.
+             */
+            amount?: number;
             /** @enum {string} */
-            providerName: "paystack" | "opay" | "stripe";
+            provider?: "paystack" | "opay" | "stripe";
+            /**
+             * @description Deprecated alias of `provider`.
+             * @enum {string}
+             */
+            providerName?: "paystack" | "opay" | "stripe";
+            /**
+             * @description A client-made key for this checkout attempt (8-100 of `A-Z a-z 0-9 _ -`).
+             *     Sending the same key again returns the same checkout instead of starting
+             *     another. Strongly recommended; required by the redesigned app.
+             */
+            idempotencyKey?: string;
             /** @enum {string} */
             paymentChannel?: "card" | "bank_transfer" | "ussd" | "wallet" | "bank" | "mobile_money";
         };
         InitializePaymentResponseDto: {
+            /** @description The transaction reference; the provider redirects back with it. */
+            reference: string;
+            /** @description Hosted checkout to send the parent to (empty if the provider call is still running for a replayed key). */
+            checkoutUrl: string;
+            /** @description Which fees this payment pays, by due date. */
+            allocations: components["schemas"]["AllocationDto"][];
+            /** @enum {string} */
+            status: "pending" | "successful" | "failed" | "cancelled" | "refunded" | "partial";
+            /** @description True when an earlier request with the same idempotency key created this checkout. */
+            replayed: boolean;
             transactionId: string;
             internalReference: string;
-            /** @description Hosted checkout to send the parent to. */
-            checkoutUrl: string;
+            /** @description What the parent is charged. */
             amount: number;
             subtotal: number;
             lateFee: number;
@@ -9124,6 +13412,43 @@ export interface components {
             transaction: components["schemas"]["PaymentTransactionDto"];
             /** @description Present once the payment has settled. */
             receipt?: components["schemas"]["PaymentReceiptDto"];
+            /** @description Present when the provider reported another amount or currency: nothing was settled. */
+            reviewFlag?: components["schemas"]["PaymentReviewFlagDto"];
+        };
+        BankDetailsResponseDto: {
+            bankName: string;
+            accountName: string;
+            accountNumber: string;
+            school: components["schemas"]["SchoolRefDto"] | null;
+        };
+        BankTransferDto: {
+            /** @description The child; optional when `X-Talim-Child` names the child. */
+            childId?: string;
+            feeAssignmentIds: string[];
+            /** @description What the parent transferred, in naira. */
+            amount: number;
+            /** @description The bank's reference or narration for the transfer. */
+            transferReference: string;
+            /** @description The day the transfer was made (ISO date). */
+            paidOn: string;
+            /** @description A link to the uploaded proof (receipt screenshot), if any. */
+            proofUrl?: string;
+        };
+        SubmittedBankTransferDto: {
+            /** @enum {string} */
+            status: "pending";
+            id: string;
+            /** @description The transaction reference. */
+            reference: string;
+            amount: number;
+            transferReference: string;
+            /** Format: date-time */
+            paidOn: string;
+            allocations: components["schemas"]["AllocationDto"][];
+        };
+        BankTransferSubmittedResponseDto: {
+            success: boolean;
+            transfer: components["schemas"]["SubmittedBankTransferDto"];
         };
         EnabledProviderDto: {
             /** @enum {string} */
@@ -9136,6 +13461,49 @@ export interface components {
         };
         EnabledProvidersResponseDto: {
             providers: components["schemas"]["EnabledProviderDto"][];
+        };
+        TransferChildRefDto: {
+            /** @description The child's class; null when the class is gone. */
+            class: components["schemas"]["ClassRefDto"] | null;
+            id: string;
+            name: string;
+            admissionNumber?: string;
+        };
+        AdminBankTransferDto: {
+            /** @enum {string} */
+            status: "pending" | "confirmed" | "rejected";
+            id: string;
+            reference: string;
+            amount: number;
+            /** Format: date-time */
+            submittedAt: string;
+            child: components["schemas"]["TransferChildRefDto"];
+            parent: components["schemas"]["PersonRefDto"];
+            items: components["schemas"]["PaidItemDto"][];
+            transferReference: string;
+            /** Format: date-time */
+            paidOn: string | null;
+            proofUrl: string;
+            /** Format: date-time */
+            reviewedAt: string | null;
+            rejectionReason: string;
+            receiptId: string | null;
+        };
+        AdminBankTransferListResponseDto: {
+            data: components["schemas"]["AdminBankTransferDto"][];
+            total: number;
+            page: number;
+            limit: number;
+        };
+        BankTransferDecisionResponseDto: {
+            success: boolean;
+            transaction: components["schemas"]["PaymentTransactionDto"];
+            /** @description Confirm only. */
+            receipt?: components["schemas"]["PaymentReceiptDto"];
+        };
+        RejectBankTransferDto: {
+            /** @description Shown to the parent. */
+            reason: string;
         };
         PaginationInfoDto: {
             page: number;
@@ -9161,18 +13529,20 @@ export interface components {
             data: components["schemas"]["PaymentReceiptDto"][];
             pagination: components["schemas"]["PaginationInfoDto"];
         };
+        ReceiptResponseDto: {
+            success: boolean;
+            receipt: components["schemas"]["PaymentReceiptDto"];
+        };
         ManualPaymentDto: {
             studentId: string;
             feeAssignmentIds: string[];
             amount: number;
             paymentMethod: string;
+            /** @description The school's own reference (teller number...). Stored as the external reference; the transaction reference is always generated. */
             reference?: string;
+            /** @description When the money was received (defaults to now). */
+            paidAt?: string;
             notes?: string;
-        };
-        ManualPaymentResponseDto: {
-            success: boolean;
-            transaction: components["schemas"]["PaymentTransactionDto"];
-            receipt?: components["schemas"]["PaymentReceiptDto"];
         };
         RefundPaymentDto: {
             /**
@@ -9494,18 +13864,6 @@ export interface components {
             /** @description Current authenticator code; required when turning the requirement off. */
             token?: string;
         };
-        UpdateSchoolProfileDto: {
-            physicalAddress?: string;
-            logo?: string;
-            contactPhone?: string;
-            website?: string;
-            primaryContacts?: components["schemas"]["UpdatePrimaryContactDto"][];
-        };
-        UpdateFinanceSettingsDto: {
-            requireEmailOtpForWithdrawals?: boolean;
-            minimumWithdrawalAmount?: number;
-            defaultBankAccountId?: string;
-        };
         CreateEnrollmentDto: {
             /** @description Student ID */
             studentId: string;
@@ -9625,6 +13983,27 @@ export interface components {
              */
             permissions: ("manage:classes" | "manage:curriculum" | "manage:assessments" | "manage:timetable" | "manage:fees" | "manage:payments" | "manage:finance" | "manage:students" | "manage:teachers" | "manage:parents" | "manage:announcements" | "manage:leave_requests" | "manage:transit" | "manage:messages" | "manage:settings" | "manage:sub_admins")[];
         };
+        SupportTicketContextDto: {
+            /** @example /grading */
+            path?: string;
+            /** @example 2.4.0 */
+            appVersion?: string;
+            userAgent?: string;
+        };
+        CreateSupportTicketDto: {
+            /** @enum {string} */
+            area: "grading" | "attendance" | "timetable" | "messages" | "signing_in" | "payments" | "results" | "other";
+            description: string;
+            /** @description An uploaded screenshot or file (https). */
+            attachmentUrl?: string;
+            context?: components["schemas"]["SupportTicketContextDto"];
+        };
+        SupportTicketCreatedDto: {
+            /** @example TS-7K2QD */
+            reference: string;
+            /** Format: date-time */
+            createdAt: string;
+        };
     };
     responses: never;
     parameters: never;
@@ -9670,6 +14049,1618 @@ export interface operations {
             };
         };
     };
+    TeachersTodayController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TeacherTodayDto"];
+                };
+            };
+        };
+    };
+    TeachersMeController_school: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SchoolContactDto"];
+                };
+            };
+        };
+    };
+    TeachersMeController_myClasses: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MyClassDto"][];
+                };
+            };
+        };
+    };
+    TeachersMeController_students: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Class id */
+                classId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ClassRosterDto"];
+                };
+            };
+        };
+    };
+    TeachersMeController_student: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Student profile id */
+                studentId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StudentRecordDto"];
+                };
+            };
+        };
+    };
+    StudentsMeController_today: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LearnerTodayDto"];
+                };
+            };
+        };
+    };
+    StudentsMeController_timetable: {
+        parameters: {
+            query?: {
+                /** @description Any day of the wanted week, `YYYY-MM-DD`; snapped to its Monday. */
+                weekStart?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LearnerTimetableDto"];
+                };
+            };
+        };
+    };
+    StudentsMeController_subjects: {
+        parameters: {
+            query?: {
+                /** @description A term of the school; defaults to the current term */
+                termId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LearnerSubjectsDto"];
+                };
+            };
+        };
+    };
+    StudentsMeController_subject: {
+        parameters: {
+            query?: {
+                /** @description A term of the school; defaults to the current term */
+                termId?: string;
+            };
+            header?: never;
+            path: {
+                courseId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LearnerSubjectDetailDto"];
+                };
+            };
+        };
+    };
+    StudentsMeController_reportCard: {
+        parameters: {
+            query?: {
+                /** @description A term of the school; defaults to the current term */
+                termId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportCardDto"];
+                };
+            };
+        };
+    };
+    StudentsMeController_reportTerms: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportTermDto"][];
+                };
+            };
+        };
+    };
+    StudentsMeController_attendance: {
+        parameters: {
+            query?: {
+                /** @description A term of the school; defaults to the current term */
+                termId?: string;
+                /** @description `YYYY-MM`: also return each day of that month. */
+                month?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LearnerAttendanceDto"];
+                };
+            };
+        };
+    };
+    StudentsMeController_files: {
+        parameters: {
+            query?: {
+                /** @description Only this course */
+                courseId?: string;
+                /** @description Only files whose name contains this text */
+                q?: string;
+                /** @description Page number (1-based). */
+                page?: number;
+                /** @description Items per page; values above 100 are capped. */
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LearnerFilesPageDto"];
+                };
+            };
+        };
+    };
+    StudentsMeController_archive: {
+        parameters: {
+            query?: {
+                /** @description Only this course; every course when absent */
+                courseId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The zip */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/zip": string;
+                };
+            };
+        };
+    };
+    StudentsMeController_school: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SchoolContactDto"];
+                };
+            };
+        };
+    };
+    StudentsMeController_preferences: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LearnerPreferencesDto"];
+                };
+            };
+        };
+    };
+    StudentsMeController_updatePreferences: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateLearnerPreferencesDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LearnerPreferencesDto"];
+                };
+            };
+        };
+    };
+    ParentChildrenController_dashboard: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The child's Student id */
+                childId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ParentDashboardDto"];
+                };
+            };
+        };
+    };
+    ParentChildrenController_timetable: {
+        parameters: {
+            query?: {
+                /** @description Any day of the wanted week, `YYYY-MM-DD`; snapped to its Monday. */
+                weekStart?: string;
+            };
+            header?: never;
+            path: {
+                /** @description The child's Student id */
+                childId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LearnerTimetableDto"];
+                };
+            };
+        };
+    };
+    ParentChildrenController_reportCard: {
+        parameters: {
+            query?: {
+                /** @description A term of the school; defaults to the current term */
+                termId?: string;
+            };
+            header?: never;
+            path: {
+                /** @description The child's Student id */
+                childId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportCardDto"];
+                };
+            };
+        };
+    };
+    ParentChildrenController_reportTerms: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The child's Student id */
+                childId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportTermDto"][];
+                };
+            };
+        };
+    };
+    ParentChildrenController_acknowledge: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The child's Student id */
+                childId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AcknowledgeReportDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AcknowledgedDto"];
+                };
+            };
+        };
+    };
+    ParentChildrenController_attendance: {
+        parameters: {
+            query?: {
+                /** @description A term of the school; defaults to the current term */
+                termId?: string;
+                /** @description `YYYY-MM`: also return each day of that month. */
+                month?: string;
+            };
+            header?: never;
+            path: {
+                /** @description The child's Student id */
+                childId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LearnerAttendanceDto"];
+                };
+            };
+        };
+    };
+    ParentChildrenController_school: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The child's Student id */
+                childId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SchoolContactDto"];
+                };
+            };
+        };
+    };
+    CalendarEventsController_list: {
+        parameters: {
+            query?: {
+                /** @description First day, `YYYY-MM-DD`. */
+                from?: string;
+                /** @description Last day (inclusive), `YYYY-MM-DD`. */
+                to?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CalendarEventDto"][];
+                };
+            };
+        };
+    };
+    CalendarEventsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCalendarEventDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CalendarEventDto"];
+                };
+            };
+        };
+    };
+    CalendarEventsController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Calendar event id */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CalendarEventsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Calendar event id */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCalendarEventDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CalendarEventDto"];
+                };
+            };
+        };
+    };
+    TimetableMeController_me: {
+        parameters: {
+            query?: {
+                /** @description Any day of the wanted week, `YYYY-MM-DD`; snapped to its Monday. */
+                weekStart?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TimetableMeDto"];
+                };
+            };
+        };
+    };
+    RegistersController_status: {
+        parameters: {
+            query?: {
+                /** @description The school day, `YYYY-MM-DD`; defaults to today in the school. */
+                date?: string;
+                /** @description Staff only: limit the result to one class. */
+                classId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RegisterStatusDto"][];
+                };
+            };
+        };
+    };
+    RegistersController_view: {
+        parameters: {
+            query?: {
+                /** @description The school day, `YYYY-MM-DD`; defaults to today in the school. */
+                date?: string;
+            };
+            header?: never;
+            path: {
+                /** @description Class id */
+                classId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RegisterSheetDto"];
+                };
+            };
+        };
+    };
+    RegistersController_save: {
+        parameters: {
+            query?: {
+                /** @description The school day, `YYYY-MM-DD`; defaults to today in the school. */
+                date?: string;
+            };
+            header?: never;
+            path: {
+                /** @description Class id */
+                classId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveRegisterDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RegisterSaveDto"];
+                };
+            };
+            /** @description The caller may only view this register (see `readOnlyReason` on GET). */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Submitting with students neither marked nor on approved leave; `missing` is their number (top level of the error body). The marks sent are saved as a draft; the register is not submitted. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RegisterIncompleteDto"];
+                };
+            };
+        };
+    };
+    RegistersController_submit: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Class id */
+                classId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubmitRegisterDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RegisterStatusDto"];
+                };
+            };
+            /** @description Some students are neither marked nor on approved leave; `missing` is their number (top level of the error body). */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RegisterIncompleteDto"];
+                };
+            };
+        };
+    };
+    SchemeOfWorkController_mine: {
+        parameters: {
+            query?: {
+                /** @description Defaults to the current term. */
+                termId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SubjectCardDto"][];
+                };
+            };
+        };
+    };
+    SchemeOfWorkController_get: {
+        parameters: {
+            query?: {
+                /** @description Defaults to the current term. */
+                termId?: string;
+            };
+            header?: never;
+            path: {
+                /** @description Course id */
+                courseId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SchemeOfWorkDto"];
+                };
+            };
+        };
+    };
+    SchemeOfWorkController_saveWeeks: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Course id */
+                courseId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveSchemeWeeksDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SchemeOfWorkDto"];
+                };
+            };
+        };
+    };
+    SchemeOfWorkController_saveWeek: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Course id */
+                courseId: string;
+                /** @description Term week, 1..30 */
+                week: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveSchemeWeekDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SchemeOfWorkDto"];
+                };
+            };
+        };
+    };
+    SchemeOfWorkController_markTaught: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Course id */
+                courseId: string;
+                /** @description Term week, 1..30 */
+                week: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MarkSchemeWeekTaughtDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SchemeWeekTaughtDto"];
+                };
+            };
+        };
+    };
+    GradingController_sheet: {
+        parameters: {
+            query?: {
+                /** @description Defaults to the current term */
+                termId?: string;
+            };
+            header?: never;
+            path: {
+                /** @description Course id */
+                courseId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GradingSheetDto"];
+                };
+            };
+        };
+    };
+    GradingController_saveScores: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Course id */
+                courseId: string;
+                /** @description Assessment id */
+                assessmentId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveGradingScoresDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GradingSheetDto"];
+                };
+            };
+            /** @description Published and locked: `{ code: 'LOCKED' }` at the top level */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    GradingController_publish: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Course id */
+                courseId: string;
+                /** @description Assessment id */
+                assessmentId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GradingPublishResultDto"];
+                };
+            };
+            /** @description Scores missing: `{ missing: studentIds }` at the top level */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    GradingController_unlock: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Course id */
+                courseId: string;
+                /** @description Assessment id */
+                assessmentId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UnlockGradingScoresDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GradingUnlockResultDto"];
+                };
+            };
+            /** @description Not published: `{ code: 'NOT_PUBLISHED' }` */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    GradingController_readiness: {
+        parameters: {
+            query?: {
+                /** @description Defaults to the current term */
+                termId?: string;
+            };
+            header?: never;
+            path: {
+                /** @description Class id */
+                classId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ClassReadinessDto"];
+                };
+            };
+        };
+    };
+    GradingController_remind: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Class id */
+                classId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SendGradingReminderDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GradingReminderSentDto"];
+                };
+            };
+            /** @description Already reminded today (`{ code: 'ALREADY_REMINDED', sentAt }`), published, or no teacher */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    GradingController_broadsheet: {
+        parameters: {
+            query?: {
+                /** @description Defaults to the current term */
+                termId?: string;
+                /** @description `total` (default) or an assessment id */
+                basis?: string;
+            };
+            header?: never;
+            path: {
+                /** @description Class id */
+                classId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BroadsheetDto"];
+                };
+            };
+        };
+    };
+    GradingController_remarks: {
+        parameters: {
+            query?: {
+                /** @description Defaults to the current term */
+                termId?: string;
+            };
+            header?: never;
+            path: {
+                /** @description Class id */
+                classId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TermRemarksDto"];
+                };
+            };
+        };
+    };
+    GradingController_saveRemarks: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Class id */
+                classId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveClassTeacherRemarksDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TermRemarksDto"];
+                };
+            };
+            /** @description The class's results are submitted or published: `{ code: 'RESULTS_SUBMITTED' | 'RESULTS_PUBLISHED' }` */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    GradingController_classSubmissions: {
+        parameters: {
+            query?: {
+                /** @description Defaults to the current term */
+                termId?: string;
+            };
+            header?: never;
+            path: {
+                /** @description Class id */
+                classId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TermResultSubmissionDto"][];
+                };
+            };
+        };
+    };
+    GradingController_submit: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Class id */
+                classId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubmitTermResultsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TermResultSubmissionDto"];
+                };
+            };
+            /** @description Not ready (`{ waitingOn }`), or already submitted or published (`{ code }`) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    GradingController_queue: {
+        parameters: {
+            query?: {
+                /** @description Defaults to the current term */
+                termId?: string;
+                status?: "submitted" | "returned" | "published";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TermResultSubmissionDto"][];
+                };
+            };
+        };
+    };
+    GradingController_counts: {
+        parameters: {
+            query?: {
+                /** @description Defaults to the current term */
+                termId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TermResultCountsDto"];
+                };
+            };
+        };
+    };
+    GradingController_detail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Submission id */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TermResultSubmissionDetailDto"];
+                };
+            };
+        };
+    };
+    GradingController_publishResults: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Submission id */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TermResultSubmissionDto"];
+                };
+            };
+            /** @description Not submitted (`{ code, status }`), or a subject unlocked since (`{ waitingOn }`) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    GradingController_returnResults: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Submission id */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReturnTermResultsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TermResultSubmissionDto"];
+                };
+            };
+            /** @description Not submitted: `{ code, status }` */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    GradingController_savePrincipalRemarks: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Submission id */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SavePrincipalRemarksDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TermRemarksDto"];
+                };
+            };
+            /** @description Results published: `{ code: 'RESULTS_PUBLISHED' }` */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ResourceController_findAll: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of all resources */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ResourceController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateResourceDto"];
+            };
+        };
+        responses: {
+            /** @description Resource uploaded successfully. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ResourceController_findByClassId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description ID of the class */
+                classId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of resources for the specified class */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ResourceController_findByTermId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description ID of the term */
+                termId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of resources for the specified term */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ResourceController_findByCourseId: {
+        parameters: {
+            query?: {
+                /** @description Only resources filed under this scheme-of-work week */
+                week?: number;
+            };
+            header?: never;
+            path: {
+                /** @description ID of the course */
+                courseId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of resources for the specified course */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ResourceController_findByUploadedBy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description ID of the user who uploaded */
+                uploadedBy: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of resources uploaded by the specified user */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ResourceController_findOne: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description ID of the resource */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Resource found */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ResourceController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description ID of the resource */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateResourceDto"];
+            };
+        };
+        responses: {
+            /** @description Resource updated successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ResourceController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description ID of the resource */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Resource deleted successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ResourceController_recordView: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description ID of the resource */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResourceViewResultDto"];
+                };
+            };
+        };
+    };
     SubjectCourseController_createCourse: {
         parameters: {
             query?: never;
@@ -9679,25 +15670,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": {
-                    /** @example Algebra 101 */
-                    title?: string;
-                    /** @example Introduction to algebra */
-                    description?: string;
-                    /** @example MTH-S11B */
-                    courseCode?: string;
-                    /** @example Mathematics */
-                    subjectName?: string;
-                    /** @example 507f1f77bcf86cd799439011 */
-                    teacherId?: string;
-                    /** @example 507f191e810c19729de860ea */
-                    classId?: string;
-                    /**
-                     * @example Academic
-                     * @enum {string}
-                     */
-                    teacherRole?: "Academic" | "NonAcademic";
-                };
+                "application/json": components["schemas"]["CreateCourseDto"];
             };
         };
         responses: {
@@ -10287,24 +16260,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        /** @example Terms fetched successfully */
-                        message?: string;
-                        terms?: {
-                            /** @example First Term */
-                            name?: string;
-                            /** @example 2025-09-01T00:00:00Z */
-                            startDate?: string;
-                            /** @example 2025-12-20T00:00:00Z */
-                            endDate?: string;
-                            /** @example 6791378c4ef5965469896850 */
-                            academicYearId?: string;
-                            /** @example 6791378c4ef5965469896850 */
-                            schoolId?: string;
-                            /** @example true */
-                            isCurrent?: boolean;
-                        }[];
-                    };
+                    "application/json": components["schemas"]["SchoolTermsResponseDto"];
                 };
             };
         };
@@ -10389,13 +16345,15 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Timetable retrieved successfully. */
+            /** @description Timetable retrieved successfully: entries grouped by weekday (e.g. `{ Monday: [...] }`). */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Timetable"][];
+                    "application/json": {
+                        [key: string]: components["schemas"]["ClassTimetableEntryDto"][];
+                    };
                 };
             };
         };
@@ -10506,7 +16464,7 @@ export interface operations {
                 course?: string;
                 /** @description Filter by term ID */
                 term?: string;
-                /** @description Filter by teacher ID */
+                /** @description Filter by the teacher's User id (the same id `POST /curriculum` takes as `teacherId`, not the Teacher profile id). 404 when that user is not a teacher of the caller's school. */
                 teacherId?: string;
             };
             header?: never;
@@ -10694,9 +16652,9 @@ export interface operations {
     AssessmentController_getAssessmentsBySchool: {
         parameters: {
             query?: {
-                /** @description Page number */
+                /** @description Page number (1-based). */
                 page?: number;
-                /** @description Items per page */
+                /** @description Items per page; values above 500 are capped. */
                 limit?: number;
             };
             header?: never;
@@ -10875,29 +16833,6 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["CreateAssessmentGradeRecordDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ResponseMessageDto"];
-                };
-            };
-        };
-    };
-    GradeRecordsController_bulkCreateAssessmentGradeRecords: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["BulkCreateAssessmentGradeRecordDto"];
             };
         };
         responses: {
@@ -11164,9 +17099,7 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "application/json": components["schemas"]["ResponseMessageDto"];
-                };
+                content?: never;
             };
         };
     };
@@ -11190,9 +17123,7 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "application/json": components["schemas"]["ResponseMessageDto"];
-                };
+                content?: never;
             };
         };
     };
@@ -11437,57 +17368,6 @@ export interface operations {
             };
         };
     };
-    GradeRecordsController_getCourseGradeRecords: {
-        parameters: {
-            query?: {
-                /** @description Filter by course ID */
-                courseId?: string;
-                /** @description Filter by term ID */
-                termId?: string;
-                /** @description Page number (1-based) */
-                page?: number;
-                /** @description Items per page */
-                limit?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    GradeRecordsController_getCourseGradeRecordsByCourse: {
-        parameters: {
-            query?: {
-                /** @description Page number (1-based) */
-                page?: number;
-                /** @description Items per page */
-                limit?: number;
-            };
-            header?: never;
-            path: {
-                /** @description Course ID */
-                courseId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
     GradeRecordsController_getCourseGradeRecord: {
         parameters: {
             query?: never;
@@ -11684,29 +17564,6 @@ export interface operations {
             };
         };
     };
-    GradeRecordsController_createStudentCumulativeTermGradeRecord: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateStudentCumulativeTermGradeRecordDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ResponseMessageDto"];
-                };
-            };
-        };
-    };
     GradeRecordsController_getStudentCumulativeTermGradeRecords: {
         parameters: {
             query?: {
@@ -11877,29 +17734,6 @@ export interface operations {
             };
         };
     };
-    GradeRecordsController_createClassCumulativeTermGradeRecord: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateClassCumulativeTermGradeRecordDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ResponseMessageDto"];
-                };
-            };
-        };
-    };
     GradeRecordsController_updateClassCumulativeTermGradeRecord: {
         parameters: {
             query?: never;
@@ -11948,57 +17782,6 @@ export interface operations {
             };
         };
     };
-    GradeRecordsController_calculateAndCreateClassCumulativeTermGradeRecord: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Class ID */
-                classId: string;
-                /** @description Term ID */
-                termId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ResponseMessageDto"];
-                };
-            };
-        };
-    };
-    GradeRecordsController_getStudentCumulativeTermGradeRecordsByClassAndTerm: {
-        parameters: {
-            query?: {
-                /** @description Page number (1-based) */
-                page?: number;
-                /** @description Items per page */
-                limit?: number;
-            };
-            header?: never;
-            path: {
-                /** @description Class ID */
-                classId: string;
-                /** @description Term ID */
-                termId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
     GradeRecordsController_publishClassCumulativeTermGradeRecord: {
         parameters: {
             query?: never;
@@ -12020,51 +17803,6 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["ResponseMessageDto"];
                 };
-            };
-        };
-    };
-    GradeRecordsController_getMyAssessmentGradeRecord: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Assessment ID */
-                assessmentId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    GradeRecordsController_getMyCourseGradeRecordsByTerm: {
-        parameters: {
-            query?: {
-                /** @description Page number (1-based) */
-                page?: number;
-                /** @description Items per page */
-                limit?: number;
-            };
-            header?: never;
-            path: {
-                /** @description Term ID */
-                termId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
             };
         };
     };
@@ -12098,28 +17836,6 @@ export interface operations {
                 /** @description Term ID */
                 termId: string;
             };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    GradeRecordsController_getMyCumulativeGradeRecords: {
-        parameters: {
-            query?: {
-                /** @description Page number (1-based) */
-                page?: number;
-                /** @description Items per page */
-                limit?: number;
-            };
-            header?: never;
-            path?: never;
             cookie?: never;
         };
         requestBody?: never;
@@ -12186,83 +17902,6 @@ export interface operations {
                 termId?: string;
                 /** @description Academic Year ID to filter results */
                 academicYearId?: string;
-            };
-            header?: never;
-            path: {
-                /** @description Student ID */
-                studentId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    ParentResultsController_getGradeSummary: {
-        parameters: {
-            query?: {
-                /** @description Defaults to the school's current term (see ParentResultsQueryDto) */
-                termId?: string;
-                /** @description Academic Year ID to filter results */
-                academicYearId?: string;
-            };
-            header?: never;
-            path: {
-                /** @description Student ID */
-                studentId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    ParentResultsController_getTermProgress: {
-        parameters: {
-            query?: {
-                /** @description Defaults to the school's current term (see ParentResultsQueryDto) */
-                termId?: string;
-                /** @description Academic Year ID to filter results */
-                academicYearId?: string;
-            };
-            header?: never;
-            path: {
-                /** @description Student ID */
-                studentId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    ParentResultsController_getAssessmentBreakdown: {
-        parameters: {
-            query?: {
-                /** @description Defaults to the school's current term (see ParentResultsQueryDto) */
-                termId?: string;
-                /** @description Academic Year ID to filter results */
-                academicYearId?: string;
-                /** @description Filter by subject/course */
-                courseId?: string;
             };
             header?: never;
             path: {
@@ -12386,7 +18025,10 @@ export interface operations {
     AuthenticationController_login: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                /** @description Web apps: which app is calling (`teachers`, `school-admin`, `students`, `parents`, `platform-admin`). With it the refresh token lives in that app’s own httpOnly cookie, `refreshToken_<app>`, and only an account whose role belongs in the app is signed in or refreshed. Without it (native apps, older clients) the shared `refreshToken` cookie is used as before. */
+                "X-Talim-App"?: "teachers" | "school-admin" | "students" | "parents" | "platform-admin";
+            };
             path?: never;
             cookie?: never;
         };
@@ -12404,7 +18046,7 @@ export interface operations {
             };
         };
         responses: {
-            /** @description Login successful */
+            /** @description Login successful. The refresh token is set as the httpOnly `refreshToken` cookie (`refreshToken_<app>` when `X-Talim-App` is sent); a native app (`platform` of `ios` or `android`) also gets it as `refresh_token` in the body. */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -12415,6 +18057,13 @@ export interface operations {
             };
             /** @description Invalid credentials */
             401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description FORBIDDEN — `X-Talim-App` names an app this account’s role does not belong in (the message names the role) */
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -12470,11 +18119,18 @@ export interface operations {
     AuthenticationController_refreshToken: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                /** @description Web apps: which app is calling (`teachers`, `school-admin`, `students`, `parents`, `platform-admin`). With it the refresh token lives in that app’s own httpOnly cookie, `refreshToken_<app>`, and only an account whose role belongs in the app is signed in or refreshed. Without it (native apps, older clients) the shared `refreshToken` cookie is used as before. */
+                "X-Talim-App"?: "teachers" | "school-admin" | "students" | "parents" | "platform-admin";
+            };
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["RefreshTokenDto"];
+            };
+        };
         responses: {
             /** @description Token refreshed successfully */
             200: {
@@ -12485,7 +18141,7 @@ export interface operations {
                     "application/json": components["schemas"]["AccessTokenResponseDto"];
                 };
             };
-            /** @description Invalid or expired refresh token */
+            /** @description UNAUTHENTICATED or TOKEN_EXPIRED: no, invalid, expired, revoked or already rotated refresh token */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -12499,11 +18155,17 @@ export interface operations {
             query?: never;
             header: {
                 authorization: string;
+                /** @description Web apps: which app is calling (`teachers`, `school-admin`, `students`, `parents`, `platform-admin`). With it the refresh token lives in that app’s own httpOnly cookie, `refreshToken_<app>`, and only an account whose role belongs in the app is signed in or refreshed. Without it (native apps, older clients) the shared `refreshToken` cookie is used as before. */
+                "X-Talim-App"?: "teachers" | "school-admin" | "students" | "parents" | "platform-admin";
             };
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["RefreshTokenDto"];
+            };
+        };
         responses: {
             201: {
                 headers: {
@@ -12596,7 +18258,10 @@ export interface operations {
     AuthenticationController_changePassword: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                /** @description Web apps: which app is calling (`teachers`, `school-admin`, `students`, `parents`, `platform-admin`). With it the refresh token lives in that app’s own httpOnly cookie, `refreshToken_<app>`, and only an account whose role belongs in the app is signed in or refreshed. Without it (native apps, older clients) the shared `refreshToken` cookie is used as before. */
+                "X-Talim-App"?: "teachers" | "school-admin" | "students" | "parents" | "platform-admin";
+            };
             path?: never;
             cookie?: never;
         };
@@ -12606,7 +18271,7 @@ export interface operations {
             };
         };
         responses: {
-            /** @description Password changed; body carries the new access_token */
+            /** @description Password changed; body carries the new access_token (and refresh_token for native apps) */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -12662,12 +18327,14 @@ export interface operations {
             };
         };
         responses: {
-            /** @description Token introspection result with user data */
+            /** @description Token introspection result with user data; `{ active: false }` for an invalid, expired or orphaned token. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["IntrospectResponseDto"];
+                };
             };
         };
     };
@@ -12762,7 +18429,10 @@ export interface operations {
     AuthenticationController_adminLogin: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                /** @description Web apps: which app is calling (`teachers`, `school-admin`, `students`, `parents`, `platform-admin`). With it the refresh token lives in that app’s own httpOnly cookie, `refreshToken_<app>`, and only an account whose role belongs in the app is signed in or refreshed. Without it (native apps, older clients) the shared `refreshToken` cookie is used as before. */
+                "X-Talim-App"?: "teachers" | "school-admin" | "students" | "parents" | "platform-admin";
+            };
             path?: never;
             cookie?: never;
         };
@@ -12856,7 +18526,10 @@ export interface operations {
     AuthenticationController_biometricLogin: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                /** @description Web apps: which app is calling (`teachers`, `school-admin`, `students`, `parents`, `platform-admin`). With it the refresh token lives in that app’s own httpOnly cookie, `refreshToken_<app>`, and only an account whose role belongs in the app is signed in or refreshed. Without it (native apps, older clients) the shared `refreshToken` cookie is used as before. */
+                "X-Talim-App"?: "teachers" | "school-admin" | "students" | "parents" | "platform-admin";
+            };
             path?: never;
             cookie?: never;
         };
@@ -12872,11 +18545,14 @@ export interface operations {
             };
         };
         responses: {
+            /** @description Login successful. Same shape as `POST /auth/login`: a native app (`platform` of `ios` or `android`) also gets `refresh_token` in the body. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["AccessTokenResponseDto"];
+                };
             };
             /** @description Invalid or revoked biometric credential */
             401: {
@@ -12906,6 +18582,98 @@ export interface operations {
             };
         };
     };
+    AuthSessionsController_list: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Web apps: which app is calling (`teachers`, `school-admin`, `students`, `parents`, `platform-admin`). With it the refresh token lives in that app’s own httpOnly cookie, `refreshToken_<app>`, and only an account whose role belongs in the app is signed in or refreshed. Without it (native apps, older clients) the shared `refreshToken` cookie is used as before. */
+                "X-Talim-App"?: "teachers" | "school-admin" | "students" | "parents" | "platform-admin";
+                /** @description Native apps: the refresh token, so the current session is marked. Browsers send the refresh cookie instead. */
+                "x-refresh-token"?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionDto"][];
+                };
+            };
+        };
+    };
+    AuthSessionsController_revokeOthers: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Web apps: which app is calling (`teachers`, `school-admin`, `students`, `parents`, `platform-admin`). With it the refresh token lives in that app’s own httpOnly cookie, `refreshToken_<app>`, and only an account whose role belongs in the app is signed in or refreshed. Without it (native apps, older clients) the shared `refreshToken` cookie is used as before. */
+                "X-Talim-App"?: "teachers" | "school-admin" | "students" | "parents" | "platform-admin";
+                "x-refresh-token"?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RevokeOthersDto"];
+                };
+            };
+        };
+    };
+    AuthSessionsController_revoke: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Web apps: which app is calling (`teachers`, `school-admin`, `students`, `parents`, `platform-admin`). With it the refresh token lives in that app’s own httpOnly cookie, `refreshToken_<app>`, and only an account whose role belongs in the app is signed in or refreshed. Without it (native apps, older clients) the shared `refreshToken` cookie is used as before. */
+                "X-Talim-App"?: "teachers" | "school-admin" | "students" | "parents" | "platform-admin";
+                "x-refresh-token"?: string;
+            };
+            path: {
+                /** @description Session id from GET /auth/sessions */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RevokeSessionDto"];
+                };
+            };
+        };
+    };
+    AuthSessionsController_passwordPolicy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PasswordPolicyDto"];
+                };
+            };
+        };
+    };
     UserController_getTeachers: {
         parameters: {
             query?: {
@@ -12926,19 +18694,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        data?: {
-                            [key: string]: unknown;
-                        }[];
-                        /** @description Total number of teachers */
-                        count?: number;
-                        meta?: {
-                            total?: number;
-                            page?: number;
-                            lastPage?: number;
-                            limit?: number;
-                        };
-                    };
+                    "application/json": components["schemas"]["TeacherRosterResponseDto"];
                 };
             };
             /** @description Unauthorized */
@@ -13175,7 +18931,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["TeacherProfileResponseDto"];
+                };
             };
             /** @description Teacher profile not found */
             404: {
@@ -13415,56 +19173,6 @@ export interface operations {
             };
         };
     };
-    TeacherController_getMyTeacherDashboard: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Teacher aggregate dashboard retrieved successfully */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TeacherDashboardDto"];
-                };
-            };
-        };
-    };
-    TeacherController_getTeacherDashboard: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Teacher user ID or Teacher profile document ID. Both are supported. */
-                teacherId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Teacher aggregate dashboard retrieved successfully */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TeacherDashboardDto"];
-                };
-            };
-            /** @description Teacher not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
     TeacherController_getTeacherDashboardKpis: {
         parameters: {
             query?: never;
@@ -13492,26 +19200,6 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
-            };
-        };
-    };
-    TeacherController_getAllTeachersDashboardKpis: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description All teachers dashboard KPIs retrieved successfully */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TeacherDashboardKpiDto"][];
-                };
             };
         };
     };
@@ -13577,6 +19265,27 @@ export interface operations {
             };
         };
     };
+    StudentController_issueLinkCode: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LinkCodeResponseDto"];
+                };
+            };
+        };
+    };
     StudentController_create: {
         parameters: {
             query?: never;
@@ -13596,7 +19305,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["StudentProfileDto"];
+                    "application/json": components["schemas"]["CreatedStudentDto"];
                 };
             };
             /** @description Bad Request - Invalid input data */
@@ -13806,9 +19515,9 @@ export interface operations {
     StudentController_getStudentsBySchool: {
         parameters: {
             query?: {
-                /** @description Page number (1-based) */
+                /** @description Page number (1-based). */
                 page?: number;
-                /** @description Number of items per page */
+                /** @description Items per page; values above 500 are capped. */
                 limit?: number;
             };
             header?: never;
@@ -13841,9 +19550,9 @@ export interface operations {
     StudentController_getStudentsByClassId: {
         parameters: {
             query?: {
-                /** @description Page number (1-based) */
+                /** @description Page number (1-based). */
                 page?: number;
-                /** @description Number of items per page */
+                /** @description Items per page; values above 500 are capped. */
                 limit?: number;
             };
             header?: never;
@@ -13883,42 +19592,6 @@ export interface operations {
             path: {
                 /** @description User ID */
                 userId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Students retrieved successfully. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        data?: {
-                            [key: string]: unknown;
-                        }[];
-                        meta?: {
-                            total?: number;
-                            page?: number;
-                            lastPage?: number;
-                            limit?: number;
-                        };
-                    };
-                };
-            };
-        };
-    };
-    StudentController_getStudentsByParentId: {
-        parameters: {
-            query: {
-                page: number;
-                limit: number;
-            };
-            header?: never;
-            path: {
-                /** @description Parent ID */
-                parentId: string;
             };
             cookie?: never;
         };
@@ -14374,6 +20047,129 @@ export interface operations {
             };
         };
     };
+    ParentLeaveController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The child's Student id */
+                childId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChildLeaveDto"];
+                };
+            };
+        };
+    };
+    ParentLeaveController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The child's Student id */
+                childId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ParentLeaveCreateDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LeaveRowDto"];
+                };
+            };
+        };
+    };
+    ParentLeaveController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The child's Student id */
+                childId: string;
+                /** @description The leave request */
+                leaveId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LeaveCancelledDto"];
+                };
+            };
+        };
+    };
+    ParentLeaveController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The child's Student id */
+                childId: string;
+                /** @description The leave request */
+                leaveId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ParentLeaveUpdateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LeaveRowDto"];
+                };
+            };
+        };
+    };
+    ParentsController_linkChild: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LinkChildDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LinkedChildResponseDto"];
+                };
+            };
+        };
+    };
     ParentsController_getMyChildren: {
         parameters: {
             query?: never;
@@ -14387,7 +20183,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["ParentChildCardDto"][];
+                };
             };
         };
     };
@@ -14444,47 +20242,6 @@ export interface operations {
             };
         };
     };
-    ParentsController_getMyChildTimetable: {
-        parameters: {
-            query: {
-                weekStart: string;
-                view: string;
-            };
-            header?: never;
-            path: {
-                childId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    ParentsController_downloadMyChildTimetable: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                childId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
     ParentsController_getMyChild: {
         parameters: {
             query?: never;
@@ -14500,7 +20257,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": Record<string, never>;
+                };
             };
         };
     };
@@ -14523,7 +20282,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": Record<string, never>;
+                };
             };
         };
     };
@@ -14746,7 +20507,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["ParentSettingsResponseDto"];
+                };
             };
             /** @description Parent profile not found */
             404: {
@@ -14782,7 +20545,10 @@ export interface operations {
     ParentSettingsController_changePassword: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                /** @description Web apps: which app is calling (`teachers`, `school-admin`, `students`, `parents`, `platform-admin`). With it the refresh token lives in that app’s own httpOnly cookie, `refreshToken_<app>`, and only an account whose role belongs in the app is signed in or refreshed. Without it (native apps, older clients) the shared `refreshToken` cookie is used as before. */
+                "X-Talim-App"?: "teachers" | "school-admin" | "students" | "parents" | "platform-admin";
+            };
             path?: never;
             cookie?: never;
         };
@@ -14917,21 +20683,51 @@ export interface operations {
             };
         };
     };
-    ParentSettingsController_getLinkedChildren: {
+    ParentSettingsController_updatePreferredProvider: {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdatePreferredProviderDto"];
+            };
+        };
         responses: {
-            /** @description List of linked children */
+            /** @description Preferred payment method updated */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["PreferredProviderUpdatedDto"];
+                };
+            };
+        };
+    };
+    ParentSettingsController_updatePreferences: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateParentPreferencesDto"];
+            };
+        };
+        responses: {
+            /** @description Preferences updated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ParentPreferencesUpdatedDto"];
+                };
             };
         };
     };
@@ -14948,7 +20744,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["TeacherSettingsDto"];
+                };
             };
         };
     };
@@ -14969,7 +20767,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["TeacherSettingsDto"];
+                };
             };
         };
     };
@@ -14991,7 +20791,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["TeacherPreferencesResponseDto"];
                 };
             };
         };
@@ -15134,6 +20934,28 @@ export interface operations {
             };
         };
     };
+    MyNotificationsController_getCounts: {
+        parameters: {
+            query?: {
+                /** @description B11: count only the notifications about this child (its Student id), with the same split as `GET /notifications?childId=`: rows naming the child plus rows naming no child. */
+                childId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InboxCountsDto"];
+                };
+            };
+        };
+    };
     MyNotificationsController_markAllRead: {
         parameters: {
             query?: never;
@@ -15147,7 +20969,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["ReadAllResponseDto"];
+                };
             };
         };
     };
@@ -15387,7 +21211,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Announcement"];
+                    "application/json": Record<string, never>;
                 };
             };
             /** @description Invalid input */
@@ -15494,52 +21318,6 @@ export interface operations {
             };
             /** @description Announcement not found */
             404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    AnnoucementController_sendNotifications: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    userIds?: string[];
-                    title?: string;
-                    body?: string;
-                };
-            };
-        };
-        responses: {
-            /** @description Notifications sent successfully */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Invalid input */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Unauthorized */
-            401: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -15848,8 +21626,12 @@ export interface operations {
                 /** @description Filter notifications for a specific recipient */
                 recipientId?: string;
                 source?: "school" | "talim" | "system";
-                category?: "announcement" | "attendance" | "academics" | "grading" | "resources" | "messages" | "account" | "other";
+                category?: "announcement" | "attendance" | "academics" | "grading" | "resources" | "messages" | "account" | "payments" | "leave" | "other";
                 type?: string;
+                /** @description true: only notifications the caller has not read (with the other filters). */
+                unread?: boolean;
+                /** @description B11: only the notifications about this child (its Student id): rows whose `metadata.childId` or `metadata.studentId` names the child, plus rows that name no child (school-wide notices). The child must be the caller's (a parent's linked child), else 404. */
+                childId?: string;
             };
             header?: never;
             path?: never;
@@ -15861,7 +21643,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["NotificationListResponseDto"];
+                };
             };
         };
     };
@@ -15895,8 +21679,12 @@ export interface operations {
                 /** @description Filter notifications for a specific recipient */
                 recipientId?: string;
                 source?: "school" | "talim" | "system";
-                category?: "announcement" | "attendance" | "academics" | "grading" | "resources" | "messages" | "account" | "other";
+                category?: "announcement" | "attendance" | "academics" | "grading" | "resources" | "messages" | "account" | "payments" | "leave" | "other";
                 type?: string;
+                /** @description true: only notifications the caller has not read (with the other filters). */
+                unread?: boolean;
+                /** @description B11: only the notifications about this child (its Student id): rows whose `metadata.childId` or `metadata.studentId` names the child, plus rows that name no child (school-wide notices). The child must be the caller's (a parent's linked child), else 404. */
+                childId?: string;
             };
             header?: never;
             path?: never;
@@ -15929,7 +21717,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Notification"][];
+                    "application/json": components["schemas"]["NotificationItemDto"][];
                 };
             };
         };
@@ -15951,7 +21739,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["NotificationItemDto"];
                 };
             };
             /** @description Notification not found */
@@ -16028,7 +21816,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["NotificationItemDto"];
                 };
             };
         };
@@ -16058,7 +21846,10 @@ export interface operations {
     };
     ChatController_getContacts: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Parents: a linked child's Student id. Defaults to the X-Talim-Child child when that header is sent. */
+                childId?: string;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -16070,7 +21861,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>[];
+                    "application/json": (components["schemas"]["TeacherContactDto"] | components["schemas"]["ParentChildContactDto"] | components["schemas"]["ChatStudentParentContactDto"])[];
                 };
             };
         };
@@ -16108,13 +21899,13 @@ export interface operations {
             };
         };
         responses: {
-            /** @description Chat room created successfully */
+            /** @description Chat room created (or reused) */
             201: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ChatRoomResponseDto"];
+                    "application/json": components["schemas"]["ChatRoomCreatedDto"];
                 };
             };
         };
@@ -16189,6 +21980,76 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ChatRoomViewDto"];
+                };
+            };
+        };
+    };
+    ChatController_openOffice: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The office room, as the room list shows it */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChatRoomViewDto"];
+                };
+            };
+        };
+    };
+    ChatController_openCourseGroup: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description ID of the course */
+                courseId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The subject group, as the room list shows it */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChatRoomViewDto"];
+                };
+            };
+        };
+    };
+    ChatController_getRoomMedia: {
+        parameters: {
+            query?: {
+                kind?: "image" | "video" | "document" | "link";
+                /** @description `nextCursor` of the previous page. */
+                cursor?: string;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                /** @description ID of the chat room */
+                roomId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChatMediaPageDto"];
                 };
             };
         };
@@ -16273,7 +22134,7 @@ export interface operations {
     ChatController_getChatRoomMessagesWithCursor: {
         parameters: {
             query?: {
-                /** @description Number of messages to fetch (default: 50) */
+                /** @description Items per page; values above 100 are capped. */
                 limit?: number;
                 /** @description Message ID to use as cursor */
                 cursor?: string;
@@ -16528,7 +22389,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["ChatPreferencesResponseDto"];
+                };
             };
         };
     };
@@ -16550,7 +22413,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["ChatPreferencesResponseDto"];
+                };
             };
         };
     };
@@ -16585,6 +22450,11 @@ export interface operations {
                          *     ]
                          */
                         courses?: string[];
+                        /**
+                         * @description Number of students enrolled in the class
+                         * @example 25
+                         */
+                        studentCount?: number;
                     }[];
                 };
             };
@@ -16730,14 +22600,14 @@ export interface operations {
     ClassController_findByTeacher: {
         parameters: {
             query?: {
-                /** @description Page number (1-based) */
+                /** @description Page number (1-based). */
                 page?: number;
-                /** @description Number of items per page */
+                /** @description Items per page; values above 500 are capped. */
                 limit?: number;
             };
             header?: never;
             path: {
-                /** @description Teacher ID */
+                /** @description The teacher's User id. 404 when that user is not a teacher of the caller's school. */
                 id: string;
             };
             cookie?: never;
@@ -16768,7 +22638,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description Teacher ID to get assigned classes for */
+                /** @description The teacher's User id. 404 when that user is not a teacher of the caller's school. */
                 teacherId: string;
             };
             cookie?: never;
@@ -17319,197 +23189,6 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["ComplaintDto"];
                 };
-            };
-        };
-    };
-    ResourceController_findAll: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description List of all resources */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    ResourceController_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateResourceDto"];
-            };
-        };
-        responses: {
-            /** @description Resource uploaded successfully. */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    ResourceController_findByClassId: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description ID of the class */
-                classId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description List of resources for the specified class */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    ResourceController_findByTermId: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description ID of the term */
-                termId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description List of resources for the specified term */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    ResourceController_findByCourseId: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description ID of the course */
-                courseId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description List of resources for the specified course */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    ResourceController_findByUploadedBy: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description ID of the user who uploaded */
-                uploadedBy: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description List of resources uploaded by the specified user */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    ResourceController_findOne: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description ID of the resource */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Resource found */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    ResourceController_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description ID of the resource */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateResourceDto"];
-            };
-        };
-        responses: {
-            /** @description Resource updated successfully */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    ResourceController_remove: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description ID of the resource */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Resource deleted successfully */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
             };
         };
     };
@@ -18087,7 +23766,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["FeePaymentDto"];
+                    "application/json": components["schemas"]["ManualPaymentResponseDto"];
                 };
             };
         };
@@ -18099,8 +23778,13 @@ export interface operations {
                 page?: number;
                 /** @description Number of items per page */
                 limit?: number;
-                status?: "pending" | "successful" | "failed" | "refunded" | "partial";
+                status?: "unpaid" | "part_paid" | "paid" | "pending" | "successful" | "failed" | "refunded" | "partial";
+                /** @description The child's Student id. */
                 studentId?: string;
+                /**
+                 * @deprecated
+                 * @description Deprecated: ledger rows are per child, not per parent; ignored.
+                 */
                 parentId?: string;
             };
             header?: never;
@@ -18161,10 +23845,242 @@ export interface operations {
             };
         };
     };
+    SettingsController_getSchoolProfile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SettingsController_updateSchoolProfile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSchoolProfileDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SettingsController_getReceiptSettings: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReceiptSettingsResponseDto"];
+                };
+            };
+        };
+    };
+    SettingsController_updateReceiptSettings: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateReceiptSettingsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReceiptSettingsResponseDto"];
+                };
+            };
+        };
+    };
+    SettingsController_getFinanceSettings: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FinanceSettingsResponseDto"];
+                };
+            };
+        };
+    };
+    SettingsController_updateFinanceSettings: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateFinanceSettingsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FinanceSettingsResponseDto"];
+                };
+            };
+        };
+    };
+    SettingsController_getAcademicSettings: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AcademicSettingsResponseDto"];
+                };
+            };
+        };
+    };
+    SettingsController_updateAcademicSettings: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateAcademicSettingsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AcademicSettingsResponseDto"];
+                };
+            };
+        };
+    };
+    SettingsController_changePassword: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Web apps: which app is calling (`teachers`, `school-admin`, `students`, `parents`, `platform-admin`). With it the refresh token lives in that app’s own httpOnly cookie, `refreshToken_<app>`, and only an account whose role belongs in the app is signed in or refreshed. Without it (native apps, older clients) the shared `refreshToken` cookie is used as before. */
+                "X-Talim-App"?: "teachers" | "school-admin" | "students" | "parents" | "platform-admin";
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChangePasswordDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SettingsController_exportData: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                type: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+        };
+    };
+    PaymentsController_getFamilyFees: {
+        parameters: {
+            query?: {
+                /** @description Only this term's fees (a term belongs to one school). */
+                termId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FamilyFeesResponseDto"];
+                };
+            };
+        };
+    };
     PaymentsController_getDueFees: {
         parameters: {
-            query: {
-                studentId: string;
+            query?: {
+                /** @description The child; optional when `X-Talim-Child` names the child. */
+                studentId?: string;
                 academicYearId?: string;
                 termId?: string;
             };
@@ -18206,7 +24122,11 @@ export interface operations {
     PaymentsController_getPaymentHistory: {
         parameters: {
             query?: {
+                /** @description One child; omit for every linked child. */
+                childId?: string;
+                /** @description Deprecated alias of `childId`. */
                 studentId?: string;
+                termId?: string;
                 status?: string;
                 startDate?: string;
                 endDate?: string;
@@ -18224,7 +24144,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaymentHistoryResponseDto"];
+                    "application/json": components["schemas"]["ParentHistoryResponseDto"];
                 };
             };
         };
@@ -18232,6 +24152,9 @@ export interface operations {
     PaymentsController_getReceipts: {
         parameters: {
             query?: {
+                /** @description One child; omit for every linked child. */
+                childId?: string;
+                /** @description Deprecated alias of `childId`. */
                 studentId?: string;
                 academicYearId?: string;
                 termId?: string;
@@ -18249,7 +24172,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ReceiptListResponseDto"];
+                    "application/json": components["schemas"]["ParentReceiptListResponseDto"];
                 };
             };
         };
@@ -18270,7 +24193,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ReceiptResponseDto"];
+                    "application/json": components["schemas"]["ParentReceiptResponseDto"];
                 };
             };
         };
@@ -18291,7 +24214,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ReceiptResponseDto"];
+                    "application/json": components["schemas"]["ParentReceiptResponseDto"];
                 };
             };
         };
@@ -18340,6 +24263,51 @@ export interface operations {
             };
         };
     };
+    PaymentsController_getBankDetails: {
+        parameters: {
+            query?: {
+                /** @description The child; optional when `X-Talim-Child` names the child. */
+                childId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BankDetailsResponseDto"];
+                };
+            };
+        };
+    };
+    PaymentsController_submitBankTransfer: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BankTransferDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BankTransferSubmittedResponseDto"];
+                };
+            };
+        };
+    };
     PaymentsController_getEnabledProviders: {
         parameters: {
             query?: never;
@@ -18355,6 +24323,75 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["EnabledProvidersResponseDto"];
+                };
+            };
+        };
+    };
+    PaymentsController_getBankTransfers: {
+        parameters: {
+            query?: {
+                status?: "pending" | "confirmed" | "rejected";
+                page?: number;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminBankTransferListResponseDto"];
+                };
+            };
+        };
+    };
+    PaymentsController_confirmBankTransfer: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                transactionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BankTransferDecisionResponseDto"];
+                };
+            };
+        };
+    };
+    PaymentsController_rejectBankTransfer: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                transactionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RejectBankTransferDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BankTransferDecisionResponseDto"];
                 };
             };
         };
@@ -18426,6 +24463,9 @@ export interface operations {
     PaymentsController_getAdminReceipts: {
         parameters: {
             query?: {
+                /** @description One child; omit for every linked child. */
+                childId?: string;
+                /** @description Deprecated alias of `childId`. */
                 studentId?: string;
                 academicYearId?: string;
                 termId?: string;
@@ -19263,166 +25303,6 @@ export interface operations {
             };
         };
     };
-    SettingsController_getSchoolProfile: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    SettingsController_updateSchoolProfile: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateSchoolProfileDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    SettingsController_getReceiptSettings: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": Record<string, never>;
-                };
-            };
-        };
-    };
-    SettingsController_updateReceiptSettings: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateReceiptSettingsDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    SettingsController_getFinanceSettings: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": Record<string, never>;
-                };
-            };
-        };
-    };
-    SettingsController_updateFinanceSettings: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateFinanceSettingsDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    SettingsController_changePassword: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ChangePasswordDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    SettingsController_exportData: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                type: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": Record<string, never>;
-                };
-            };
-        };
-    };
     TransitController_getDashboard: {
         parameters: {
             query?: never;
@@ -20126,6 +26006,29 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    SupportController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateSupportTicketDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SupportTicketCreatedDto"];
+                };
             };
         };
     };
