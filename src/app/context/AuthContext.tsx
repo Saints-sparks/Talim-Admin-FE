@@ -46,7 +46,9 @@ export const useAuthContext = () => useContext(AuthContext);
  *
  * The access token never touches a cookie or web storage: it lives in
  * {@link sessionStore} in memory for the life of the tab. Durability comes from
- * the httpOnly `refreshToken` cookie the backend sets on `/auth/admin-login`,
+ * the httpOnly `refreshToken_platform-admin` cookie the backend sets on
+ * `/auth/admin-login` (every request carries `X-Talim-App: platform-admin`,
+ * so other Talim portals in the same browser have cookies of their own),
  * which this provider exchanges for a fresh access token on mount and whenever
  * a request comes back 401.
  *

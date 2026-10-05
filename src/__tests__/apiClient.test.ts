@@ -52,6 +52,20 @@ describe('api requests', () => {
     expect((init.headers as Record<string, string>).Authorization).toBeUndefined();
   });
 
+  it('names this portal in X-Talim-App on authenticated and skipAuth requests, and no caller can override it', async () => {
+    sessionStore.setToken('tok-1');
+    fetchMock.mockImplementation(() => Promise.resolve(jsonResponse({})));
+
+    await api.get('/schools/search');
+    await api.post('/auth/admin-login', { email: 'a' }, { skipAuth: true });
+    await api.get('/complaints', { headers: { 'X-Talim-App': 'teachers' } });
+
+    for (const [, init] of fetchMock.mock.calls) {
+      expect((init.headers as Record<string, string>)['X-Talim-App']).toBe('platform-admin');
+    }
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+  });
+
   it('prefixes relative paths with the API base URL and leaves absolute ones alone', async () => {
     fetchMock.mockImplementation(() => Promise.resolve(jsonResponse({})));
 

@@ -6,9 +6,10 @@
  * The access token lives **only here**, in module memory. It is never written
  * to a cookie, `localStorage` or `sessionStorage`, so no script running on the
  * page (and no XSS payload) can read it back. Durability across reloads comes
- * from the `refreshToken` httpOnly cookie the backend sets on
- * `POST /auth/admin-login`: `AuthContext` calls `POST /auth/refresh` on mount
- * to mint a new access token into this store.
+ * from the `refreshToken_platform-admin` httpOnly cookie the backend sets on
+ * `POST /auth/admin-login` (the client sends `X-Talim-App: platform-admin`):
+ * `AuthContext` calls `POST /auth/refresh` on mount to mint a new access token
+ * into this store.
  *
  * `AuthContext` is the only writer; everything else reads.
  */

@@ -15,11 +15,12 @@ export interface RoleBearer {
 /**
  * True when the user is a Talim platform administrator.
  *
- * The server already gates `/auth/admin-login` on this, but the browser must
- * check too: a session minted by another Talim app (school admin, teacher,
- * parent) carries a valid refresh cookie for the same API origin, so without
- * this check such a user could load the portal shell and see platform screens
- * before each request came back 403.
+ * The server already gates `/auth/admin-login` and, under
+ * `X-Talim-App: platform-admin`, `/auth/refresh` on this, but the browser
+ * checks too: an access token minted by another Talim app (school admin,
+ * teacher, parent) is valid for the same API, so without this check such a
+ * user could load the portal shell and see platform screens before each
+ * request came back 403. It is a second line of defence, kept on purpose.
  *
  * @param user - The signed-in user, or `null` when signed out.
  * @returns True when the portal should render for them.

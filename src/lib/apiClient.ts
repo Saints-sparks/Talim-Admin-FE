@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '@/app/lib/api/config';
+import { API_BASE_URL, TALIM_APP, TALIM_APP_HEADER } from '@/app/lib/api/config';
 import { ApiError } from './apiError';
 import { sessionStore } from './session';
 
@@ -28,8 +28,11 @@ const DEFAULT_TIMEOUT_MS = 30_000;
  *
  * - Prefixes relative paths with `API_BASE_URL` and attaches the bearer token
  *   held in {@link sessionStore} (memory only — never a readable cookie).
- * - Refreshes the token once on 401 (queueing concurrent requests) against the
- *   httpOnly `refreshToken` cookie, then signs the user out if that fails.
+ * - Sends `X-Talim-App: platform-admin` on every request, so the API keeps
+ *   this portal's session in its own httpOnly `refreshToken_platform-admin`
+ *   cookie rather than the one every Talim portal used to share.
+ * - Refreshes the token once on 401 (queueing concurrent requests) against
+ *   that cookie, then signs the user out if that fails.
  * - Reports offline / unreachable / timed-out requests as `ApiError`s with
  *   stable codes, so pages never see a raw `TypeError`.
  */
@@ -111,17 +114,27 @@ class ApiClient {
     return `${API_BASE_URL}${endpoint.startsWith('/') ? endpoint : `/${endpoint}`}`;
   }
 
+  /**
+   * Builds the headers every request carries: the bearer token (unless
+   * `skipAuth`), the caller's own headers, and `X-Talim-App: platform-admin`,
+   * which is set last so no caller can send another app's value. The app
+   * header is what makes the API read and write this portal's own refresh
+   * cookie on the auth routes (admin-login, refresh, logout, sessions).
+   *
+   * @param config - The caller's request options.
+   * @returns The options with credentials and headers applied.
+   */
   private withAuth(config: RequestConfig): RequestConfig {
-    const next: RequestConfig = { ...config, credentials: 'include' };
-    if (next.skipAuth) return next;
-    const token = sessionStore.getToken();
-    if (token) {
-      next.headers = {
-        Authorization: `Bearer ${token}`,
-        ...(next.headers as Record<string, string> | undefined),
-      };
-    }
-    return next;
+    const token = config.skipAuth ? null : sessionStore.getToken();
+    return {
+      ...config,
+      credentials: 'include',
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...(config.headers as Record<string, string> | undefined),
+        [TALIM_APP_HEADER]: TALIM_APP,
+      },
+    };
   }
 
   /**

@@ -24,9 +24,10 @@ function getDeviceToken(): string {
 export const authService = {
   /**
    * Signs a platform administrator in through `POST /auth/admin-login`, which
-   * refuses any account whose role is not `admin`. The backend sets the
-   * httpOnly `refreshToken` cookie; the access token comes back in the body and
-   * is held in memory only.
+   * refuses any account whose role is not `admin`. The client sends
+   * `X-Talim-App: platform-admin`, so the backend sets this portal's own
+   * httpOnly `refreshToken_platform-admin` cookie; the access token comes back
+   * in the body and is held in memory only.
    *
    * @param credentials - Email and password.
    * @returns The access token and the introspected user.
@@ -49,8 +50,10 @@ export const authService = {
   },
 
   /**
-   * Exchanges the httpOnly refresh cookie for a new access token. Returns
-   * `null` when there is no valid session, which is the normal cold-start case.
+   * Exchanges this portal's httpOnly `refreshToken_platform-admin` cookie for a
+   * new access token. Returns `null` when there is no valid session, which is
+   * the normal cold-start case, and when the session's account is not an
+   * `admin` (the API answers 401 for that under `X-Talim-App`).
    *
    * @returns The new access token, or `null`.
    */
@@ -88,8 +91,12 @@ export const authService = {
   },
 
   /**
-   * Revokes the refresh token and clears the server-side cookie. Never throws:
-   * the local session is cleared by the caller either way.
+   * Revokes the refresh token and clears this portal's
+   * `refreshToken_platform-admin` cookie (other portals' sessions in the same
+   * browser are left alone). Never throws: the local session is cleared by the
+   * caller either way.
+   *
+   * @returns Resolves once the request has settled.
    */
   async logout(): Promise<void> {
     try {

@@ -1,4 +1,4 @@
-import { API_ENDPOINTS } from '@/app/lib/api/config';
+import { API_ENDPOINTS, TALIM_APP, TALIM_APP_HEADER } from '@/app/lib/api/config';
 import { apiClient, unwrapEnvelope } from '@/lib/apiClient';
 import { ApiError } from '@/lib/apiError';
 import { sessionStore } from '@/lib/session';
@@ -31,7 +31,8 @@ export function validateImageFile(file: File | null | undefined): string | null 
  * Uploads an image and reports progress.
  *
  * `XMLHttpRequest` rather than `fetch`, because only XHR exposes upload
- * progress events; it borrows the bearer token from {@link sessionStore} so it
+ * progress events; it borrows the bearer token from {@link sessionStore} and
+ * sends the same `X-Talim-App` header as {@link apiClient}, so it
  * authenticates exactly like the rest of the app, and it raises the same
  * {@link ApiError} type as {@link apiClient} so callers have one error shape.
  *
@@ -88,6 +89,7 @@ export function uploadImage(
 
     xhr.open('POST', API_ENDPOINTS.UPLOAD_IMAGE);
     xhr.withCredentials = true;
+    xhr.setRequestHeader(TALIM_APP_HEADER, TALIM_APP);
     const token = sessionStore.getToken();
     if (token) xhr.setRequestHeader('Authorization', `Bearer ${token}`);
     xhr.send(body);

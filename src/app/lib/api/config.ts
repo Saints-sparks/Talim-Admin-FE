@@ -1,3 +1,5 @@
+import type { operations } from '@/types/api';
+
 // The API origin comes from the environment so each deployment (local, preview,
 // production) points at its own backend. Next.js inlines NEXT_PUBLIC_* at build
 // time, so a missing value fails the build here rather than at runtime.
@@ -9,6 +11,27 @@ if (!configuredApiBaseUrl) {
 }
 
 export const API_BASE_URL = configuredApiBaseUrl.replace(/\/+$/, '');
+
+/** The values the API accepts in {@link TALIM_APP_HEADER}, from the generated contract. */
+export type TalimApp = NonNullable<
+  NonNullable<operations['AuthenticationController_refreshToken']['parameters']['header']>['X-Talim-App']
+>;
+
+/**
+ * Request header that names the calling Talim web app. With it, the API keeps
+ * this app's refresh token in its own httpOnly cookie (`refreshToken_<app>`)
+ * instead of the one shared by every portal, so signing in to another portal in
+ * the same browser no longer signs this one out, and it signs in or refreshes
+ * only an account whose role belongs in the app.
+ */
+export const TALIM_APP_HEADER = 'X-Talim-App';
+
+/**
+ * This portal's {@link TALIM_APP_HEADER} value. The API admits only `admin`
+ * accounts under it (403 `FORBIDDEN` on sign-in, 401 on refresh otherwise) and
+ * keeps the session in the `refreshToken_platform-admin` cookie.
+ */
+export const TALIM_APP = 'platform-admin' satisfies TalimApp;
 
 export const API_ENDPOINTS = {
   LOGIN: `${API_BASE_URL}/auth/login`,
