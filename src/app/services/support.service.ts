@@ -2,11 +2,8 @@ import { api } from '@/lib/apiClient';
 import { API_ENDPOINTS } from '@/app/lib/api/config';
 import type { UpdateComplaintStatusPayload } from '@/types/apiPayloads';
 
-/**
- * Mirrors `ComplaintStatus` in
- * `talimBE-V2/src/modules/complaints/data/enums/complaint-status.enum.ts`.
- */
-export type ComplaintStatus = 'Pending' | 'In Progress' | 'Resolved';
+/** `ComplaintStatus`, from `UpdateComplaintStatusDto` in the generated contract. */
+export type ComplaintStatus = UpdateComplaintStatusPayload['status'];
 
 /** Every value `PATCH /complaints/:id/status` accepts, in workflow order. */
 export const COMPLAINT_STATUSES: readonly ComplaintStatus[] = [
@@ -32,7 +29,11 @@ export interface PopulatedUser {
   schoolId?: ComplaintSchool | string;
 }
 
-/** One support ticket. Mirrors the `Complaint` schema. */
+/**
+ * One support ticket. Stays hand-written for now: the contract's `ComplaintDto`
+ * types `schoolId` as a bare id and `userId` as id-or-author, while the support
+ * screens still read a populated school and author; moving them is a UI change.
+ */
 export interface Complaint {
   _id: string;
   ticket: string;

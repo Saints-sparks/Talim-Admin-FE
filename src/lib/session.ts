@@ -22,8 +22,10 @@ export interface SessionUser {
   role: string;
   firstName?: string;
   lastName?: string;
-  phoneNumber?: string;
-  userAvatar?: string;
+  /** `null` when the account has none, as `POST /auth/introspect` sends it. */
+  phoneNumber?: string | null;
+  /** `null` when the account has none, as `POST /auth/introspect` sends it. */
+  userAvatar?: string | null;
   isActive?: boolean;
   isEmailVerified?: boolean;
   createdAt?: string;

@@ -5,14 +5,10 @@ import type {
   UpdateSchoolPayload,
   UpdateSchoolStatusPayload,
 } from '@/types/apiPayloads';
+import type { Schema } from '@/types/apiContract';
 
-/** A named contact on a school record. Mirrors `PrimaryContactDto`. */
-export interface PrimaryContact {
-  name: string;
-  phone: string;
-  email: string;
-  role: string;
-}
+/** A named contact on a school record: `PrimaryContactDto` from the generated contract. */
+export type PrimaryContact = Schema<'PrimaryContactDto'>;
 
 /** A school as the platform console reads it. */
 export interface School {

@@ -20,6 +20,7 @@ import type {
   CreateNotificationPayload,
   CreateSchoolPayload,
   PlatformProviderConfigPayload,
+  UpdateAvatarPayload,
   UpdateComplaintStatusPayload,
   UpdateSchoolStatusPayload,
 } from '@/types/apiPayloads';
@@ -151,6 +152,16 @@ describe('write payloads follow the backend contract', () => {
     assertKeys<AdminLoginPayload>()(['email', 'password', 'deviceToken', 'platform']);
     expect(login.platform).toBe('admin-web');
     expect(noPassword).toBeDefined();
+  });
+
+  it('avatar removal', () => {
+    const remove = { avatarUrl: '' } satisfies UpdateAvatarPayload;
+    // @ts-expect-error a field the DTO does not declare is a 400
+    const extra: UpdateAvatarPayload = { avatarUrl: '', userAvatar: '' };
+
+    assertKeys<UpdateAvatarPayload>()(['avatarUrl']);
+    expect(remove.avatarUrl).toBe('');
+    expect(extra).toBeDefined();
   });
 
   it('the helper types resolve real routes (a wrong path or method would not compile)', () => {

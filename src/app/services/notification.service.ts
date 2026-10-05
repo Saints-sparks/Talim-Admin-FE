@@ -1,42 +1,31 @@
 import { API_ENDPOINTS } from '../lib/api/config';
 import { api } from '@/lib/apiClient';
 import type { CreateNotificationPayload } from '@/types/apiPayloads';
+import type { Schema } from '@/types/apiContract';
 
-/** Mirrors `NotificationPriority`. */
-export type Priority = 'low' | 'medium' | 'high';
+/** `NotificationPriority`, from `CreateNotificationDto` in the generated contract. */
+export type Priority = NonNullable<CreateNotificationPayload['priority']>;
 
 /**
- * Mirrors `UserRole` in the backend, which is what `recipientRoles` is typed
- * as. Note `admin` is the *platform* administrator; a school's own
+ * `UserRole`, which is what `recipientRoles` is typed as, from the generated
+ * contract. Note `admin` is the *platform* administrator; a school's own
  * administrator is `school_admin`.
  */
-export type RecipientRole =
-  | 'student'
-  | 'teacher'
-  | 'parent'
-  | 'admin'
-  | 'school_admin'
-  | 'school_sub_admin';
+export type RecipientRole = NonNullable<CreateNotificationPayload['recipientRoles']>[number];
 
-/** Delivery state of a notification. */
-export type NotificationStatus = 'pending' | 'sent' | 'failed';
+/** Delivery state of a notification, from `NotificationItemDto` in the generated contract. */
+export type NotificationStatus = NonNullable<Schema<'NotificationItemDto'>['status']>;
 
-/** Mirrors `NotificationSource`. */
-export type NotificationSource = 'school' | 'talim' | 'system';
+/** `NotificationSource`, from the generated contract. */
+export type NotificationSource = NonNullable<CreateNotificationPayload['source']>;
 
-/** Mirrors `NotificationDeliveryChannel`. */
-export type NotificationDeliveryChannel = 'inApp' | 'email' | 'push' | 'webPush';
+/** `NotificationDeliveryChannel`, from the generated contract. */
+export type NotificationDeliveryChannel = NonNullable<
+  CreateNotificationPayload['deliveryChannels']
+>[number];
 
-/** Mirrors `NotificationCategory`. */
-export type NotificationCategory =
-  | 'announcement'
-  | 'attendance'
-  | 'academics'
-  | 'grading'
-  | 'resources'
-  | 'messages'
-  | 'account'
-  | 'other';
+/** `NotificationCategory`, from the generated contract. */
+export type NotificationCategory = NonNullable<CreateNotificationPayload['category']>;
 
 /** The administrator who sent a notification, as the API populates them. */
 export interface Sender {
@@ -78,7 +67,11 @@ export interface NotificationDeliveryStats {
  */
 export type CreateNotificationRequest = CreateNotificationPayload;
 
-/** One notification as the API returns it. */
+/**
+ * One notification as the API returns it. Stays hand-written: the contract's
+ * `NotificationItemDto` types `readBy`/`targetSchools` as untyped records and
+ * has no `deliveryStats`, which this screen reads when present.
+ */
 export interface NotificationResponse {
   _id: string;
   id?: string;

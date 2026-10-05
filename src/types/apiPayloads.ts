@@ -7,10 +7,6 @@
  * `whitelist + forbidNonWhitelisted`, so a missing required field, a wrong enum
  * value or one extra property is a 400 in production; here it is a compile
  * error the next time the contract is refreshed (`npm run types:api`).
- *
- * Deliberately NOT here: `PUT /auth/profile/avatar`. The contract documents it
- * as multipart only; the app also sends `{ avatarUrl: '' }` as JSON to remove
- * the avatar, which the endpoint accepts, so that call stays hand-typed.
  */
 import type { RequestBody } from './apiContract';
 
@@ -22,6 +18,8 @@ export type AdminLoginPayload = RequestBody<'/auth/admin-login', 'post'>;
 export type IntrospectPayload = RequestBody<'/auth/introspect', 'post'>;
 /** Body of `PUT /auth/profile/update`. */
 export type UpdateProfileContractPayload = RequestBody<'/auth/profile/update', 'put'>;
+/** JSON body of `PUT /auth/profile/avatar` (`{ avatarUrl: '' }` removes the avatar). */
+export type UpdateAvatarPayload = RequestBody<'/auth/profile/avatar', 'put'>;
 
 // ─── Schools ──────────────────────────────────────────────────────────────────
 

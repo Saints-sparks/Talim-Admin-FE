@@ -1,11 +1,12 @@
+import type { Schema } from '@/types/apiContract';
 import type { SessionUser } from './session';
 
 /**
- * The only role the Talim Admin portal admits. Mirrors `UserRole.ADMIN` in
- * `talimBE-V2/src/modules/user/data/models/user.schema.ts`; every platform
- * endpoint this app calls is decorated `@Roles(UserRole.ADMIN)`.
+ * The only role the Talim Admin portal admits: `UserRole.ADMIN`, checked
+ * against the role union in the generated contract. Every platform endpoint
+ * this app calls is decorated `@Roles(UserRole.ADMIN)`.
  */
-export const PLATFORM_ADMIN_ROLE = 'admin';
+export const PLATFORM_ADMIN_ROLE = 'admin' satisfies Schema<'IntrospectUserDto'>['role'];
 
 /** A user shape with just enough on it to make an access decision. */
 export interface RoleBearer {

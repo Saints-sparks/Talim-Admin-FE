@@ -1,7 +1,7 @@
 import { API_ENDPOINTS } from '@/app/lib/api/config';
 import { api } from '@/lib/apiClient';
 import type { SessionUser } from '@/lib/session';
-import type { UpdateProfileContractPayload } from '@/types/apiPayloads';
+import type { UpdateAvatarPayload, UpdateProfileContractPayload } from '@/types/apiPayloads';
 
 /**
  * Body for `PUT /auth/profile/update/`: the fields of `UpdateProfileDto` this
@@ -12,7 +12,10 @@ export type UpdateProfilePayload = Pick<
   'firstName' | 'lastName' | 'phoneNumber'
 >;
 
-/** Response of `PUT /auth/profile/avatar`. */
+/**
+ * Response of `PUT /auth/profile/avatar`. Stays hand-written: the contract
+ * documents no response body for this route.
+ */
 export interface UpdateAvatarResponse {
   message: string;
   userAvatar: string;
@@ -52,6 +55,8 @@ export const profileService = {
    * @throws ApiError - On any non-2xx response.
    */
   async removeAvatar(): Promise<UpdateAvatarResponse> {
-    return api.put<UpdateAvatarResponse>(API_ENDPOINTS.PROFILE_AVATAR, { avatarUrl: '' });
+    return api.put<UpdateAvatarResponse>(API_ENDPOINTS.PROFILE_AVATAR, {
+      avatarUrl: '',
+    } satisfies UpdateAvatarPayload);
   },
 };
