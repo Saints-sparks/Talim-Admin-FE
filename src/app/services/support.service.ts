@@ -1,20 +1,14 @@
 import { api } from '@/lib/apiClient';
 import { API_ENDPOINTS } from '@/app/lib/api/config';
 import { toQueryString } from '@/lib/queryString';
-import type {
-  PostTicketMessagePayload,
-  Ticket,
-  TicketDeskCounts,
-  TicketDeskQuery,
-  TicketPage,
-  UpdateTicketPayload,
-} from '@/types/v15';
+import type { PostTicketMessagePayload, UpdateTicketPayload } from '@/types/apiPayloads';
+import type { Ticket, TicketDeskCounts, TicketDeskQuery, TicketPage, TicketStaff } from '@/types/tickets';
 
 /** Rows per page of the desk list. */
 export const DESK_PAGE_SIZE = 20;
 
 /**
- * The Talim support desk (v1.5 contract §1, "Talim desk"). Every route is
+ * The Talim support desk (v1.5 §1, "v1.5 as built"). Every route is
  * platform-admin only. Each screen makes one list call and one counts call;
  * nothing here is called per row.
  *
@@ -23,10 +17,13 @@ export const DESK_PAGE_SIZE = 20;
  */
 export const supportService = {
   /**
-   * One page of the Talim desk. With `scope: 'all'` it also lists every
-   * school-desk ticket, which Talim may read but not change.
+   * One page of the Talim desk, each row with the requester's messages the
+   * desk has not read (`unread`). With `scope: 'all'` it also lists every
+   * school-desk ticket (`access: 'observer'`), which Talim may read but not
+   * change.
    *
-   * @param query - Status, area, priority, assignee, school, search, page and scope.
+   * @param query - Status, area, priority, assignee (`me`, `unassigned` or a
+   *   staff id), school, search, page and scope.
    * @returns The page of ticket summaries and its pagination meta.
    * @throws ApiError - `FORBIDDEN` when the caller is not a platform admin.
    */
@@ -37,8 +34,8 @@ export const supportService = {
   },
 
   /**
-   * The desk's tab counts (open, in progress, waiting on user, resolved,
-   * unassigned and mine), in one call.
+   * The desk's counts by status, in all (`total`), unassigned and mine, in
+   * one call.
    *
    * @param scope - `all` to count school-desk tickets too.
    * @returns The counts.
@@ -49,7 +46,19 @@ export const supportService = {
   },
 
   /**
-   * One ticket with its whole thread, internal notes included (desk staff see them).
+   * Who the Talim desk can assign: the active platform admins, by name.
+   *
+   * @returns The staff.
+   * @throws ApiError - `FORBIDDEN` when the caller is not a platform admin.
+   */
+  async listStaff(): Promise<TicketStaff[]> {
+    return api.get<TicketStaff[]>(API_ENDPOINTS.TICKETS_TALIM_DESK_STAFF);
+  },
+
+  /**
+   * One ticket with its whole thread, internal notes and `context` included
+   * (desk staff see them). Opening a Talim-desk ticket marks it read for the
+   * desk, so its `unread` comes back 0.
    *
    * @param id - The ticket id.
    * @returns The ticket.
@@ -60,17 +69,20 @@ export const supportService = {
   },
 
   /**
-   * Adds a staff reply, or an internal note when `internal` is true. The
-   * requester is notified of a reply, never of a note.
+   * Adds a staff reply, or an internal note when `internal` is true; a reply
+   * may also set `status` in the same write. The requester is notified of a
+   * reply, never of a note.
    *
    * @param id - The ticket id.
-   * @param payload - The body (1..5000), uploaded attachments and the internal flag.
-   * @returns The server's answer (the updated ticket or the new message); callers refetch.
-   * @throws ApiError - `CONFLICT` (409) when the ticket is closed or holds 500 messages;
-   *   `FORBIDDEN` on a school-desk ticket that was never escalated.
+   * @param payload - The body (1..5000), up to 5 uploaded attachments, the
+   *   internal flag and an optional status.
+   * @returns The ticket after the message.
+   * @throws ApiError - 409 with `reasonCode` `TICKET_CLOSED`, `MESSAGE_CAP`
+   *   (500 messages), `INVALID_TRANSITION` or `TICKET_NOT_ESCALATED` (a
+   *   school-desk ticket); 400 for a bad body.
    */
-  async postMessage(id: string, payload: PostTicketMessagePayload): Promise<unknown> {
-    return api.post<unknown>(API_ENDPOINTS.TICKET_MESSAGES(id), payload);
+  async postMessage(id: string, payload: PostTicketMessagePayload): Promise<Ticket> {
+    return api.post<Ticket>(API_ENDPOINTS.TICKET_MESSAGES(id), payload);
   },
 
   /**
@@ -78,11 +90,11 @@ export const supportService = {
    *
    * @param id - The ticket id.
    * @param patch - The fields to change; `assigneeId: null` unassigns.
-   * @returns The server's answer (the updated ticket); callers refetch.
-   * @throws ApiError - `CONFLICT` (409) when the move is not allowed, such as
-   *   reopening after the 7-day window; `FORBIDDEN` on a school-desk ticket.
+   * @returns The ticket after the change.
+   * @throws ApiError - 409 with `reasonCode` `TICKET_CLOSED` or
+   *   `INVALID_TRANSITION`; 400 when the assignee is not Talim desk staff.
    */
-  async updateTicket(id: string, patch: UpdateTicketPayload): Promise<unknown> {
-    return api.patch<unknown>(API_ENDPOINTS.TICKET_BY_ID(id), patch);
+  async updateTicket(id: string, patch: UpdateTicketPayload): Promise<Ticket> {
+    return api.patch<Ticket>(API_ENDPOINTS.TICKET_BY_ID(id), patch);
   },
 };

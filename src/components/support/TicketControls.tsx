@@ -1,16 +1,17 @@
 'use client';
 
 import React from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { useAuthContext } from '@/app/context/AuthContext';
 import { supportService } from '@/app/services/support.service';
 import { ApiError } from '@/lib/apiError';
 import { logger } from '@/lib/logger';
 import { formatWhen } from '@/lib/format';
-import { queryKeys } from '@/lib/queryKeys';
+import { queryKeys, staleTimes } from '@/lib/queryKeys';
 import { card, cardTitle, fieldControl, fieldHint, fieldLabel, rowButton } from '@/components/tl/styles';
-import type { Ticket, TicketPriority, TicketStatus, UpdateTicketPayload } from '@/types/v15';
+import type { UpdateTicketPayload } from '@/types/apiPayloads';
+import type { Ticket, TicketPriority, TicketStaff, TicketStatus } from '@/types/tickets';
 import {
   PRIORITY_META,
   STATUS_META,
@@ -23,18 +24,21 @@ import {
 import { invalidateTicket } from './ticket-cache';
 
 /**
- * What a successful change says, e.g. "Status changed to In progress".
+ * What a successful change says, e.g. "Status changed to In progress" or
+ * "Assigned to Tunde Bello".
  *
  * @param patch - The change that was saved.
  * @param myUserId - The signed-in admin.
+ * @param staff - The desk's staff, for the assignee's name.
  * @returns The toast text.
  */
-export function changeToast(patch: UpdateTicketPayload, myUserId: string | undefined): string {
+export function changeToast(patch: UpdateTicketPayload, myUserId: string | undefined, staff: TicketStaff[] = []): string {
   if (patch.status) return `Status changed to ${STATUS_META[patch.status].label}`;
   if (patch.priority) return `Priority set to ${PRIORITY_META[patch.priority].label}`;
   if (patch.assigneeId === null) return 'Ticket unassigned';
   if (patch.assigneeId && patch.assigneeId === myUserId) return 'Assigned to you';
-  return 'Ticket updated';
+  const name = staff.find((member) => member.id === patch.assigneeId)?.name;
+  return name ? `Assigned to ${name}` : 'Ticket updated';
 }
 
 /**
@@ -55,8 +59,9 @@ function actionOf(patch: UpdateTicketPayload): ConflictAction {
  * (for instance reopening after the 7-day window) is explained in words and
  * the ticket is reloaded. On a school-desk ticket every control is off.
  *
- * Assignee choices are you, nobody and whoever holds it now: the contract
- * has no route listing Talim desk staff.
+ * Assignee choices are nobody and the Talim desk's staff
+ * (`GET /tickets/desk/talim/staff`, cached for minutes), you first; whoever
+ * holds the ticket stays listed even if they are no longer staff.
  *
  * @param props - The ticket and whether it may be changed.
  * @param props.ticket - The ticket.
@@ -69,6 +74,13 @@ export function TicketControls({ ticket, readOnly }: { ticket: Ticket; readOnly:
   const myUserId = user?.userId;
   const myName = [user?.firstName, user?.lastName].filter(Boolean).join(' ') || user?.email || 'Me';
   const detailKey = queryKeys.tickets.detail(ticket.id);
+  const staffQuery = useQuery({
+    queryKey: queryKeys.tickets.staff(),
+    queryFn: () => supportService.listStaff(),
+    staleTime: staleTimes.reference,
+    enabled: !readOnly,
+  });
+  const staff = staffQuery.data ?? [];
 
   const update = useMutation({
     mutationFn: (patch: UpdateTicketPayload) => supportService.updateTicket(ticket.id, patch),
@@ -76,20 +88,21 @@ export function TicketControls({ ticket, readOnly }: { ticket: Ticket; readOnly:
       await queryClient.cancelQueries({ queryKey: detailKey });
       const previous = queryClient.getQueryData<Ticket>(detailKey);
       if (previous) {
-        const assignee =
-          patch.assigneeId === undefined
-            ? previous.assignee
-            : patch.assigneeId === null
-              ? null
-              : patch.assigneeId === myUserId
-                ? { id: patch.assigneeId, name: myName }
-                : previous.assignee;
-        queryClient.setQueryData<Ticket>(detailKey, { ...previous, ...patch, assignee });
+        let assignee = previous.assignee;
+        if (patch.assigneeId === null) assignee = null;
+        else if (patch.assigneeId) {
+          const name =
+            staff.find((member) => member.id === patch.assigneeId)?.name ||
+            (patch.assigneeId === myUserId ? myName : 'Talim staff');
+          assignee = { id: patch.assigneeId, name };
+        }
+        const { assigneeId: _assigneeId, ...fields } = patch;
+        queryClient.setQueryData<Ticket>(detailKey, { ...previous, ...fields, assignee });
       }
       return { previous };
     },
     onSuccess: (_result, patch) => {
-      toast.success(changeToast(patch, myUserId));
+      toast.success(changeToast(patch, myUserId, staff));
     },
     onError: (err, patch, context) => {
       logger.error('support', 'Ticket update failed', err);
@@ -104,7 +117,18 @@ export function TicketControls({ ticket, readOnly }: { ticket: Ticket; readOnly:
 
   const disabled = readOnly || update.isPending;
   const deadline = reopenDeadline(ticket);
-  const otherAssignee = ticket.assigneeId && ticket.assigneeId !== myUserId ? ticket.assigneeId : null;
+  const assigneeId = ticket.assignee?.id ?? '';
+  // You first, then the rest of the desk by name; a holder who left the desk stays listed.
+  const choices = [
+    ...staff.filter((member) => member.id === myUserId),
+    ...staff.filter((member) => member.id !== myUserId),
+  ].map((member) => ({ id: member.id, label: member.id === myUserId ? `Me (${member.name || myName})` : member.name || member.email || 'Talim staff' }));
+  if (assigneeId && !choices.some((choice) => choice.id === assigneeId)) {
+    choices.push({ id: assigneeId, label: ticket.assignee?.name || 'Another staff member' });
+  }
+  if (myUserId && !choices.some((choice) => choice.id === myUserId)) {
+    choices.unshift({ id: myUserId, label: `Me (${myName})` });
+  }
 
   return (
     <section className={card} aria-labelledby="manage-title">
@@ -165,15 +189,24 @@ export function TicketControls({ ticket, readOnly }: { ticket: Ticket; readOnly:
           <select
             id="ticket-assignee"
             className={fieldControl}
-            value={ticket.assigneeId ?? ''}
-            disabled={disabled || !myUserId}
+            value={assigneeId}
+            disabled={disabled}
+            aria-describedby={staffQuery.isError ? 'ticket-assignee-hint' : undefined}
             onChange={(e) => update.mutate({ assigneeId: e.target.value || null })}
           >
             <option value="">Unassigned</option>
-            {myUserId ? <option value={myUserId}>Me ({myName})</option> : null}
-            {otherAssignee ? <option value={otherAssignee}>{ticket.assignee?.name ?? 'Another staff member'}</option> : null}
+            {choices.map((choice) => (
+              <option key={choice.id} value={choice.id}>
+                {choice.label}
+              </option>
+            ))}
           </select>
-          {!readOnly && myUserId && ticket.assigneeId !== myUserId ? (
+          {staffQuery.isError ? (
+            <span id="ticket-assignee-hint" className={fieldHint}>
+              The desk&apos;s staff list did not load; you can still assign the ticket to yourself.
+            </span>
+          ) : null}
+          {!readOnly && myUserId && assigneeId !== myUserId ? (
             <button type="button" className={`${rowButton} self-start`} disabled={disabled} onClick={() => update.mutate({ assigneeId: myUserId })}>
               Assign to me
             </button>

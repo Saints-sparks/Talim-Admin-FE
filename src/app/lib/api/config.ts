@@ -58,6 +58,7 @@ export const API_ENDPOINTS = {
   // v1.5 tickets (talimBE-V2/docs/v1.5-platform-sync.md §1): the Talim desk.
   TICKETS_TALIM_DESK: `${API_BASE_URL}/tickets/desk/talim`,
   TICKETS_TALIM_DESK_COUNTS: `${API_BASE_URL}/tickets/desk/talim/counts`,
+  TICKETS_TALIM_DESK_STAFF: `${API_BASE_URL}/tickets/desk/talim/staff`,
   TICKET_BY_ID: (id: string) => `${API_BASE_URL}/tickets/${encodeURIComponent(id)}`,
   TICKET_MESSAGES: (id: string) => `${API_BASE_URL}/tickets/${encodeURIComponent(id)}/messages`,
 
@@ -66,6 +67,7 @@ export const API_ENDPOINTS = {
   ADMIN_BROADCASTS_PREVIEW: `${API_BASE_URL}/admin/broadcasts/preview`,
   ADMIN_BROADCAST_BY_ID: (id: string) => `${API_BASE_URL}/admin/broadcasts/${encodeURIComponent(id)}`,
   ADMIN_BROADCAST_CANCEL: (id: string) => `${API_BASE_URL}/admin/broadcasts/${encodeURIComponent(id)}/cancel`,
+  ADMIN_USERS_SEARCH: `${API_BASE_URL}/admin/users/search`,
 
   PROFILE_UPDATE: `${API_BASE_URL}/auth/profile/update/`,
   PROFILE_AVATAR: `${API_BASE_URL}/auth/profile/avatar`,

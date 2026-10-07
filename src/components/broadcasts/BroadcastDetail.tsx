@@ -8,11 +8,11 @@ import { broadcastService } from '@/app/services/broadcast.service';
 import { ApiError } from '@/lib/apiError';
 import { formatWhen } from '@/lib/format';
 import { queryKeys, staleTimes } from '@/lib/queryKeys';
-import { AttachmentLinks } from '@/components/attachments/AttachmentPicker';
+import { AttachmentLinks, urlAttachments } from '@/components/attachments/AttachmentPicker';
 import { StatTile } from '@/components/tl/StatTile';
 import { Banner, ErrorCard, SkeletonRows } from '@/components/tl/States';
 import { card, cardTitle, eyebrow, pagePad, pageTitle, pill, pillTone, textLink } from '@/components/tl/styles';
-import type { Broadcast } from '@/types/v15';
+import type { Broadcast } from '@/types/broadcasts';
 import { CancelBroadcastButton } from './CancelBroadcast';
 import {
   BROADCAST_STATUS_META,
@@ -136,7 +136,7 @@ export function BroadcastDetail({ id }: { id: string }) {
               Message
             </h2>
             <p className="m-0 mt-3 whitespace-pre-wrap break-words text-[15px] leading-[1.6] text-tl-ink">{b.body}</p>
-            <AttachmentLinks files={b.attachments} />
+            <AttachmentLinks files={urlAttachments(b.attachments)} />
             {b.target ? (
               <p className="m-0 mt-3 text-sm text-tl-muted">
                 Button opens <strong className="text-tl-ink">{TARGET_LABELS[b.target.page] ?? b.target.page}</strong>.
@@ -149,18 +149,29 @@ export function BroadcastDetail({ id }: { id: string }) {
               Delivery
             </h2>
             <dl className="m-0 mt-3">
-              <Fact label="Audience">{b.audience.all ? 'Everyone' : (b.audience.roles ?? []).map((r) => ROLE_LABELS[r] ?? r).join(', ') || '—'}</Fact>
+              <Fact label="Audience">
+                {b.audience.all
+                  ? 'Everyone'
+                  : b.audience.roles.map((r) => ROLE_LABELS[r] ?? r).join(', ') || (b.audience.schoolIds.length ? 'Everyone in them' : '—')}
+              </Fact>
               {!b.audience.all ? (
                 <Fact label="Schools">
-                  {b.audience.schoolIds?.length
-                    ? (b.schools?.map((s) => s.name).join(', ') ?? `${b.audience.schoolIds.length} schools`)
+                  {b.audience.schoolIds.length
+                    ? b.audience.schools.map((s) => s.name).join(', ') || `${b.audience.schoolIds.length} schools`
                     : 'All schools'}
                 </Fact>
               ) : null}
-              {b.audience.userIds?.length ? <Fact label="Specific people">{formatCount(b.audience.userIds.length)}</Fact> : null}
+              {b.audience.userIds.length ? (
+                <Fact label="Specific people">
+                  {b.audience.users?.length
+                    ? b.audience.users.map((u) => u.name).join(', ')
+                    : formatCount(b.audience.userIds.length)}
+                </Fact>
+              ) : null}
               <Fact label="Channels">{channelsLabel(b.channels)}</Fact>
+              <Fact label="Audience size when created">{formatCount(b.recipientsEstimate)}</Fact>
               <Fact label="Created">{formatWhen(b.createdAt)}</Fact>
-              {b.sendAt ? <Fact label="Scheduled for">{formatWhen(b.sendAt)}</Fact> : null}
+              {b.status === 'scheduled' || b.status === 'cancelled' ? <Fact label="Scheduled for">{formatWhen(b.sendAt)}</Fact> : null}
               {b.sentAt ? <Fact label="Sent">{formatWhen(b.sentAt)}</Fact> : null}
               {b.cancelledAt ? <Fact label="Cancelled">{formatWhen(b.cancelledAt)}</Fact> : null}
               {b.createdBy?.name ? <Fact label="Sent by">{b.createdBy.name}</Fact> : null}

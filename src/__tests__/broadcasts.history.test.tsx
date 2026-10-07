@@ -25,9 +25,9 @@ const scheduled = broadcast({
   status: 'scheduled',
   sentAt: null,
   sendAt: '2026-10-10T07:00:00.000Z',
-  audience: { roles: ['student'] },
-  schools: [],
-  stats: { recipients: 5000, delivered: 0, read: 0, pushSent: 0, emailSent: 0, failed: 0 },
+  audience: { all: false, schoolIds: [], schools: [], roles: ['student'], userIds: [] },
+  recipientsEstimate: 5000,
+  stats: { recipients: 0, delivered: 0, read: 0, pushSent: 0, emailSent: 0, failed: 0 },
 });
 
 beforeEach(() => {
@@ -113,15 +113,17 @@ describe('Broadcast history', () => {
     expect(cancel).not.toHaveBeenCalled();
   });
 
-  it('explains a 409: too late, it has started sending', async () => {
-    cancel.mockRejectedValue(new ApiError('CONFLICT', 'Not scheduled', 409));
+  it('explains a 409 BROADCAST_NOT_SCHEDULED: too late, it has started sending', async () => {
+    cancel.mockRejectedValue(new ApiError('CONFLICT', 'Not scheduled', 409, [], undefined, 'BROADCAST_NOT_SCHEDULED'));
     const user = userEvent.setup();
     renderWithProviders(<BroadcastHistory />);
     const rows = await screen.findAllByTestId('broadcast-row');
     await user.click(within(rows[1]).getByRole('button', { name: /Cancel “/ }));
     await user.click(within(await screen.findByRole('dialog')).getByRole('button', { name: 'Cancel notification' }));
     await waitFor(() =>
-      expect(toast.error).toHaveBeenCalledWith('Too late to cancel', { description: 'It has already started sending.' }),
+      expect(toast.error).toHaveBeenCalledWith('Too late to cancel', {
+        description: 'It has already started sending, or was cancelled already.',
+      }),
     );
     await waitFor(() => expect(list).toHaveBeenCalledTimes(2));
   });
@@ -148,6 +150,28 @@ describe('Broadcast detail', () => {
     expect(screen.getByText('In-app and push')).toBeInTheDocument();
     expect(screen.getByText('Greenfield Academy, Hillcrest College')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /Cancel/ })).toBeNull();
+  });
+
+  it('names the specific people and lists attachments by their URL', async () => {
+    get.mockResolvedValue(
+      broadcast({
+        attachments: ['https://res.cloudinary.com/demo/raw/upload/term%20dates.pdf'],
+        audience: {
+          ...broadcast().audience,
+          userIds: ['u1', 'u2'],
+          users: [
+            { id: 'u1', name: 'Ngozi Okafor', role: 'school_admin' },
+            { id: 'u2', name: 'Femi Ade', role: 'parent' },
+          ],
+        },
+      }),
+    );
+    renderWithProviders(<BroadcastDetail id="b1" />);
+    expect(await screen.findByText('Ngozi Okafor, Femi Ade')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /term dates\.pdf/ })).toHaveAttribute(
+      'href',
+      'https://res.cloudinary.com/demo/raw/upload/term%20dates.pdf',
+    );
   });
 
   it('offers Cancel while scheduled', async () => {

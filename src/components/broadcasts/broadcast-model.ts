@@ -1,13 +1,14 @@
 import type { PillTone } from '@/components/tl/styles';
+import type { CreateBroadcastPayload } from '@/types/apiPayloads';
 import type {
-  Attachment,
+  AdminUserSearchItem,
   Broadcast,
   BroadcastAudience,
   BroadcastRole,
   BroadcastStatus,
-  CreateBroadcastPayload,
-  NotificationTarget,
-} from '@/types/v15';
+  BroadcastTargetInput,
+} from '@/types/broadcasts';
+import type { TicketAttachmentInput } from '@/types/tickets';
 
 /** The notifications history page. */
 export const HISTORY_ROUTE = '/talimadmindashboard/talimannouncement';
@@ -21,8 +22,11 @@ export const BODY_MAX = 2000;
 /** Quiet period before an audience change is recounted. */
 export const PREVIEW_DEBOUNCE_MS = 400;
 
-/** The page a broadcast's button can open (§30 `NotificationTarget.page`). */
-export type TargetPage = NotificationTarget['page'];
+/** The page a broadcast's button can open (`BroadcastTargetInputDto.page`). */
+export type TargetPage = BroadcastTargetInput['page'];
+
+/** One person chosen for an audience's "specific people", as the search found them. */
+export type AudiencePerson = Pick<AdminUserSearchItem, 'id' | 'name' | 'role' | 'email' | 'school'>;
 
 /** Audience roles, with the words the composer shows. */
 export const ROLE_OPTIONS: readonly { value: BroadcastRole; label: string }[] = [
@@ -49,6 +53,7 @@ export const TARGET_LABELS = {
   results: 'Results',
   settings: 'Settings',
   subjects: 'Subjects',
+  support: 'Support',
   timetable: 'Timetable',
 } as const satisfies Record<TargetPage, string>;
 
@@ -111,8 +116,8 @@ export interface BroadcastForm {
   schoolScope: 'all' | 'selected';
   schoolIds: string[];
   roles: BroadcastRole[];
-  /** Specific people. Always empty for now: there is no admin user search route. */
-  userIds: string[];
+  /** Specific people, found with `GET /admin/users/search`; their ids go in `audience.userIds`. */
+  people: AudiencePerson[];
   push: boolean;
   email: boolean;
   when: 'now' | 'later';
@@ -131,7 +136,7 @@ export const EMPTY_BROADCAST_FORM: BroadcastForm = {
   schoolScope: 'all',
   schoolIds: [],
   roles: [],
-  userIds: [],
+  people: [],
   push: true,
   email: false,
   when: 'now',
@@ -145,39 +150,44 @@ export type BroadcastField = 'title' | 'body' | 'audience' | 'schedule';
 /** Errors by field; a missing key means the field is fine. */
 export type BroadcastErrors = Partial<Record<BroadcastField, string>>;
 
+/** The audience part of the form. */
+export type AudienceFields = Pick<BroadcastForm, 'audienceMode' | 'schoolScope' | 'schoolIds' | 'roles' | 'people'>;
+
 /**
  * The audience the form describes. Everyone is `{ all: true }`; otherwise
  * the chosen roles (in the chosen schools, or every school when "All
- * schools") plus any specific people.
+ * schools"; every role in the chosen schools when none is ticked) plus any
+ * specific people.
  *
  * @param form - The form.
  * @returns The audience for preview and send.
  */
-export function buildAudience(form: Pick<BroadcastForm, 'audienceMode' | 'schoolScope' | 'schoolIds' | 'roles' | 'userIds'>): BroadcastAudience {
+export function buildAudience(form: AudienceFields): BroadcastAudience {
   if (form.audienceMode === 'everyone') return { all: true };
   return {
     ...(form.schoolScope === 'selected' && form.schoolIds.length ? { schoolIds: [...form.schoolIds] } : {}),
     ...(form.roles.length ? { roles: [...form.roles] } : {}),
-    ...(form.userIds.length ? { userIds: [...form.userIds] } : {}),
+    ...(form.people.length ? { userIds: form.people.map((person) => person.id) } : {}),
   };
 }
 
 /**
- * Why the audience cannot be sent to, or `null` when it can. Schools need
- * roles (the contract crosses schools with roles), and a custom audience
- * needs at least one role or one person.
+ * Why the audience cannot be sent to, or `null` when it can. "Selected
+ * schools" needs at least one school (with no role chosen it is everyone
+ * there); "All schools" needs a role or a person, else it would be everyone
+ * (which is its own choice).
  *
  * @param form - The form.
  * @returns The problem, or `null`.
  */
-export function validateAudience(form: Pick<BroadcastForm, 'audienceMode' | 'schoolScope' | 'schoolIds' | 'roles' | 'userIds'>): string | null {
+export function validateAudience(form: AudienceFields): string | null {
   if (form.audienceMode === 'everyone') return null;
   if (form.schoolScope === 'selected' && form.schoolIds.length === 0) {
     return 'Choose at least one school, or switch to All schools.';
   }
-  if (form.roles.length === 0) {
-    if (form.schoolScope === 'selected') return 'Choose at least one role for the selected schools.';
-    if (form.userIds.length === 0) return 'Choose at least one role, or send to everyone.';
+  // Selected schools without roles are everyone there (the API confirms it).
+  if (form.roles.length === 0 && form.schoolScope === 'all' && form.people.length === 0) {
+    return 'Choose at least one role or person, or send to everyone.';
   }
   return null;
 }
@@ -225,18 +235,19 @@ export function validateBroadcastForm(form: BroadcastForm, now: number = Date.no
 
 /**
  * The `POST /admin/broadcasts` body. In-app delivery is implied; `sendAt` is
- * sent only when scheduling.
+ * sent only when scheduling; attachments go as their https URLs, as the API
+ * stores them.
  *
  * @param form - A validated form.
  * @param attachments - Files already uploaded.
  * @returns The request body.
  */
-export function buildBroadcastPayload(form: BroadcastForm, attachments: Attachment[]): CreateBroadcastPayload {
+export function buildBroadcastPayload(form: BroadcastForm, attachments: TicketAttachmentInput[]): CreateBroadcastPayload {
   const sendAt = form.when === 'later' ? toSendAtIso(form.date, form.time) : null;
   return {
     title: form.title.trim(),
     body: form.body.trim(),
-    ...(attachments.length ? { attachments } : {}),
+    ...(attachments.length ? { attachments: attachments.map((file) => file.url) } : {}),
     ...(form.target ? { target: { page: form.target } } : {}),
     audience: buildAudience(form),
     channels: { push: form.push, email: form.email },
@@ -259,23 +270,25 @@ export function channelsLabel(channels: { push: boolean; email: boolean }): stri
 
 /**
  * Who a broadcast went to, in one line ("Teachers, Parents · 2 schools").
+ * Schools without roles are everyone there.
  *
  * @param broadcast - The broadcast.
  * @returns The phrase.
  */
-export function audienceLabel(broadcast: Pick<Broadcast, 'audience' | 'schools'>): string {
+export function audienceLabel(broadcast: Pick<Broadcast, 'audience'>): string {
   const { audience } = broadcast;
   if (audience.all) return 'Everyone';
   const parts: string[] = [];
-  if (audience.roles?.length) {
-    const roles = audience.roles.map((r) => ROLE_LABELS[r] ?? r).join(', ');
-    const schoolCount = audience.schoolIds?.length ?? 0;
-    let where = 'all schools';
-    if (schoolCount === 1) where = broadcast.schools?.[0]?.name ?? '1 school';
-    else if (schoolCount > 1) where = `${schoolCount} schools`;
-    parts.push(`${roles} · ${where}`);
+  const schoolCount = audience.schoolIds.length;
+  let where = 'all schools';
+  if (schoolCount === 1) where = audience.schools[0]?.name || '1 school';
+  else if (schoolCount > 1) where = `${schoolCount} schools`;
+  if (audience.roles.length) {
+    parts.push(`${audience.roles.map((r) => ROLE_LABELS[r] ?? r).join(', ')} · ${where}`);
+  } else if (schoolCount) {
+    parts.push(`Everyone · ${where}`);
   }
-  if (audience.userIds?.length) parts.push(`${audience.userIds.length} ${audience.userIds.length === 1 ? 'person' : 'people'}`);
+  if (audience.userIds.length) parts.push(`${audience.userIds.length} ${audience.userIds.length === 1 ? 'person' : 'people'}`);
   return parts.join(' + ') || 'No audience';
 }
 

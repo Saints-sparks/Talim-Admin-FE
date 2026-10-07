@@ -5,7 +5,7 @@ import { Lock } from 'lucide-react';
 import { Avatar } from '@/components/tl/Avatar';
 import { pill, pillTone } from '@/components/tl/styles';
 import { AttachmentLinks } from '@/components/attachments/AttachmentPicker';
-import type { TicketMessage } from '@/types/v15';
+import type { TicketMessage } from '@/types/tickets';
 import { formatWhen } from '@/lib/format';
 import { ROLE_LABELS } from './desk-model';
 

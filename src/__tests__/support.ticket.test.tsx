@@ -7,13 +7,20 @@ import { TicketView } from '@/components/support/TicketView';
 import { supportService } from '@/app/services/support.service';
 import { uploadFile } from '@/app/services/upload.service';
 import { ApiError } from '@/lib/apiError';
-import { ADMIN_USER, ticket } from '@/test-utils/v15Fixtures';
+import { ADMIN_USER, DESK_STAFF, OTHER_ADMIN_ID, ticket } from '@/test-utils/v15Fixtures';
 
 jest.mock('sonner', () => ({ toast: { success: jest.fn(), error: jest.fn() } }));
 jest.mock('@/app/context/AuthContext', () => ({ useAuthContext: () => ({ user: ADMIN_USER }) }));
 jest.mock('@/app/services/support.service', () => ({
   DESK_PAGE_SIZE: 20,
-  supportService: { listDesk: jest.fn(), getDeskCounts: jest.fn(), getTicket: jest.fn(), postMessage: jest.fn(), updateTicket: jest.fn() },
+  supportService: {
+    listDesk: jest.fn(),
+    getDeskCounts: jest.fn(),
+    listStaff: jest.fn(),
+    getTicket: jest.fn(),
+    postMessage: jest.fn(),
+    updateTicket: jest.fn(),
+  },
 }));
 jest.mock('@/app/services/upload.service', () => ({
   ...jest.requireActual('@/app/services/upload.service'),
@@ -23,13 +30,21 @@ jest.mock('@/app/services/upload.service', () => ({
 const getTicket = supportService.getTicket as jest.Mock;
 const postMessage = supportService.postMessage as jest.Mock;
 const updateTicket = supportService.updateTicket as jest.Mock;
-const conflict = () => new ApiError('CONFLICT', 'Conflict', 409);
+const listStaff = supportService.listStaff as jest.Mock;
+/**
+ * A 409 as the API sends it.
+ *
+ * @param reasonCode - The route's reason (top-level `code`).
+ * @returns The error.
+ */
+const conflict = (reasonCode: string) => new ApiError('CONFLICT', 'Conflict', 409, [], undefined, reasonCode);
 
 beforeEach(() => {
   jest.clearAllMocks();
   getTicket.mockResolvedValue(ticket());
-  postMessage.mockResolvedValue({});
-  updateTicket.mockResolvedValue({});
+  postMessage.mockResolvedValue(ticket());
+  updateTicket.mockResolvedValue(ticket());
+  listStaff.mockResolvedValue(DESK_STAFF);
 });
 
 /**
@@ -57,7 +72,14 @@ describe('Ticket thread', () => {
     expect(within(items[0]).getByRole('link', { name: /receipt\.pdf/ })).toHaveAttribute('href', 'https://cdn.test/receipt.pdf');
   });
 
-  it('shows the requester and the school', async () => {
+  it('shows the requester, the school, the child and where they were', async () => {
+    getTicket.mockResolvedValue(
+      ticket({
+        child: { id: 'c1', name: 'Tobi Ade' },
+        childId: 'c1',
+        context: { path: '/payments/fees', appVersion: '1.5.0', userAgent: 'Mozilla/5.0 (iPhone)' },
+      }),
+    );
     await open();
     expect(screen.getByRole('heading', { name: 'Card payment failed twice' })).toBeInTheDocument();
     const requester = screen.getByRole('region', { name: 'Requester' });
@@ -67,6 +89,10 @@ describe('Ticket thread', () => {
     const school = screen.getByRole('region', { name: 'School' });
     expect(within(school).getByText('Greenfield Academy')).toBeInTheDocument();
     expect(within(school).getByRole('link', { name: 'Open school profile' })).toHaveAttribute('href', '/SchoolProfile/view/s1');
+    expect(within(school).getByText('Tobi Ade')).toBeInTheDocument();
+    const context = screen.getByRole('region', { name: 'Where they were' });
+    expect(within(context).getByText('/payments/fees')).toBeInTheDocument();
+    expect(within(context).getByText('1.5.0')).toBeInTheDocument();
   });
 });
 
@@ -123,14 +149,14 @@ describe('Replying', () => {
     expect(uploadFile).not.toHaveBeenCalled();
   });
 
-  it('explains a 409, keeps the draft and reloads the ticket', async () => {
-    postMessage.mockRejectedValueOnce(conflict());
+  it('explains a 409 TICKET_CLOSED, keeps the draft and reloads the ticket', async () => {
+    postMessage.mockRejectedValueOnce(conflict('TICKET_CLOSED'));
     const user = await open();
     await user.type(screen.getByLabelText('Reply to the requester'), 'Any update?');
     await user.click(screen.getByRole('button', { name: 'Send reply' }));
     await waitFor(() =>
       expect(toast.error).toHaveBeenCalledWith('Not sent', {
-        description: expect.stringMatching(/can no longer take replies/),
+        description: 'This ticket is closed, so it can no longer take replies or notes.',
       }),
     );
     expect(screen.getByLabelText('Reply to the requester')).toHaveValue('Any update?');
@@ -163,33 +189,44 @@ describe('Status, priority and assignee', () => {
   it('assigns to me, and unassigns', async () => {
     getTicket
       .mockResolvedValueOnce(ticket())
-      .mockResolvedValue(ticket({ assigneeId: 'u-admin', assignee: { id: 'u-admin', name: 'Ada Admin' } }));
+      .mockResolvedValue(ticket({ assignee: { id: ADMIN_USER.userId, name: 'Ada Admin' } }));
     const user = await open();
     await user.click(screen.getByRole('button', { name: 'Assign to me' }));
-    await waitFor(() => expect(updateTicket).toHaveBeenCalledWith('t1', { assigneeId: 'u-admin' }));
+    await waitFor(() => expect(updateTicket).toHaveBeenCalledWith('t1', { assigneeId: ADMIN_USER.userId }));
     expect(toast.success).toHaveBeenCalledWith('Assigned to you');
 
-    await waitFor(() => expect(screen.getByLabelText('Assignee')).toHaveValue('u-admin'));
+    await waitFor(() => expect(screen.getByLabelText('Assignee')).toHaveValue(ADMIN_USER.userId));
     await user.selectOptions(screen.getByLabelText('Assignee'), '');
     await waitFor(() => expect(updateTicket).toHaveBeenLastCalledWith('t1', { assigneeId: null }));
   });
 
-  it('explains a refused reopen and rolls the status back', async () => {
+  it('offers the desk staff as assignees and assigns to another admin', async () => {
+    const user = await open();
+    const select = screen.getByLabelText('Assignee');
+    expect(await within(select).findByRole('option', { name: 'Tunde Bello' })).toBeInTheDocument();
+    expect(within(select).getAllByRole('option').map((o) => o.textContent)).toEqual(['Unassigned', 'Me (Ada Admin)', 'Tunde Bello']);
+    expect(listStaff).toHaveBeenCalledTimes(1);
+    await user.selectOptions(select, OTHER_ADMIN_ID);
+    await waitFor(() => expect(updateTicket).toHaveBeenCalledWith('t1', { assigneeId: OTHER_ADMIN_ID }));
+    expect(toast.success).toHaveBeenCalledWith('Assigned to Tunde Bello');
+  });
+
+  it('explains an INVALID_TRANSITION and rolls the status back', async () => {
     getTicket.mockResolvedValue(ticket({ status: 'resolved', resolvedAt: '2026-09-01T00:00:00.000Z' }));
-    updateTicket.mockRejectedValueOnce(conflict());
+    updateTicket.mockRejectedValueOnce(conflict('INVALID_TRANSITION'));
     const user = await open();
     expect(screen.getByLabelText('Status')).toHaveValue('resolved');
-    await user.selectOptions(screen.getByLabelText('Status'), 'open');
+    await user.selectOptions(screen.getByLabelText('Status'), 'waiting_on_user');
     await waitFor(() =>
       expect(toast.error).toHaveBeenCalledWith('Not changed', {
-        description: 'This ticket can no longer be reopened: its 7-day reopen window has passed.',
+        description: 'A ticket cannot go from Resolved to Waiting on user.',
       }),
     );
     await waitFor(() => expect(screen.getByLabelText('Status')).toHaveValue('resolved'));
   });
 
-  it('makes a school-desk ticket read-only', async () => {
-    getTicket.mockResolvedValue(ticket({ desk: 'school', reference: 'CMP-77' }));
+  it('makes a school-desk ticket Talim only observes read-only', async () => {
+    getTicket.mockResolvedValue(ticket({ desk: 'school', access: 'observer', reference: 'TCKT-7K2QD9XA' }));
     await open();
     expect(screen.getByText(/Talim can read it; replies and changes open once the school escalates it/)).toBeInTheDocument();
     expect(screen.queryByRole('form')).toBeNull();

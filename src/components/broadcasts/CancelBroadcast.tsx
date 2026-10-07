@@ -9,18 +9,19 @@ import { logger } from '@/lib/logger';
 import { listPrefix, queryKeys } from '@/lib/queryKeys';
 import { ConfirmSheet } from '@/components/tl/ConfirmSheet';
 import { dangerGhostButton } from '@/components/tl/styles';
-import type { Broadcast } from '@/types/v15';
+import type { Broadcast } from '@/types/broadcasts';
 import { formatCount } from './broadcast-model';
 
 /**
- * "Cancel" on a scheduled broadcast, with a confirm sheet. A 409 means it
- * has already started sending; the admin is told and the data reloads.
+ * "Cancel" on a scheduled broadcast, with a confirm sheet. A 409
+ * `BROADCAST_NOT_SCHEDULED` means it has already started sending (or was
+ * cancelled meanwhile); the admin is told and the data reloads.
  *
  * @param props - The broadcast.
  * @param props.broadcast - A scheduled broadcast.
  * @returns The button and its sheet.
  */
-export function CancelBroadcastButton({ broadcast }: { broadcast: Pick<Broadcast, 'id' | 'title' | 'sendAt' | 'stats'> }) {
+export function CancelBroadcastButton({ broadcast }: { broadcast: Pick<Broadcast, 'id' | 'title' | 'sendAt' | 'recipientsEstimate'> }) {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
 
@@ -40,9 +41,9 @@ export function CancelBroadcastButton({ broadcast }: { broadcast: Pick<Broadcast
     onError: async (err) => {
       logger.error('broadcasts', 'Cancel failed', err);
       setOpen(false);
-      const tooLate = err instanceof ApiError && err.status === 409;
+      const tooLate = err instanceof ApiError && err.status === 409 && err.reasonCode === 'BROADCAST_NOT_SCHEDULED';
       toast.error(tooLate ? 'Too late to cancel' : 'The notification could not be cancelled', {
-        description: tooLate ? 'It has already started sending.' : getErrorMessage(err),
+        description: tooLate ? 'It has already started sending, or was cancelled already.' : getErrorMessage(err),
       });
       if (tooLate) await refresh();
     },
@@ -66,7 +67,7 @@ export function CancelBroadcastButton({ broadcast }: { broadcast: Pick<Broadcast
         body={
           <>
             “{broadcast.title}” will not be sent
-            {broadcast.stats.recipients ? <> to its {formatCount(broadcast.stats.recipients)} recipients</> : null}. This cannot be undone.
+            {broadcast.recipientsEstimate ? <> to its {formatCount(broadcast.recipientsEstimate)} recipients</> : null}. This cannot be undone.
           </>
         }
       />

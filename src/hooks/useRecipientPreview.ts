@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { broadcastService } from '@/app/services/broadcast.service';
 import { useDebounce } from '@/hooks/use-debounce';
 import { queryKeys, staleTimes } from '@/lib/queryKeys';
-import type { BroadcastAudience, BroadcastPreview } from '@/types/v15';
+import type { BroadcastAudience, BroadcastPreview } from '@/types/broadcasts';
 
 /** What {@link useRecipientPreview} reports. */
 export interface RecipientPreviewState {

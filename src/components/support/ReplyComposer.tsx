@@ -9,7 +9,8 @@ import { ApiError } from '@/lib/apiError';
 import { logger } from '@/lib/logger';
 import { AttachmentPicker } from '@/components/attachments/AttachmentPicker';
 import { fieldHint, fieldLabel, focusRing, primaryButton, segment, segmentTrack } from '@/components/tl/styles';
-import type { Attachment, PostTicketMessagePayload, Ticket } from '@/types/v15';
+import type { PostTicketMessagePayload } from '@/types/apiPayloads';
+import type { Ticket, TicketAttachmentInput } from '@/types/tickets';
 import { MESSAGE_MAX_LENGTH, ticketErrorMessage } from './desk-model';
 import { invalidateTicket } from './ticket-cache';
 
@@ -21,10 +22,10 @@ type ComposerMode = 'reply' | 'internal';
  * internal note, attach files (uploaded first, then sent as `{ url, name,
  * mimeType, size }`) and send with the button or Ctrl/⌘+Enter.
  *
- * A closed ticket takes no messages (the API answers 409), so the box is
- * replaced by an explanation; a 409 that arrives anyway (closed meanwhile,
- * or the 500-message cap) is explained, the draft is kept and the ticket is
- * reloaded.
+ * A closed ticket takes no messages (the API answers 409 `TICKET_CLOSED`),
+ * so the box is replaced by an explanation; a 409 that arrives anyway
+ * (closed meanwhile, `MESSAGE_CAP`) is explained, the draft is kept and the
+ * ticket is reloaded. At most 5 files a message, as the API allows.
  *
  * @param props - The ticket.
  * @param props.ticket - The ticket being answered.
@@ -34,7 +35,7 @@ export function ReplyComposer({ ticket }: { ticket: Ticket }) {
   const queryClient = useQueryClient();
   const [mode, setMode] = useState<ComposerMode>('reply');
   const [body, setBody] = useState('');
-  const [attachments, setAttachments] = useState<Attachment[]>([]);
+  const [attachments, setAttachments] = useState<TicketAttachmentInput[]>([]);
   const [uploading, setUploading] = useState(false);
   const onBusyChange = useCallback((busy: boolean) => setUploading(busy), []);
 

@@ -52,6 +52,12 @@ describe('supportService (v1.5 Talim desk)', () => {
     expect(call(1).url).toBe('http://api.test/tickets/desk/talim/counts?scope=all');
   });
 
+  it('lists the desk staff with one request', async () => {
+    fetchMock.mockResolvedValueOnce(jsonResponse({ success: true, data: [{ id: 'a1', name: 'Ada', role: 'admin', email: null }] }));
+    expect(await supportService.listStaff()).toEqual([{ id: 'a1', name: 'Ada', role: 'admin', email: null }]);
+    expect(call()).toEqual({ method: 'GET', url: 'http://api.test/tickets/desk/talim/staff', body: undefined });
+  });
+
   it('posts a reply or note and patches only the changed fields', async () => {
     fetchMock.mockImplementation(async () => jsonResponse({}));
     await supportService.postMessage('t1', { body: 'Hello', internal: true });
@@ -60,11 +66,15 @@ describe('supportService (v1.5 Talim desk)', () => {
     expect(call(1)).toEqual({ method: 'PATCH', url: 'http://api.test/tickets/t1', body: { assigneeId: null } });
   });
 
-  it('surfaces a 409 as an ApiError with its status', async () => {
+  it("surfaces a 409 as an ApiError with its status and the route's reason", async () => {
     fetchMock.mockResolvedValueOnce(
-      jsonResponse({ success: false, error: { code: 'CONFLICT', message: 'Ticket is closed' } }, 409),
+      jsonResponse({ success: false, error: { code: 'CONFLICT', message: 'This ticket is closed.' }, code: 'TICKET_CLOSED' }, 409),
     );
-    await expect(supportService.postMessage('t1', { body: 'Hi' })).rejects.toMatchObject({ status: 409, code: 'CONFLICT' });
+    await expect(supportService.postMessage('t1', { body: 'Hi' })).rejects.toMatchObject({
+      status: 409,
+      code: 'CONFLICT',
+      reasonCode: 'TICKET_CLOSED',
+    });
   });
 });
 

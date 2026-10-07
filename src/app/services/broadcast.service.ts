@@ -1,21 +1,26 @@
 import { api } from '@/lib/apiClient';
 import { API_ENDPOINTS } from '@/app/lib/api/config';
 import { toQueryString } from '@/lib/queryString';
+import type { CreateBroadcastPayload } from '@/types/apiPayloads';
 import type {
+  AdminUserSearchItem,
+  AdminUserSearchQuery,
   Broadcast,
   BroadcastAudience,
   BroadcastListQuery,
   BroadcastPage,
   BroadcastPreview,
-  CreateBroadcastPayload,
   CreateBroadcastResult,
-} from '@/types/v15';
+} from '@/types/broadcasts';
 
 /** Rows per page of the broadcast history. */
 export const BROADCAST_PAGE_SIZE = 20;
 
+/** People one search for the audience returns (the API allows 1–50). */
+export const PEOPLE_SEARCH_LIMIT = 20;
+
 /**
- * Talim Admin notifications (v1.5 contract §2): a platform-level
+ * Talim Admin notifications (v1.5 §2, "v1.5 as built"): a platform-level
  * announcement sent to any audience, in-app always, push and email
  * optional, now or at a set time. Every route is platform-admin only.
  *
@@ -28,18 +33,20 @@ export const broadcastService = {
    *
    * @param audience - Everyone, or (schools × roles) ∪ specific people.
    * @returns The recipient count and its breakdowns.
-   * @throws ApiError - `VALIDATION_FAILED` for an empty or malformed audience.
+   * @throws ApiError - `VALIDATION_FAILED` when the audience names nobody or is malformed.
    */
   async preview(audience: BroadcastAudience): Promise<BroadcastPreview> {
     return api.post<BroadcastPreview>(API_ENDPOINTS.ADMIN_BROADCASTS_PREVIEW, { audience });
   },
 
   /**
-   * Sends a broadcast now, or schedules it when `sendAt` is set.
+   * Sends a broadcast now, or schedules it when `sendAt` is in the future
+   * (a past `sendAt` sends now).
    *
-   * @param payload - Title (1..120), body (1..2000), attachments, target, audience, channels and `sendAt`.
+   * @param payload - Title (1..120), body (1..2000), attachment URLs, target,
+   *   audience, channels and `sendAt` (at most a year ahead).
    * @returns The new broadcast's id, `scheduled` or `sending`, and the recipient estimate.
-   * @throws ApiError - `VALIDATION_FAILED` for a bad field (a `sendAt` in the past among them).
+   * @throws ApiError - `VALIDATION_FAILED` for a bad field or an audience that names nobody.
    */
   async create(payload: CreateBroadcastPayload): Promise<CreateBroadcastResult> {
     return api.post<CreateBroadcastResult>(API_ENDPOINTS.ADMIN_BROADCASTS, payload);
@@ -57,7 +64,7 @@ export const broadcastService = {
   },
 
   /**
-   * One broadcast with its stats.
+   * One broadcast with its stats, its schools' names and the people it names.
    *
    * @param id - The broadcast id.
    * @returns The broadcast.
@@ -71,10 +78,25 @@ export const broadcastService = {
    * Cancels a scheduled broadcast.
    *
    * @param id - The broadcast id.
-   * @returns The server's answer; callers refetch.
-   * @throws ApiError - `CONFLICT` (409) once it is no longer scheduled.
+   * @returns The cancelled broadcast.
+   * @throws ApiError - 409 with `reasonCode` `BROADCAST_NOT_SCHEDULED` once it
+   *   has started sending.
    */
-  async cancel(id: string): Promise<unknown> {
-    return api.post<unknown>(API_ENDPOINTS.ADMIN_BROADCAST_CANCEL(id));
+  async cancel(id: string): Promise<Broadcast> {
+    return api.post<Broadcast>(API_ENDPOINTS.ADMIN_BROADCAST_CANCEL(id));
+  },
+
+  /**
+   * Finds people anywhere on Talim for an audience's "specific people":
+   * active users whose name or email contains every word of `q`, by name.
+   *
+   * @param query - The words (`q`), and optionally a role, a school and a limit (1–50).
+   * @returns The people found, each with their role and school.
+   * @throws ApiError - `FORBIDDEN` when the caller is not a platform admin.
+   */
+  async searchPeople(query: AdminUserSearchQuery): Promise<AdminUserSearchItem[]> {
+    return api.get<AdminUserSearchItem[]>(
+      `${API_ENDPOINTS.ADMIN_USERS_SEARCH}${toQueryString({ limit: PEOPLE_SEARCH_LIMIT, ...query })}`,
+    );
   },
 };

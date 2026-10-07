@@ -10,7 +10,17 @@ import {
   validateBroadcastForm,
   type BroadcastForm,
 } from '@/components/broadcasts/broadcast-model';
-import { broadcast } from '@/test-utils/v15Fixtures';
+import { PEOPLE, broadcast } from '@/test-utils/v15Fixtures';
+
+const NGOZI = PEOPLE[0];
+const audience = (fields: Partial<ReturnType<typeof broadcast>['audience']>) => ({
+  ...broadcast().audience,
+  schoolIds: [],
+  schools: [],
+  roles: [],
+  userIds: [],
+  ...fields,
+});
 
 const NOW = Date.parse('2026-10-06T12:00:00.000Z');
 
@@ -35,18 +45,19 @@ describe('audience builder rules', () => {
     expect(buildAudience(form({ schoolScope: 'selected', schoolIds: ['s1', 's2'] }))).toEqual({ schoolIds: ['s1', 's2'], roles: ['teacher'] });
     // Schools chosen but scope switched back to all: the ids are not sent.
     expect(buildAudience(form({ schoolScope: 'all', schoolIds: ['s1'] }))).toEqual({ roles: ['teacher'] });
-    expect(buildAudience(form({ roles: [], userIds: ['u1'] }))).toEqual({ userIds: ['u1'] });
+    expect(buildAudience(form({ roles: [], people: [NGOZI] }))).toEqual({ userIds: [NGOZI.id] });
+    expect(buildAudience(form({ people: PEOPLE }))).toEqual({ roles: ['teacher'], userIds: PEOPLE.map((p) => p.id) });
+    // Schools without roles: everyone there (the API confirms it).
+    expect(buildAudience(form({ schoolScope: 'selected', schoolIds: ['s1'], roles: [] }))).toEqual({ schoolIds: ['s1'] });
   });
 
-  it('needs a role, and a school when "Selected schools"', () => {
-    expect(validateAudience(form({ roles: [] }))).toBe('Choose at least one role, or send to everyone.');
+  it('needs a role or a person for all schools, and a school when "Selected schools"', () => {
+    expect(validateAudience(form({ roles: [] }))).toBe('Choose at least one role or person, or send to everyone.');
     expect(validateAudience(form({ schoolScope: 'selected', schoolIds: [] }))).toBe(
       'Choose at least one school, or switch to All schools.',
     );
-    expect(validateAudience(form({ schoolScope: 'selected', schoolIds: ['s1'], roles: [], userIds: ['u1'] }))).toBe(
-      'Choose at least one role for the selected schools.',
-    );
-    expect(validateAudience(form({ roles: [], userIds: ['u1'] }))).toBeNull();
+    expect(validateAudience(form({ schoolScope: 'selected', schoolIds: ['s1'], roles: [] }))).toBeNull();
+    expect(validateAudience(form({ roles: [], people: [NGOZI] }))).toBeNull();
     expect(validateAudience(form())).toBeNull();
   });
 });
@@ -84,12 +95,12 @@ describe('form validation', () => {
 });
 
 describe('payload', () => {
-  it('builds the POST /admin/broadcasts body', () => {
+  it('builds the POST /admin/broadcasts body, with attachments as their URLs', () => {
     const files = [{ url: 'https://cdn.test/a.pdf', name: 'a.pdf', mimeType: 'application/pdf', size: 10 }];
     expect(buildBroadcastPayload(form({ title: ' Hi ', body: ' Body ', target: 'payments', push: true, email: true }), files)).toEqual({
       title: 'Hi',
       body: 'Body',
-      attachments: files,
+      attachments: ['https://cdn.test/a.pdf'],
       target: { page: 'payments' },
       audience: { roles: ['teacher'] },
       channels: { push: true, email: true },
@@ -109,9 +120,17 @@ describe('payload', () => {
 describe('labels', () => {
   it('words audiences and channels', () => {
     expect(audienceLabel(broadcast())).toBe('Teachers, Parents · 2 schools');
-    expect(audienceLabel(broadcast({ audience: { all: true } }))).toBe('Everyone');
-    expect(audienceLabel(broadcast({ audience: { roles: ['student'] }, schools: [] }))).toBe('Students · all schools');
-    expect(audienceLabel(broadcast({ audience: { roles: ['teacher'], schoolIds: ['s1'] } }))).toBe('Teachers · Greenfield Academy');
+    expect(audienceLabel(broadcast({ audience: audience({ all: true }) }))).toBe('Everyone');
+    expect(audienceLabel(broadcast({ audience: audience({ roles: ['student'] }) }))).toBe('Students · all schools');
+    expect(
+      audienceLabel(
+        broadcast({ audience: audience({ roles: ['teacher'], schoolIds: ['s1'], schools: [{ id: 's1', name: 'Greenfield Academy' }] }) }),
+      ),
+    ).toBe('Teachers · Greenfield Academy');
+    expect(audienceLabel(broadcast({ audience: audience({ schoolIds: ['s1', 's2'] }) }))).toBe('Everyone · 2 schools');
+    expect(audienceLabel(broadcast({ audience: audience({ roles: ['parent'], userIds: ['u1', 'u2'] }) }))).toBe(
+      'Parents · all schools + 2 people',
+    );
     expect(channelsLabel({ push: false, email: false })).toBe('In-app');
     expect(channelsLabel({ push: true, email: true })).toBe('In-app, push and email');
     expect(percentOf(640, 1200)).toBe('53%');

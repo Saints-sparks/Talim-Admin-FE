@@ -21,7 +21,7 @@ import {
   tableCell,
   tableHead,
 } from '@/components/tl/styles';
-import type { Broadcast, BroadcastStatus } from '@/types/v15';
+import type { Broadcast, BroadcastStatus } from '@/types/broadcasts';
 import { CancelBroadcastButton } from './CancelBroadcast';
 import { BROADCAST_STATUS_META, HISTORY_FILTERS, HISTORY_ROUTE, STAT_COLUMNS, audienceLabel, formatCount, whenOf } from './broadcast-model';
 import { formatWhen } from '@/lib/format';

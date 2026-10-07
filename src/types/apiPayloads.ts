@@ -37,3 +37,17 @@ export type PlatformProviderConfigPayload = RequestBody<
   '/payments/platform/providers/{providerName}/config',
   'patch'
 >;
+
+// ─── Support desk (v1.5 §1) ───────────────────────────────────────────────────
+
+/** Body of `POST /tickets/{id}/messages`: a reply, or an internal note from desk staff. */
+export type PostTicketMessagePayload = RequestBody<'/tickets/{id}/messages', 'post'>;
+/** Body of `PATCH /tickets/{id}`: status, priority or assignee (`null` unassigns). */
+export type UpdateTicketPayload = RequestBody<'/tickets/{id}', 'patch'>;
+
+// ─── Broadcasts (v1.5 §2) ─────────────────────────────────────────────────────
+
+/** Body of `POST /admin/broadcasts/preview`. */
+export type PreviewBroadcastPayload = RequestBody<'/admin/broadcasts/preview', 'post'>;
+/** Body of `POST /admin/broadcasts`: send now, or at `sendAt`. */
+export type CreateBroadcastPayload = RequestBody<'/admin/broadcasts', 'post'>;

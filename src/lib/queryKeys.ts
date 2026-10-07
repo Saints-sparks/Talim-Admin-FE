@@ -17,6 +17,8 @@ export const queryKeys = {
     list: (params?: Record<string, unknown>) => ['tickets', 'list', params ?? {}] as const,
     counts: (params?: Record<string, unknown>) => ['tickets', 'counts', params ?? {}] as const,
     detail: (ticketId: string) => ['tickets', 'detail', ticketId] as const,
+    /** Who the Talim desk can assign. */
+    staff: () => ['tickets', 'staff'] as const,
   },
   broadcasts: {
     all: ['broadcasts'] as const,
@@ -24,6 +26,8 @@ export const queryKeys = {
     detail: (broadcastId: string) => ['broadcasts', 'detail', broadcastId] as const,
     /** Keyed on the serialised audience, so an unchanged audience is never recounted. */
     preview: (audienceKey: string) => ['broadcasts', 'preview', audienceKey] as const,
+    /** People found for an audience's "specific people", by search term. */
+    people: (term: string) => ['broadcasts', 'people', term] as const,
   },
   payments: {
     all: ['payments'] as const,

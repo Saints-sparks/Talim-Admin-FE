@@ -43,4 +43,11 @@ describe('broadcastService (v1.5 §2)', () => {
     expect(call(2)).toMatchObject({ method: 'GET', url: 'http://api.test/admin/broadcasts/b1' });
     expect(call(3)).toMatchObject({ method: 'POST', url: 'http://api.test/admin/broadcasts/b1/cancel' });
   });
+
+  it('searches people across Talim for an audience', async () => {
+    await broadcastService.searchPeople({ q: 'ngozi okafor' });
+    await broadcastService.searchPeople({ q: 'ada', role: 'parent', limit: 5 });
+    expect(call(0)).toEqual({ method: 'GET', url: 'http://api.test/admin/users/search?limit=20&q=ngozi+okafor', body: undefined });
+    expect(call(1)).toMatchObject({ url: 'http://api.test/admin/users/search?limit=5&q=ada&role=parent' });
+  });
 });

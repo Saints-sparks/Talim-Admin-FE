@@ -1,17 +1,17 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft, Mail } from 'lucide-react';
 import { supportService } from '@/app/services/support.service';
 import { ApiError } from '@/lib/apiError';
 import { formatWhen } from '@/lib/format';
-import { queryKeys, staleTimes } from '@/lib/queryKeys';
+import { listPrefix, queryKeys, staleTimes } from '@/lib/queryKeys';
 import { Avatar } from '@/components/tl/Avatar';
 import { Banner, ErrorCard, SkeletonRows } from '@/components/tl/States';
 import { card, cardTitle, eyebrow, focusRing, pagePad, pageTitle, pill, pillTone, textLink } from '@/components/tl/styles';
-import type { Ticket } from '@/types/v15';
+import type { Ticket } from '@/types/tickets';
 import {
   AREA_LABELS,
   PRIORITY_META,
@@ -44,7 +44,8 @@ function Fact({ label, children }: { label: string; children: React.ReactNode })
 }
 
 /**
- * The requester, school and timeline cards.
+ * The requester, school, timeline and (when the requester's app sent it)
+ * context cards.
  *
  * @param props - The ticket.
  * @param props.ticket - The ticket.
@@ -59,7 +60,7 @@ function TicketFacts({ ticket }: { ticket: Ticket }) {
           Requester
         </h2>
         <div className="mt-4 flex items-center gap-3">
-          <Avatar id={ticket.requester.userId} name={name} size={44} />
+          <Avatar id={ticket.requester.id} name={name} size={44} />
           <div className="min-w-0">
             <p className="m-0 truncate text-[15px] font-extrabold text-tl-ink">{name}</p>
             <p className="m-0 text-sm text-tl-muted">{ROLE_LABELS[ticket.requester.role] ?? ticket.requester.role}</p>
@@ -78,8 +79,13 @@ function TicketFacts({ ticket }: { ticket: Ticket }) {
           School
         </h2>
         <p className="m-0 mt-3 text-[15px] font-extrabold text-tl-ink">{schoolName(ticket)}</p>
-        {ticket.schoolId ? (
-          <Link href={`/SchoolProfile/view/${encodeURIComponent(ticket.schoolId)}`} className={textLink}>
+        {ticket.child ? (
+          <p className="m-0 mt-1 text-sm text-tl-muted">
+            About <strong className="text-tl-ink">{ticket.child.name || 'their child'}</strong>
+          </p>
+        ) : null}
+        {ticket.school ? (
+          <Link href={`/SchoolProfile/view/${encodeURIComponent(ticket.school.id)}`} className={textLink}>
             Open school profile
           </Link>
         ) : null}
@@ -94,9 +100,27 @@ function TicketFacts({ ticket }: { ticket: Ticket }) {
           <Fact label="First response">{ticket.firstResponseAt ? formatWhen(ticket.firstResponseAt) : 'Not yet'}</Fact>
           {ticket.resolvedAt ? <Fact label="Resolved">{formatWhen(ticket.resolvedAt)}</Fact> : null}
           {ticket.closedAt ? <Fact label="Closed">{formatWhen(ticket.closedAt)}</Fact> : null}
+          {ticket.escalatedAt ? <Fact label="Escalated">{formatWhen(ticket.escalatedAt)}</Fact> : null}
           <Fact label="Last activity">{formatWhen(ticket.lastActivityAt)}</Fact>
         </dl>
       </section>
+
+      {ticket.context && (ticket.context.path || ticket.context.appVersion || ticket.context.userAgent) ? (
+        <section className={card} aria-labelledby="context-title">
+          <h2 id="context-title" className={cardTitle}>
+            Where they were
+          </h2>
+          <dl className="m-0 mt-3">
+            {ticket.context.path ? <Fact label="Page">{ticket.context.path}</Fact> : null}
+            {ticket.context.appVersion ? <Fact label="App version">{ticket.context.appVersion}</Fact> : null}
+            {ticket.context.userAgent ? (
+              <Fact label="Device">
+                <span className="break-all text-xs">{ticket.context.userAgent}</span>
+              </Fact>
+            ) : null}
+          </dl>
+        </section>
+      ) : null}
     </>
   );
 }
@@ -109,16 +133,25 @@ function TicketFacts({ ticket }: { ticket: Ticket }) {
  * A school-desk ticket (reached from the "All schools" view) is read-only
  * until the school escalates it: no reply box, controls off.
  *
+ * Opening a ticket marks it read for the desk on the server, so once it has
+ * loaded the queue and its counts are refreshed (the row's "new" badge goes).
+ *
  * @param props - The ticket id from the route.
  * @param props.id - The ticket id.
  * @returns The page.
  */
 export function TicketView({ id }: { id: string }) {
+  const queryClient = useQueryClient();
   const ticketQuery = useQuery({
     queryKey: queryKeys.tickets.detail(id),
     queryFn: () => supportService.getTicket(id),
     staleTime: staleTimes.list,
   });
+  const loadedAt = ticketQuery.dataUpdatedAt;
+  useEffect(() => {
+    if (!loadedAt) return;
+    void queryClient.invalidateQueries({ queryKey: listPrefix(queryKeys.tickets.list()) });
+  }, [loadedAt, queryClient]);
 
   const back = (
     <Link href="/talimsupport" className={`${textLink} self-start`}>

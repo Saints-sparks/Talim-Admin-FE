@@ -5,7 +5,7 @@ import { act, renderWithProviders, screen, waitFor, within } from '@/test-utils/
 import { DeskQueue, SEARCH_DEBOUNCE_MS } from '@/components/support/DeskQueue';
 import { supportService } from '@/app/services/support.service';
 import { schoolService } from '@/app/services/school.service';
-import { ADMIN_USER, DESK_COUNTS, ticketPage, ticketSummary } from '@/test-utils/v15Fixtures';
+import { ADMIN_USER, DESK_COUNTS, DESK_STAFF, OTHER_ADMIN_ID, ticketPage, ticketSummary } from '@/test-utils/v15Fixtures';
 
 const replace = jest.fn();
 let search = new URLSearchParams();
@@ -18,12 +18,20 @@ jest.mock('next/navigation', () => ({
 jest.mock('@/app/context/AuthContext', () => ({ useAuthContext: () => ({ user: ADMIN_USER }) }));
 jest.mock('@/app/services/support.service', () => ({
   DESK_PAGE_SIZE: 20,
-  supportService: { listDesk: jest.fn(), getDeskCounts: jest.fn(), getTicket: jest.fn(), postMessage: jest.fn(), updateTicket: jest.fn() },
+  supportService: {
+    listDesk: jest.fn(),
+    getDeskCounts: jest.fn(),
+    listStaff: jest.fn(),
+    getTicket: jest.fn(),
+    postMessage: jest.fn(),
+    updateTicket: jest.fn(),
+  },
 }));
 jest.mock('@/app/services/school.service', () => ({ schoolService: { getAllSchools: jest.fn() } }));
 
 const listDesk = supportService.listDesk as jest.Mock;
 const getDeskCounts = supportService.getDeskCounts as jest.Mock;
+const listStaff = supportService.listStaff as jest.Mock;
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -38,12 +46,13 @@ beforeEach(() => {
         area: 'signing_in',
         priority: 'urgent',
         status: 'in_progress',
-        assigneeId: 'u-admin',
-        assignee: { id: 'u-admin', name: 'Ada Admin' },
+        assignee: { id: ADMIN_USER.userId, name: 'Ada Admin' },
+        unread: 2,
       }),
     ]),
   );
   getDeskCounts.mockResolvedValue(DESK_COUNTS);
+  listStaff.mockResolvedValue(DESK_STAFF);
   (schoolService.getAllSchools as jest.Mock).mockResolvedValue({
     data: [{ _id: 's1', name: 'Greenfield Academy' }],
     meta: { total: 1, page: 1, lastPage: 1, limit: 50 },
@@ -51,7 +60,7 @@ beforeEach(() => {
 });
 
 describe('Support desk queue', () => {
-  it('lists the Talim desk with one list call and one counts call', async () => {
+  it('lists the Talim desk with one list, one counts and one staff call', async () => {
     renderWithProviders(<DeskQueue />);
     const rows = await screen.findAllByTestId('desk-row');
     expect(rows).toHaveLength(2);
@@ -60,20 +69,25 @@ describe('Support desk queue', () => {
     expect(within(rows[0]).getByText('Unassigned')).toBeInTheDocument();
     expect(within(rows[1]).getByText('Ada Admin')).toBeInTheDocument();
     expect(within(rows[1]).getByText('Urgent')).toBeInTheDocument();
+    // The requester's messages the desk has not read.
+    expect(within(rows[0]).queryByTestId('unread-badge')).toBeNull();
+    expect(within(rows[1]).getByTestId('unread-badge')).toHaveTextContent('2 new messages from the requester');
 
     expect(listDesk).toHaveBeenCalledTimes(1);
     expect(listDesk).toHaveBeenCalledWith({ status: 'open', page: 1 });
     expect(getDeskCounts).toHaveBeenCalledTimes(1);
     expect(getDeskCounts).toHaveBeenCalledWith(undefined);
+    await waitFor(() => expect(listStaff).toHaveBeenCalledTimes(1));
   });
 
-  it('shows the counts on the status tabs, and none where the contract has none', async () => {
+  it('shows the counts on every status tab, and the total on All', async () => {
     renderWithProviders(<DeskQueue />);
     const open = await screen.findByRole('tab', { name: /Open/ });
     await waitFor(() => expect(within(open).getByText('7')).toBeInTheDocument());
     expect(open).toHaveAttribute('aria-selected', 'true');
     expect(within(screen.getByRole('tab', { name: /Resolved/ })).getByText('11')).toBeInTheDocument();
-    expect(screen.getByRole('tab', { name: 'Closed' })).toBeInTheDocument();
+    expect(within(screen.getByRole('tab', { name: /Closed/ })).getByText('40')).toBeInTheDocument();
+    expect(within(screen.getByRole('tab', { name: /All/ })).getByText('63')).toBeInTheDocument();
     expect(screen.getByText('4 unassigned')).toBeInTheDocument();
     expect(screen.getByText('2 mine')).toBeInTheDocument();
   });
@@ -96,19 +110,23 @@ describe('Support desk queue', () => {
     await user.selectOptions(screen.getByLabelText('Assignee'), 'unassigned');
     expect(replace).toHaveBeenLastCalledWith('/talimsupport?assignee=unassigned', { scroll: false });
 
+    // The rest of the desk's staff, from the staff list.
+    await user.selectOptions(screen.getByLabelText('Assignee'), await screen.findByRole('option', { name: 'Tunde Bello' }));
+    expect(replace).toHaveBeenLastCalledWith(`/talimsupport?assignee=${OTHER_ADMIN_ID}`, { scroll: false });
+
     await user.click(screen.getByRole('button', { name: /School/ }));
     await user.click(await screen.findByRole('radio', { name: 'Greenfield Academy' }));
     expect(replace).toHaveBeenLastCalledWith('/talimsupport?school=s1', { scroll: false });
   });
 
-  it('sends the filters in the URL to the API, "Assigned to me" as the admin id', async () => {
+  it('sends the filters in the URL to the API, "Assigned to me" as `me`', async () => {
     search = new URLSearchParams('status=all&area=payments&priority=high&assignee=me&school=s1&q=card&page=2');
     renderWithProviders(<DeskQueue />);
     await screen.findAllByTestId('desk-row');
     expect(listDesk).toHaveBeenCalledWith({
       area: 'payments',
       priority: 'high',
-      assigneeId: 'u-admin',
+      assigneeId: 'me',
       schoolId: 's1',
       q: 'card',
       page: 2,
@@ -139,7 +157,16 @@ describe('Support desk queue', () => {
   it('adds every school desk, read-only, under ?scope=all', async () => {
     search = new URLSearchParams('scope=all');
     listDesk.mockResolvedValue(
-      ticketPage([ticketSummary({ id: 't9', desk: 'school', reference: 'CMP-77', subject: 'Bus was late', school: { id: 's2', name: 'Hillcrest College' } })]),
+      ticketPage([
+        ticketSummary({
+          id: 't9',
+          desk: 'school',
+          access: 'observer',
+          reference: 'TCKT-7K2QD9XA',
+          subject: 'Bus was late',
+          school: { id: 's2', name: 'Hillcrest College' },
+        }),
+      ]),
     );
     renderWithProviders(<DeskQueue />);
     const [row] = await screen.findAllByTestId('desk-row');

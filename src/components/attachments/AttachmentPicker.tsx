@@ -5,9 +5,12 @@ import { Paperclip, X } from 'lucide-react';
 import { uploadFile, validateAttachmentFile } from '@/app/services/upload.service';
 import { getErrorMessage } from '@/lib/apiError';
 import { focusRing, rowButton } from '@/components/tl/styles';
-import type { Attachment } from '@/types/v15';
+import type { TicketAttachment, TicketAttachmentInput } from '@/types/tickets';
 
-/** Most files one message or broadcast carries. A UI cap: the contract sets none. */
+/**
+ * Most files one message or broadcast carries: a ticket message takes 5
+ * (the API answers 400 beyond), a broadcast 10; the console keeps both to 5.
+ */
 export const MAX_ATTACHMENTS = 5;
 
 /**
@@ -35,9 +38,9 @@ export interface AttachmentPickerProps {
   /** Unique id for the hidden file input. */
   id: string;
   /** Files already uploaded, sent with the message. */
-  value: Attachment[];
+  value: TicketAttachmentInput[];
   /** A state setter, so uploads finishing together never drop one another. */
-  onChange: React.Dispatch<React.SetStateAction<Attachment[]>>;
+  onChange: React.Dispatch<React.SetStateAction<TicketAttachmentInput[]>>;
   /** Told `true` while any upload is in flight, so the parent can hold Send. */
   onBusyChange?: (busy: boolean) => void;
   max?: number;
@@ -209,14 +212,33 @@ export function AttachmentPicker({ id, value, onChange, onBusyChange, max = MAX_
 }
 
 /**
+ * A broadcast's files as links: the API stores bare https URLs, so each is
+ * named after the last part of its path (size unknown).
+ *
+ * @param urls - The URLs.
+ * @returns The attachments.
+ */
+export function urlAttachments(urls: readonly string[] | undefined): TicketAttachment[] {
+  return (urls ?? []).map((url) => {
+    let name = '';
+    try {
+      name = decodeURIComponent(new URL(url).pathname.split('/').pop() ?? '');
+    } catch {
+      name = '';
+    }
+    return { url, name: name || 'Attachment', mimeType: '', size: 0 };
+  });
+}
+
+/**
  * Read-only links to a message's or a broadcast's files, each opening in a
- * new tab.
+ * new tab. A size of 0 (unknown) is not shown.
  *
  * @param props - The files.
  * @param props.files - The attachments to list.
  * @returns The list, or nothing when there are no files.
  */
-export function AttachmentLinks({ files }: { files: Attachment[] | undefined }) {
+export function AttachmentLinks({ files }: { files: TicketAttachment[] | undefined }) {
   if (!files?.length) return null;
   return (
     <ul className="m-0 mt-2.5 flex list-none flex-wrap gap-2 p-0" aria-label="Attachments">
@@ -230,7 +252,7 @@ export function AttachmentLinks({ files }: { files: Attachment[] | undefined }) 
           >
             <Paperclip className="h-4 w-4 shrink-0" aria-hidden />
             <span className="min-w-0 truncate">{file.name}</span>
-            <span className="shrink-0 text-xs font-medium text-tl-muted">{formatBytes(file.size)}</span>
+            {file.size > 0 ? <span className="shrink-0 text-xs font-medium text-tl-muted">{formatBytes(file.size)}</span> : null}
             <span className="sr-only">(opens in a new tab)</span>
           </a>
         </li>

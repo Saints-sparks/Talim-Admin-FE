@@ -28,7 +28,7 @@ import {
   tableCell,
   tableHead,
 } from '@/components/tl/styles';
-import type { TicketSummary } from '@/types/v15';
+import type { TicketSummary } from '@/types/tickets';
 import {
   AREA_LABELS,
   DEFAULT_DESK_FILTERS,
@@ -45,6 +45,7 @@ import {
   schoolName,
   tabCount,
   toDeskQuery,
+  unreadLabel,
   type DeskFilters,
   type DeskTab,
 } from './desk-model';
@@ -72,8 +73,10 @@ const tabLabel = (tab: DeskTab) => (tab === 'all' ? 'All' : STATUS_META[tab].lab
 
 /**
  * One row of the queue: subject (the link), reference, requester, school,
- * area, priority, status, assignee and last activity. School-desk tickets in
- * the "All schools" view carry a read-only chip.
+ * area, priority, status, assignee and last activity. A ticket with
+ * requester messages the desk has not read shows them as "N new" and a bold
+ * subject. School-desk tickets in the "All schools" view carry a read-only
+ * chip.
  *
  * @param props - The ticket and the clock.
  * @param props.ticket - The ticket summary.
@@ -83,6 +86,7 @@ const tabLabel = (tab: DeskTab) => (tab === 'all' ? 'All' : STATUS_META[tab].lab
 function QueueRow({ ticket, now }: { ticket: TicketSummary; now: number }) {
   const status = STATUS_META[ticket.status];
   const priority = PRIORITY_META[ticket.priority];
+  const unread = unreadLabel(ticket);
   return (
     <tr className="border-t border-tl-line-soft hover:bg-tl-subtle" data-testid="desk-row">
       <th scope="row" className={`${tableCell} max-w-[360px] text-left font-normal`}>
@@ -90,7 +94,15 @@ function QueueRow({ ticket, now }: { ticket: TicketSummary; now: number }) {
           href={`/talimsupport/${encodeURIComponent(ticket.id)}`}
           className={`block min-h-[44px] rounded-md py-0.5 ${focusRing}`}
         >
-          <span className="block truncate text-[15px] font-bold text-tl-ink hover:underline">{ticket.subject}</span>
+          <span className="flex items-center gap-2">
+            <span className={`block truncate text-[15px] text-tl-ink hover:underline ${unread ? 'font-extrabold' : 'font-bold'}`}>{ticket.subject}</span>
+            {unread ? (
+              <span className={`${pill} ${pillTone.info} shrink-0`} data-testid="unread-badge">
+                {unread}
+                <span className="sr-only"> {ticket.unread === 1 ? 'message' : 'messages'} from the requester</span>
+              </span>
+            ) : null}
+          </span>
           <span className="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs text-tl-muted">
             <span className="font-semibold">{ticket.reference}</span>
             <span aria-hidden>·</span>
@@ -109,7 +121,7 @@ function QueueRow({ ticket, now }: { ticket: TicketSummary; now: number }) {
         <span className={`${pill} ${pillTone[status.tone]}`}>{status.label}</span>
       </td>
       <td className={`${tableCell} max-w-[160px] truncate text-tl-body`}>
-        {ticket.assignee?.name ?? (ticket.assigneeId ? 'Assigned' : <span className="text-tl-faint">Unassigned</span>)}
+        {ticket.assignee ? ticket.assignee.name || 'Assigned' : <span className="text-tl-faint">Unassigned</span>}
       </td>
       <td className={`${tableCell} whitespace-nowrap text-tl-muted`}>
         <time dateTime={ticket.lastActivityAt}>{relativeTime(ticket.lastActivityAt, now)}</time>
@@ -125,8 +137,9 @@ function QueueRow({ ticket, now }: { ticket: TicketSummary; now: number }) {
  * read-only. Every filter lives in the URL, so a view can be shared and the
  * back button restores it.
  *
- * Data: one `GET /tickets/desk/talim` per page and one counts call; never a
- * request per row.
+ * Data: one `GET /tickets/desk/talim` per page, one counts call and the
+ * desk's staff (for the assignee filter, cached for minutes); never a
+ * request per row. Each row's `unread` comes with the list.
  *
  * @returns The queue page.
  */
@@ -136,6 +149,12 @@ export function DeskQueue() {
   const searchParams = useSearchParams();
   const { user } = useAuthContext();
   const filters = useMemo(() => parseDeskFilters(searchParams), [searchParams]);
+  const staff = useQuery({
+    queryKey: queryKeys.tickets.staff(),
+    queryFn: () => supportService.listStaff(),
+    staleTime: staleTimes.reference,
+  });
+  const otherStaff = (staff.data ?? []).filter((member) => member.id !== user?.userId);
   const [now] = useState(() => Date.now());
 
   const apply = (patch: Partial<DeskFilters>) => {
@@ -163,7 +182,7 @@ export function DeskQueue() {
 
   const clearFilters = () => apply({ ...DEFAULT_DESK_FILTERS, scope: filters.scope, status: filters.status });
 
-  const query = toDeskQuery(filters, user?.userId);
+  const query = toDeskQuery(filters);
   const list = useQuery({
     queryKey: queryKeys.tickets.list({ ...query }),
     queryFn: () => supportService.listDesk(query),
@@ -318,7 +337,7 @@ export function DeskQueue() {
                 id="desk-search"
                 type="search"
                 value={term}
-                placeholder="Reference, subject or requester"
+                placeholder="Reference or subject"
                 onChange={(e) => setTerm(e.target.value)}
                 className={`${fieldControl} pl-10`}
               />
@@ -368,6 +387,11 @@ export function DeskQueue() {
               <option value="">Anyone</option>
               <option value="me">Assigned to me</option>
               <option value="unassigned">Unassigned</option>
+              {otherStaff.map((member) => (
+                <option key={member.id} value={member.id}>
+                  {member.name || member.email || 'Talim staff'}
+                </option>
+              ))}
             </select>
           </div>
           <SchoolPicker label="School" selectedIds={filters.schoolId ? [filters.schoolId] : []} onChange={(ids) => apply({ schoolId: ids[0] ?? '' })} />

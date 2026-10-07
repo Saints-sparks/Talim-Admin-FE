@@ -28,7 +28,8 @@ import {
   primaryButton,
   textLink,
 } from '@/components/tl/styles';
-import type { Attachment, CreateBroadcastPayload } from '@/types/v15';
+import type { CreateBroadcastPayload } from '@/types/apiPayloads';
+import type { TicketAttachmentInput } from '@/types/tickets';
 import { AudienceBuilder } from './AudienceBuilder';
 import { RecipientPreview } from './RecipientPreview';
 import {
@@ -99,7 +100,7 @@ export function BroadcastComposer() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const [form, setForm] = useState<BroadcastForm>(EMPTY_BROADCAST_FORM);
-  const [attachments, setAttachments] = useState<Attachment[]>([]);
+  const [attachments, setAttachments] = useState<TicketAttachmentInput[]>([]);
   const [uploading, setUploading] = useState(false);
   const [errors, setErrors] = useState<BroadcastErrors>({});
   const [confirming, setConfirming] = useState<CreateBroadcastPayload | null>(null);

@@ -4,7 +4,7 @@ import React from 'react';
 import { getErrorMessage } from '@/lib/apiError';
 import { card, cardTitle, eyebrow, focusRing, pill, pillTone } from '@/components/tl/styles';
 import type { RecipientPreviewState } from '@/hooks/useRecipientPreview';
-import type { BroadcastRole } from '@/types/v15';
+import type { BroadcastRole } from '@/types/broadcasts';
 import { ROLE_LABELS, formatCount } from './broadcast-model';
 
 /** How many schools the breakdown lists before "and N more". */
@@ -70,8 +70,8 @@ export function RecipientPreview({ preview, audienceProblem }: { preview: Recipi
               <p className={`${eyebrow} m-0 mb-1.5`}>By school</p>
               <ul className="m-0 flex list-none flex-col gap-1 p-0 text-sm">
                 {schools.slice(0, TOP_SCHOOLS).map((s) => (
-                  <li key={s.schoolId} className="flex justify-between gap-3">
-                    <span className="min-w-0 truncate font-semibold text-tl-ink">{s.name}</span>
+                  <li key={s.schoolId ?? 'none'} className="flex justify-between gap-3">
+                    <span className="min-w-0 truncate font-semibold text-tl-ink">{s.schoolId ? s.name || 'School' : 'No school on their account'}</span>
                     <span className="shrink-0 font-bold text-tl-body">{formatCount(s.count)}</span>
                   </li>
                 ))}

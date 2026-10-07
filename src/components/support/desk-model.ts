@@ -6,10 +6,9 @@ import type {
   TicketDeskCounts,
   TicketDeskQuery,
   TicketPriority,
-  TicketRole,
   TicketStatus,
   TicketSummary,
-} from '@/types/v15';
+} from '@/types/tickets';
 
 /** Every status, in workflow order. */
 export const TICKET_STATUSES: readonly TicketStatus[] = ['open', 'in_progress', 'waiting_on_user', 'resolved', 'closed'];
@@ -64,8 +63,8 @@ export const AREA_LABELS: Record<TicketArea, string> = {
   other: 'Other',
 };
 
-/** Label per role. */
-export const ROLE_LABELS: Record<TicketRole, string> = {
+/** Label per role (the API sends the role as a plain string). */
+export const ROLE_LABELS: Readonly<Record<string, string>> = {
   student: 'Student',
   parent: 'Parent',
   teacher: 'Teacher',
@@ -86,8 +85,11 @@ export type DeskTab = TicketStatus | 'all';
 /** The status tabs, in order; `all` last. */
 export const DESK_TABS: readonly DeskTab[] = [...TICKET_STATUSES, 'all'];
 
-/** Assignee filter choices: anyone, the signed-in admin, or nobody. */
-export type AssigneeFilter = '' | 'me' | 'unassigned';
+/** Assignee filter choices: anyone, the signed-in admin, nobody, or one staff member's id. */
+export type AssigneeFilter = '' | 'me' | 'unassigned' | (string & {});
+
+/** A user id as the API writes it (24 hex characters). */
+const USER_ID = /^[0-9a-f]{24}$/i;
 
 /** Every desk filter, as the URL carries it. */
 export interface DeskFilters {
@@ -127,6 +129,18 @@ function oneOf<T extends string>(value: string | null, allowed: readonly T[], fa
 }
 
 /**
+ * Reads the assignee filter: `me`, `unassigned` or a staff id; anything
+ * else is "anyone".
+ *
+ * @param value - The raw `assignee` parameter.
+ * @returns The filter.
+ */
+function parseAssignee(value: string | null): AssigneeFilter {
+  if (value === 'me' || value === 'unassigned') return value;
+  return value && USER_ID.test(value) ? value : '';
+}
+
+/**
  * Reads the desk filters from the URL, ignoring unknown or malformed values.
  *
  * @param params - The page's search params.
@@ -139,7 +153,7 @@ export function parseDeskFilters(params: Pick<URLSearchParams, 'get'>): DeskFilt
     status: oneOf<DeskTab>(params.get('status'), DESK_TABS, DEFAULT_DESK_FILTERS.status),
     area: oneOf<TicketArea | ''>(params.get('area'), TICKET_AREAS, ''),
     priority: oneOf<TicketPriority | ''>(params.get('priority'), TICKET_PRIORITIES, ''),
-    assignee: oneOf<AssigneeFilter>(params.get('assignee'), ['me', 'unassigned'], ''),
+    assignee: parseAssignee(params.get('assignee')),
     schoolId: params.get('school') ?? '',
     q: params.get('q') ?? '',
     page: Number.isFinite(page) && page > 0 ? page : 1,
@@ -168,21 +182,19 @@ export function deskFiltersToSearch(filters: DeskFilters): string {
 }
 
 /**
- * Turns the URL filters into the `GET /tickets/desk/talim` query.
+ * Turns the URL filters into the `GET /tickets/desk/talim` query. The API
+ * reads `assigneeId` as `me`, `unassigned` or a staff id, so the filter is
+ * sent as it is.
  *
  * @param filters - The filters.
- * @param myUserId - The signed-in admin, for "Assigned to me".
  * @returns The query.
  */
-export function toDeskQuery(filters: DeskFilters, myUserId: string | undefined): TicketDeskQuery {
-  let assigneeId: string | undefined;
-  if (filters.assignee === 'me') assigneeId = myUserId;
-  else if (filters.assignee === 'unassigned') assigneeId = 'unassigned';
+export function toDeskQuery(filters: DeskFilters): TicketDeskQuery {
   return {
     ...(filters.status !== 'all' ? { status: filters.status } : {}),
     ...(filters.area ? { area: filters.area } : {}),
     ...(filters.priority ? { priority: filters.priority } : {}),
-    ...(assigneeId ? { assigneeId } : {}),
+    ...(filters.assignee ? { assigneeId: filters.assignee } : {}),
     ...(filters.schoolId ? { schoolId: filters.schoolId } : {}),
     ...(filters.q.trim() ? { q: filters.q.trim() } : {}),
     page: filters.page,
@@ -191,79 +203,91 @@ export function toDeskQuery(filters: DeskFilters, myUserId: string | undefined):
 }
 
 /**
- * The count a status tab shows. The contract counts every status but
- * `closed`, and has no total, so those two tabs show none.
+ * The count a status tab shows: each status's own count, and the desk's
+ * total on "All".
  *
  * @param counts - The desk counts, once loaded.
  * @param tab - The tab.
- * @returns The count, or `undefined` when there is none to show.
+ * @returns The count, or `undefined` before the counts load.
  */
 export function tabCount(counts: TicketDeskCounts | undefined, tab: DeskTab): number | undefined {
-  if (!counts || tab === 'all' || tab === 'closed') return undefined;
-  return counts[tab];
+  if (!counts) return undefined;
+  return tab === 'all' ? counts.total : counts[tab];
 }
 
 /**
- * True when Talim may only read the ticket: a school-desk ticket that was not
- * escalated (escalation moves it to the Talim desk).
+ * True when Talim may only read the ticket: the API says the caller observes
+ * it (a school-desk ticket the school has not escalated).
  *
  * @param ticket - The ticket.
  * @returns True when replies and changes are off.
  */
-export function isReadOnlyTicket(ticket: Pick<TicketSummary, 'desk'>): boolean {
-  return ticket.desk === 'school';
+export function isReadOnlyTicket(ticket: Pick<TicketSummary, 'access'>): boolean {
+  return ticket.access !== 'desk';
 }
 
 /**
- * The last moment a resolved ticket can be reopened, or `null` when it is
- * not resolved or has no `resolvedAt`.
+ * The last moment the requester can reopen a resolved ticket, or `null` when
+ * it is not resolved. Uses the detail's `reopenableUntil` when present, else
+ * 7 days from `resolvedAt`.
  *
  * @param ticket - The ticket.
  * @returns The deadline.
  */
-export function reopenDeadline(ticket: Pick<TicketSummary, 'status' | 'resolvedAt'>): Date | null {
-  if (ticket.status !== 'resolved' || !ticket.resolvedAt) return null;
+export function reopenDeadline(
+  ticket: Pick<TicketSummary, 'status' | 'resolvedAt'> & { reopenableUntil?: string | null },
+): Date | null {
+  if (ticket.status !== 'resolved') return null;
+  if (ticket.reopenableUntil) {
+    const until = new Date(ticket.reopenableUntil);
+    if (!Number.isNaN(until.getTime())) return until;
+  }
+  if (!ticket.resolvedAt) return null;
   const resolved = new Date(ticket.resolvedAt).getTime();
   return Number.isNaN(resolved) ? null : new Date(resolved + REOPEN_WINDOW_MS);
 }
 
-/** What the admin was doing when the API answered 409. */
+/** What the admin was doing when the API refused. */
 export type ConflictAction = { kind: 'reply' } | { kind: 'status'; next: TicketStatus } | { kind: 'update' };
 
 /**
- * The words for a failed reply or change. A 409 is explained from the ticket
- * as last loaded (closed, or past the 7-day reopen window); anything else
- * uses the server's message.
+ * The words for a failed reply or change. A 409 is explained from the
+ * route's own reason (`reasonCode`): `TICKET_CLOSED`,
+ * `REOPEN_WINDOW_PASSED`, `MESSAGE_CAP`, `INVALID_TRANSITION`, and the
+ * desk's `TICKET_NOT_ESCALATED` and `TICKET_CHANGED`; anything else uses the
+ * server's message.
  *
  * @param error - What was thrown.
  * @param ticket - The ticket as last loaded.
  * @param action - What was being attempted.
  * @returns The message to show.
  */
-export function ticketErrorMessage(
-  error: unknown,
-  ticket: Pick<Ticket, 'status' | 'resolvedAt'>,
-  action: ConflictAction,
-): string {
-  if (!(error instanceof ApiError) || error.status !== 409) {
-    return error instanceof ApiError ? error.message : 'Something went wrong. Please try again.';
+export function ticketErrorMessage(error: unknown, ticket: Pick<Ticket, 'status'>, action: ConflictAction): string {
+  if (!(error instanceof ApiError)) return 'Something went wrong. Please try again.';
+  if (error.status !== 409) return error.message;
+  switch (error.reasonCode) {
+    case 'TICKET_CLOSED':
+      return action.kind === 'reply'
+        ? 'This ticket is closed, so it can no longer take replies or notes.'
+        : 'This ticket is closed, so it can no longer be changed. Ask the requester to raise a new one.';
+    case 'REOPEN_WINDOW_PASSED':
+      return 'This ticket can no longer be reopened: its 7-day reopen window has passed.';
+    case 'MESSAGE_CAP':
+      return 'This ticket has reached its limit of 500 messages, so it takes no more.';
+    case 'INVALID_TRANSITION': {
+      const from = STATUS_META[ticket.status]?.label ?? ticket.status;
+      const to = action.kind === 'status' ? STATUS_META[action.next]?.label ?? action.next : null;
+      return to
+        ? `A ticket cannot go from ${from} to ${to}.`
+        : `That change is not allowed while the ticket is ${from.toLowerCase()}.`;
+    }
+    case 'TICKET_NOT_ESCALATED':
+      return 'Talim can act on a school ticket only once the school escalates it.';
+    case 'TICKET_CHANGED':
+      return 'Someone changed this ticket while you were working on it. It has been reloaded; check it and try again.';
+    default:
+      return error.message;
   }
-  if (action.kind === 'reply') {
-    return ticket.status === 'closed'
-      ? 'This ticket is closed, so it can no longer take replies.'
-      : 'This ticket can no longer take replies. It may have been closed, or reached its 500-message limit.';
-  }
-  const reopening =
-    action.kind === 'status' &&
-    (ticket.status === 'resolved' || ticket.status === 'closed') &&
-    action.next !== 'resolved' &&
-    action.next !== 'closed';
-  if (reopening) {
-    return ticket.status === 'closed'
-      ? 'A closed ticket cannot be reopened. Ask the requester to raise a new one.'
-      : 'This ticket can no longer be reopened: its 7-day reopen window has passed.';
-  }
-  return 'This change conflicts with the ticket’s current state. It has been reloaded; check it and try again.';
 }
 
 /**
@@ -277,14 +301,24 @@ export function requesterName(ticket: Pick<TicketSummary, 'requester'>): string 
 }
 
 /**
- * The school's display name, or a placeholder when the API sent only an id.
+ * The school's display name.
  *
  * @param ticket - The ticket.
- * @returns A display name.
+ * @returns A display name, or "No school" when the ticket has none.
  */
-export function schoolName(ticket: Pick<TicketSummary, 'school' | 'schoolId'>): string {
-  if (ticket.school?.name) return ticket.school.name;
-  return ticket.schoolId ? 'School' : 'No school';
+export function schoolName(ticket: Pick<TicketSummary, 'school'>): string {
+  return ticket.school?.name?.trim() || (ticket.school ? 'School' : 'No school');
+}
+
+/**
+ * The unread badge's text for a desk row ("3 new"), or `null` when the desk
+ * has read everything.
+ *
+ * @param ticket - The ticket.
+ * @returns The text, or `null`.
+ */
+export function unreadLabel(ticket: Pick<TicketSummary, 'unread'>): string | null {
+  return ticket.unread > 0 ? `${ticket.unread} new` : null;
 }
 
 /**

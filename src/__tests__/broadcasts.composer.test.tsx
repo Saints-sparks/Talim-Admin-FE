@@ -7,7 +7,7 @@ import { BroadcastComposer } from '@/components/broadcasts/BroadcastComposer';
 import { PREVIEW_DEBOUNCE_MS, todayInput } from '@/components/broadcasts/broadcast-model';
 import { broadcastService } from '@/app/services/broadcast.service';
 import { schoolService } from '@/app/services/school.service';
-import { PREVIEW } from '@/test-utils/v15Fixtures';
+import { PEOPLE, PREVIEW } from '@/test-utils/v15Fixtures';
 
 const push = jest.fn();
 
@@ -15,17 +15,19 @@ jest.mock('next/navigation', () => ({ useRouter: () => ({ push, replace: jest.fn
 jest.mock('sonner', () => ({ toast: { success: jest.fn(), error: jest.fn() } }));
 jest.mock('@/app/services/broadcast.service', () => ({
   BROADCAST_PAGE_SIZE: 20,
-  broadcastService: { preview: jest.fn(), create: jest.fn(), list: jest.fn(), get: jest.fn(), cancel: jest.fn() },
+  broadcastService: { preview: jest.fn(), create: jest.fn(), list: jest.fn(), get: jest.fn(), cancel: jest.fn(), searchPeople: jest.fn() },
 }));
 jest.mock('@/app/services/school.service', () => ({ schoolService: { getAllSchools: jest.fn() } }));
 
 const preview = broadcastService.preview as jest.Mock;
 const create = broadcastService.create as jest.Mock;
+const searchPeople = broadcastService.searchPeople as jest.Mock;
 
 beforeEach(() => {
   jest.clearAllMocks();
   preview.mockResolvedValue(PREVIEW);
   create.mockResolvedValue({ id: 'b42', status: 'sending', recipientsEstimate: 1234 });
+  searchPeople.mockResolvedValue(PEOPLE);
   (schoolService.getAllSchools as jest.Mock).mockResolvedValue({
     data: [
       { _id: 's1', name: 'Greenfield Academy' },
@@ -62,7 +64,7 @@ describe('Broadcast composer', () => {
     expect(screen.getByText('Choose who should receive it.')).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Review and send' }));
-    expect(screen.getByRole('alert')).toHaveTextContent('Choose at least one role, or send to everyone.');
+    expect(screen.getByRole('alert')).toHaveTextContent('Choose at least one role or person, or send to everyone.');
     expect(screen.getByRole('region', { name: 'Audience' })).toHaveFocus();
 
     await user.click(screen.getByRole('radio', { name: 'Selected schools' }));
@@ -189,9 +191,42 @@ describe('Broadcast composer', () => {
     expect(push).not.toHaveBeenCalled();
   });
 
-  it('says that people cannot be searched yet', () => {
+  it('finds specific people across Talim and sends them as userIds', async () => {
+    const user = userEvent.setup();
     renderWithProviders(<BroadcastComposer />);
-    expect(screen.getByRole('searchbox', { name: 'Specific people' })).toBeDisabled();
-    expect(screen.getByText(/needs an admin-wide user search, which the API does not have/)).toBeInTheDocument();
+    await writeMessage(user);
+    await user.type(screen.getByRole('searchbox', { name: 'Specific people' }), 'ngozi');
+    await waitFor(() => expect(searchPeople).toHaveBeenCalledWith({ q: 'ngozi' }));
+    expect(searchPeople).toHaveBeenCalledTimes(1);
+    expect(await screen.findByText('2 people found.')).toBeInTheDocument();
+    expect(screen.getByText('School admin · Greenfield Academy · ngozi@greenfield.test')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('checkbox', { name: /Ngozi Okafor/ }));
+    expect(screen.getByRole('button', { name: 'Remove Ngozi Okafor' })).toBeInTheDocument();
+    // A person alone is an audience.
+    await waitFor(() => expect(preview).toHaveBeenLastCalledWith({ userIds: [PEOPLE[0].id] }));
+
+    await user.click(screen.getByRole('checkbox', { name: 'Parents' }));
+    await waitFor(() => expect(preview).toHaveBeenLastCalledWith({ roles: ['parent'], userIds: [PEOPLE[0].id] }));
+    await waitFor(() => expect(screen.getByTestId('recipient-count')).toHaveTextContent('1,234'));
+    await user.click(screen.getByRole('button', { name: 'Review and send' }));
+    await user.click(within(await screen.findByRole('dialog')).getByRole('button', { name: 'Send to 1,234 people' }));
+    await waitFor(() => expect(create).toHaveBeenCalled());
+    expect(create.mock.calls[0][0].audience).toEqual({ roles: ['parent'], userIds: [PEOPLE[0].id] });
+  });
+
+  it('removes a chosen person, and searches only from two letters', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<BroadcastComposer />);
+    const search = screen.getByRole('searchbox', { name: 'Specific people' });
+    await user.type(search, 'n');
+    expect(await screen.findByText('Type at least 2 letters.')).toBeInTheDocument();
+    expect(searchPeople).not.toHaveBeenCalled();
+    await user.type(search, 'g');
+    await user.click(await screen.findByRole('checkbox', { name: /Ngozi Adeyemi/ }));
+    await user.clear(search);
+    // The chip keeps the name after the results go.
+    await user.click(screen.getByRole('button', { name: 'Remove Ngozi Adeyemi' }));
+    expect(screen.queryByRole('list', { name: 'Chosen people' })).toBeNull();
   });
 });

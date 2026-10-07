@@ -17,10 +17,14 @@
 import type { RequestBody, ResponseBody } from '@/types/apiContract';
 import type {
   AdminLoginPayload,
+  CreateBroadcastPayload,
   CreateSchoolPayload,
   PlatformProviderConfigPayload,
+  PostTicketMessagePayload,
+  PreviewBroadcastPayload,
   UpdateAvatarPayload,
   UpdateSchoolStatusPayload,
+  UpdateTicketPayload,
 } from '@/types/apiPayloads';
 
 /** Exact key list of `T`; passing the wrong list is a compile error. */
@@ -117,6 +121,44 @@ describe('write payloads follow the backend contract', () => {
     assertKeys<UpdateAvatarPayload>()(['avatarUrl']);
     expect(remove.avatarUrl).toBe('');
     expect(extra).toBeDefined();
+  });
+
+  it('support desk replies and changes (v1.5)', () => {
+    const reply = {
+      body: 'We have refunded the charge.',
+      attachments: [{ url: 'https://cdn.test/r.pdf', name: 'r.pdf', mimeType: 'application/pdf', size: 10 }],
+      internal: false,
+    } satisfies PostTicketMessagePayload;
+    // @ts-expect-error `body` is required
+    const noBody: PostTicketMessagePayload = { internal: true };
+    // @ts-expect-error a status the workflow does not know
+    const badStatus: UpdateTicketPayload = { status: 'pending' };
+
+    assertKeys<PostTicketMessagePayload>()(['body', 'attachments', 'internal', 'status']);
+    assertKeys<UpdateTicketPayload>()(['status', 'priority', 'assigneeId']);
+    const unassign = { assigneeId: null } satisfies UpdateTicketPayload;
+    expect(reply.attachments).toHaveLength(1);
+    expect([noBody, badStatus, unassign]).toHaveLength(3);
+  });
+
+  it('broadcasts (v1.5)', () => {
+    const create = {
+      title: 'Maintenance',
+      body: 'Down on Saturday.',
+      attachments: ['https://cdn.test/plan.pdf'],
+      target: { page: 'support' },
+      audience: { schoolIds: ['s1'], roles: ['teacher', 'parent'], userIds: ['u1'] },
+      channels: { push: true, email: false },
+      sendAt: '2026-10-10T08:00:00.000Z',
+    } satisfies CreateBroadcastPayload;
+    // @ts-expect-error attachments are URLs, not file objects
+    const objects: CreateBroadcastPayload = { ...create, attachments: [{ url: 'https://cdn.test/a.pdf' }] };
+    // @ts-expect-error `roles` is a list
+    const oneRole: PreviewBroadcastPayload = { audience: { roles: 'teacher' } };
+
+    assertKeys<CreateBroadcastPayload>()(['title', 'body', 'attachments', 'target', 'audience', 'channels', 'sendAt']);
+    assertKeys<CreateBroadcastPayload['audience']>()(['all', 'schoolIds', 'roles', 'userIds']);
+    expect([objects, oneRole]).toHaveLength(2);
   });
 
   it('the helper types resolve real routes (a wrong path or method would not compile)', () => {

@@ -1,14 +1,11 @@
 'use client';
 
 import React, { useId } from 'react';
-import { Info } from 'lucide-react';
 import { SchoolPicker } from '@/components/schools/SchoolPicker';
-import { chip, fieldLabel } from '@/components/tl/styles';
-import type { BroadcastRole } from '@/types/v15';
-import { ROLE_OPTIONS, type BroadcastForm } from './broadcast-model';
-
-/** The audience part of the form. */
-type AudienceFields = Pick<BroadcastForm, 'audienceMode' | 'schoolScope' | 'schoolIds' | 'roles' | 'userIds'>;
+import { chip, fieldHint, fieldLabel } from '@/components/tl/styles';
+import type { BroadcastRole } from '@/types/broadcasts';
+import { ROLE_OPTIONS, type AudienceFields } from './broadcast-model';
+import { PeoplePicker } from './PeoplePicker';
 
 /** Props for {@link AudienceBuilder}. */
 export interface AudienceBuilderProps {
@@ -77,11 +74,9 @@ function RadioCard({
 
 /**
  * Who a broadcast goes to (v1.5 §2 `audience`): everyone, or the chosen
- * roles in every school or in chosen schools, plus specific people.
- *
- * Specific people are shown but off: finding a user by email needs an
- * admin-wide user search, and the API has none (`GET /users/search`
- * searches only the caller's own school, and a platform admin has none).
+ * roles in every school or in chosen schools (everyone there when no role is
+ * ticked), plus specific people found by name or email anywhere on Talim
+ * ({@link PeoplePicker}, `GET /admin/users/search`).
  *
  * @param props - See {@link AudienceBuilderProps}.
  * @param props.value - The audience fields.
@@ -149,8 +144,13 @@ export function AudienceBuilder({ value, onChange, error, disabled = false }: Au
             ) : null}
           </fieldset>
 
-          <fieldset className="m-0 border-0 p-0">
+          <fieldset className="m-0 border-0 p-0" aria-describedby="roles-hint">
             <legend className={`${fieldLabel} mb-2`}>Roles</legend>
+            <p id="roles-hint" className={`${fieldHint} m-0 mb-2`}>
+              {value.schoolScope === 'selected'
+                ? 'None ticked: everyone in the selected schools.'
+                : 'Each role you tick, in every school.'}
+            </p>
             <div className="flex flex-wrap gap-2">
               {ROLE_OPTIONS.map((role) => {
                 const on = value.roles.includes(role.value);
@@ -170,23 +170,7 @@ export function AudienceBuilder({ value, onChange, error, disabled = false }: Au
             </div>
           </fieldset>
 
-          <div className="flex flex-col gap-1.5">
-            <span className={fieldLabel} id="people-label">
-              Specific people
-            </span>
-            <input
-              type="search"
-              aria-labelledby="people-label"
-              aria-describedby="people-unavailable"
-              placeholder="Search by email"
-              disabled
-              className="min-h-[46px] w-full cursor-not-allowed rounded-[13px] border border-dashed border-tl-control bg-tl-surface px-3.5 text-[15px] text-tl-muted"
-            />
-            <p id="people-unavailable" className="m-0 flex items-start gap-1.5 text-xs font-semibold text-tl-muted">
-              <Info className="mt-px h-3.5 w-3.5 shrink-0" aria-hidden />
-              Not available yet: finding people by email needs an admin-wide user search, which the API does not have. Send to roles and schools for now.
-            </p>
-          </div>
+          <PeoplePicker value={value.people} onChange={(people) => onChange({ people })} disabled={disabled} />
         </div>
       ) : null}
 
