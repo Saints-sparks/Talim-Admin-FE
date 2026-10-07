@@ -17,6 +17,17 @@ describe('ApiError.fromResponse', () => {
     expect(error.status).toBe(403);
   });
 
+  it("keeps a route's own reason (the top-level code) beside the generic code", () => {
+    const error = ApiError.fromResponse(res(409), {
+      success: false,
+      error: { code: 'CONFLICT', message: 'This ticket is closed.' },
+      code: 'TICKET_CLOSED',
+    });
+    expect(error.code).toBe('CONFLICT');
+    expect(error.reasonCode).toBe('TICKET_CLOSED');
+    expect(ApiError.fromResponse(res(409), { error: { code: 'CONFLICT' } }).reasonCode).toBeUndefined();
+  });
+
   it('falls back to a code derived from the status when the body has none', () => {
     expect(ApiError.fromResponse(res(404), null).code).toBe('NOT_FOUND');
     expect(ApiError.fromResponse(res(409), null).code).toBe('CONFLICT');
