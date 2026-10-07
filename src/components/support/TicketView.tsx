@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { ArrowLeft, Mail } from 'lucide-react';
 import { supportService } from '@/app/services/support.service';
 import { ApiError } from '@/lib/apiError';
+import { formatWhen } from '@/lib/format';
 import { queryKeys, staleTimes } from '@/lib/queryKeys';
 import { Avatar } from '@/components/tl/Avatar';
 import { Banner, ErrorCard, SkeletonRows } from '@/components/tl/States';
@@ -16,7 +17,6 @@ import {
   PRIORITY_META,
   ROLE_LABELS,
   STATUS_META,
-  formatWhen,
   isReadOnlyTicket,
   reopenDeadline,
   requesterName,

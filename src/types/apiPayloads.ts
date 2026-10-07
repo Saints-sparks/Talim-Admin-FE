@@ -37,8 +37,3 @@ export type PlatformProviderConfigPayload = RequestBody<
   '/payments/platform/providers/{providerName}/config',
   'patch'
 >;
-
-// ─── Notifications and support ────────────────────────────────────────────────
-
-/** Body of `POST /notifications` (an announcement or notification from Talim). */
-export type CreateNotificationPayload = RequestBody<'/notifications', 'post'>;

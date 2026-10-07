@@ -6,7 +6,8 @@ import { Avatar } from '@/components/tl/Avatar';
 import { pill, pillTone } from '@/components/tl/styles';
 import { AttachmentLinks } from '@/components/attachments/AttachmentPicker';
 import type { TicketMessage } from '@/types/v15';
-import { ROLE_LABELS, formatWhen } from './desk-model';
+import { formatWhen } from '@/lib/format';
+import { ROLE_LABELS } from './desk-model';
 
 /**
  * The surface classes of a message: internal notes on a dashed amber card,

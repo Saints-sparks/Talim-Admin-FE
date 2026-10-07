@@ -17,7 +17,6 @@
 import type { RequestBody, ResponseBody } from '@/types/apiContract';
 import type {
   AdminLoginPayload,
-  CreateNotificationPayload,
   CreateSchoolPayload,
   PlatformProviderConfigPayload,
   UpdateAvatarPayload,
@@ -93,39 +92,6 @@ describe('write payloads follow the backend contract', () => {
     ]);
     expect(config.supportedChannels).toContain('card');
     expect(wrongEnvironment).toBeDefined();
-  });
-
-  it('announcement / notification create', () => {
-    const notification = {
-      title: 'Term dates',
-      message: 'Second term starts on 5 January.',
-      recipientRoles: ['school_admin', 'teacher'],
-      priority: 'high',
-      category: 'announcement',
-      deliveryChannels: ['inApp', 'email'],
-    } satisfies CreateNotificationPayload;
-    // @ts-expect-error `message` is required
-    const noMessage: CreateNotificationPayload = { title: 'Only a title' };
-
-    assertKeys<CreateNotificationPayload>()([
-      'title',
-      'message',
-      'attachments',
-      'recipientRoles',
-      'targetSchools',
-      'senderId',
-      'priority',
-      'type',
-      'source',
-      'category',
-      'metadata',
-      'recipientId',
-      'scheduledFor',
-      'isScheduled',
-      'deliveryChannels',
-    ]);
-    expect(notification.recipientRoles).toHaveLength(2);
-    expect(noMessage).toBeDefined();
   });
 
   it('admin login', () => {

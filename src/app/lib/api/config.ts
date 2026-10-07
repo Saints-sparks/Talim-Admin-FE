@@ -61,8 +61,11 @@ export const API_ENDPOINTS = {
   TICKET_BY_ID: (id: string) => `${API_BASE_URL}/tickets/${encodeURIComponent(id)}`,
   TICKET_MESSAGES: (id: string) => `${API_BASE_URL}/tickets/${encodeURIComponent(id)}/messages`,
 
-  NOTIFICATIONS: `${API_BASE_URL}/notifications`,
-  NOTIFICATION_BY_ID: (id: string) => `${API_BASE_URL}/notifications/${id}`,
+  // v1.5 broadcasts (talimBE-V2/docs/v1.5-platform-sync.md §2): platform admin only.
+  ADMIN_BROADCASTS: `${API_BASE_URL}/admin/broadcasts`,
+  ADMIN_BROADCASTS_PREVIEW: `${API_BASE_URL}/admin/broadcasts/preview`,
+  ADMIN_BROADCAST_BY_ID: (id: string) => `${API_BASE_URL}/admin/broadcasts/${encodeURIComponent(id)}`,
+  ADMIN_BROADCAST_CANCEL: (id: string) => `${API_BASE_URL}/admin/broadcasts/${encodeURIComponent(id)}/cancel`,
 
   PROFILE_UPDATE: `${API_BASE_URL}/auth/profile/update/`,
   PROFILE_AVATAR: `${API_BASE_URL}/auth/profile/avatar`,

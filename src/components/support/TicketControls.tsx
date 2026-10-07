@@ -7,6 +7,7 @@ import { useAuthContext } from '@/app/context/AuthContext';
 import { supportService } from '@/app/services/support.service';
 import { ApiError } from '@/lib/apiError';
 import { logger } from '@/lib/logger';
+import { formatWhen } from '@/lib/format';
 import { queryKeys } from '@/lib/queryKeys';
 import { card, cardTitle, fieldControl, fieldHint, fieldLabel, rowButton } from '@/components/tl/styles';
 import type { Ticket, TicketPriority, TicketStatus, UpdateTicketPayload } from '@/types/v15';
@@ -15,7 +16,6 @@ import {
   STATUS_META,
   TICKET_PRIORITIES,
   TICKET_STATUSES,
-  formatWhen,
   reopenDeadline,
   ticketErrorMessage,
   type ConflictAction,

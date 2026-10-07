@@ -18,11 +18,12 @@ export const queryKeys = {
     counts: (params?: Record<string, unknown>) => ['tickets', 'counts', params ?? {}] as const,
     detail: (ticketId: string) => ['tickets', 'detail', ticketId] as const,
   },
-  notifications: {
-    all: ['notifications'] as const,
-    list: (params?: Record<string, unknown>) => ['notifications', 'list', params ?? {}] as const,
-    detail: (notificationId: string) => ['notifications', notificationId] as const,
-    stats: (params?: Record<string, unknown>) => ['notifications', 'stats', params ?? {}] as const,
+  broadcasts: {
+    all: ['broadcasts'] as const,
+    list: (params?: Record<string, unknown>) => ['broadcasts', 'list', params ?? {}] as const,
+    detail: (broadcastId: string) => ['broadcasts', 'detail', broadcastId] as const,
+    /** Keyed on the serialised audience, so an unchanged audience is never recounted. */
+    preview: (audienceKey: string) => ['broadcasts', 'preview', audienceKey] as const,
   },
   payments: {
     all: ['payments'] as const,
