@@ -1,102 +1,88 @@
 import { api } from '@/lib/apiClient';
 import { API_ENDPOINTS } from '@/app/lib/api/config';
-import type { UpdateComplaintStatusPayload } from '@/types/apiPayloads';
+import { toQueryString } from '@/lib/queryString';
+import type {
+  PostTicketMessagePayload,
+  Ticket,
+  TicketDeskCounts,
+  TicketDeskQuery,
+  TicketPage,
+  UpdateTicketPayload,
+} from '@/types/v15';
 
-/** `ComplaintStatus`, from `UpdateComplaintStatusDto` in the generated contract. */
-export type ComplaintStatus = UpdateComplaintStatusPayload['status'];
-
-/** Every value `PATCH /complaints/:id/status` accepts, in workflow order. */
-export const COMPLAINT_STATUSES: readonly ComplaintStatus[] = [
-  'Pending',
-  'In Progress',
-  'Resolved',
-] as const;
-
-/** A school reference as the API populates it on a complaint. */
-export interface ComplaintSchool {
-  _id: string;
-  name: string;
-  email: string;
-  location?: { state?: string; city?: string };
-}
-
-/** The complaint author, as the API populates them. */
-export interface PopulatedUser {
-  userId: string;
-  firstName?: string;
-  lastName?: string;
-  email: string;
-  schoolId?: ComplaintSchool | string;
-}
+/** Rows per page of the desk list. */
+export const DESK_PAGE_SIZE = 20;
 
 /**
- * One support ticket. Stays hand-written for now: the contract's `ComplaintDto`
- * types `schoolId` as a bare id and `userId` as id-or-author, while the support
- * screens still read a populated school and author; moving them is a UI change.
+ * The Talim support desk (v1.5 contract §1, "Talim desk"). Every route is
+ * platform-admin only. Each screen makes one list call and one counts call;
+ * nothing here is called per row.
+ *
+ * The legacy `/complaints/*` routes this portal used before v1.5 are now thin
+ * deprecated wrappers on the backend; this console no longer calls them.
  */
-export interface Complaint {
-  _id: string;
-  ticket: string;
-  userId: PopulatedUser;
-  subject: string;
-  description: string;
-  schoolId?: ComplaintSchool | string;
-  attachment?: string;
-  status: ComplaintStatus;
-  /**
-   * Declared on the backend schema but never written by any endpoint — there is
-   * no assign route today, so this is always absent. See the T4.17 note in the
-   * support screen.
-   */
-  assignedAdmin?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
 export const supportService = {
   /**
-   * Every complaint on the platform. `GET /complaints` is decorated
-   * `@Roles(UserRole.ADMIN)`, so only a platform administrator may call it.
+   * One page of the Talim desk. With `scope: 'all'` it also lists every
+   * school-desk ticket, which Talim may read but not change.
    *
-   * @returns All complaints, newest first as the API orders them.
-   * @throws ApiError - On any non-2xx response.
+   * @param query - Status, area, priority, assignee, school, search, page and scope.
+   * @returns The page of ticket summaries and its pagination meta.
+   * @throws ApiError - `FORBIDDEN` when the caller is not a platform admin.
    */
-  async getAllComplaints(): Promise<Complaint[]> {
-    return api.get<Complaint[]>(API_ENDPOINTS.COMPLAINTS);
+  async listDesk(query: TicketDeskQuery = {}): Promise<TicketPage> {
+    return api.get<TicketPage>(
+      `${API_ENDPOINTS.TICKETS_TALIM_DESK}${toQueryString({ limit: DESK_PAGE_SIZE, ...query })}`,
+    );
   },
 
   /**
-   * One complaint by id or ticket number.
+   * The desk's tab counts (open, in progress, waiting on user, resolved,
+   * unassigned and mine), in one call.
    *
-   * @param id - The complaint id or its ticket number.
-   * @returns The complaint.
+   * @param scope - `all` to count school-desk tickets too.
+   * @returns The counts.
+   * @throws ApiError - `FORBIDDEN` when the caller is not a platform admin.
+   */
+  async getDeskCounts(scope?: 'all'): Promise<TicketDeskCounts> {
+    return api.get<TicketDeskCounts>(`${API_ENDPOINTS.TICKETS_TALIM_DESK_COUNTS}${toQueryString({ scope })}`);
+  },
+
+  /**
+   * One ticket with its whole thread, internal notes included (desk staff see them).
+   *
+   * @param id - The ticket id.
+   * @returns The ticket.
    * @throws ApiError - `NOT_FOUND` when no such ticket exists.
    */
-  async getComplaint(id: string): Promise<Complaint> {
-    return api.get<Complaint>(API_ENDPOINTS.COMPLAINT_BY_ID(id));
+  async getTicket(id: string): Promise<Ticket> {
+    return api.get<Ticket>(API_ENDPOINTS.TICKET_BY_ID(id));
   },
 
   /**
-   * Moves a complaint through the workflow via `PATCH /complaints/:id/status`.
-   * The DTO declares `status` and nothing else, and the API runs
-   * `forbidNonWhitelisted`, so no other field may be sent.
+   * Adds a staff reply, or an internal note when `internal` is true. The
+   * requester is notified of a reply, never of a note.
    *
-   * @param id - The complaint id.
-   * @param status - The new status.
-   * @returns The updated complaint.
-   * @throws ApiError - `VALIDATION_FAILED` for a status outside the enum.
+   * @param id - The ticket id.
+   * @param payload - The body (1..5000), uploaded attachments and the internal flag.
+   * @returns The server's answer (the updated ticket or the new message); callers refetch.
+   * @throws ApiError - `CONFLICT` (409) when the ticket is closed or holds 500 messages;
+   *   `FORBIDDEN` on a school-desk ticket that was never escalated.
    */
-  async updateStatus(id: string, status: ComplaintStatus): Promise<Complaint> {
-    return api.patch<Complaint>(API_ENDPOINTS.COMPLAINT_STATUS(id), { status } satisfies UpdateComplaintStatusPayload);
+  async postMessage(id: string, payload: PostTicketMessagePayload): Promise<unknown> {
+    return api.post<unknown>(API_ENDPOINTS.TICKET_MESSAGES(id), payload);
   },
 
   /**
-   * Deletes a complaint.
+   * Changes a ticket's status, priority or assignee. Send only what changes.
    *
-   * @param id - The complaint id.
-   * @throws ApiError - On any non-2xx response.
+   * @param id - The ticket id.
+   * @param patch - The fields to change; `assigneeId: null` unassigns.
+   * @returns The server's answer (the updated ticket); callers refetch.
+   * @throws ApiError - `CONFLICT` (409) when the move is not allowed, such as
+   *   reopening after the 7-day window; `FORBIDDEN` on a school-desk ticket.
    */
-  async deleteComplaint(id: string): Promise<void> {
-    await api.delete<void>(API_ENDPOINTS.COMPLAINT_BY_ID(id));
+  async updateTicket(id: string, patch: UpdateTicketPayload): Promise<unknown> {
+    return api.patch<unknown>(API_ENDPOINTS.TICKET_BY_ID(id), patch);
   },
 };

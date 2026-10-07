@@ -21,7 +21,6 @@ import type {
   CreateSchoolPayload,
   PlatformProviderConfigPayload,
   UpdateAvatarPayload,
-  UpdateComplaintStatusPayload,
   UpdateSchoolStatusPayload,
 } from '@/types/apiPayloads';
 
@@ -127,16 +126,6 @@ describe('write payloads follow the backend contract', () => {
     ]);
     expect(notification.recipientRoles).toHaveLength(2);
     expect(noMessage).toBeDefined();
-  });
-
-  it('complaint status', () => {
-    const inProgress = { status: 'In Progress' } satisfies UpdateComplaintStatusPayload;
-    // @ts-expect-error "Closed" is not a complaint status
-    const closed: UpdateComplaintStatusPayload = { status: 'Closed' };
-
-    assertKeys<UpdateComplaintStatusPayload>()(['status']);
-    expect(inProgress.status).toBe('In Progress');
-    expect(closed).toBeDefined();
   });
 
   it('admin login', () => {

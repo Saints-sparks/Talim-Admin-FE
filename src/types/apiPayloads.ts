@@ -42,5 +42,3 @@ export type PlatformProviderConfigPayload = RequestBody<
 
 /** Body of `POST /notifications` (an announcement or notification from Talim). */
 export type CreateNotificationPayload = RequestBody<'/notifications', 'post'>;
-/** Body of `PATCH /complaints/{id}/status`. */
-export type UpdateComplaintStatusPayload = RequestBody<'/complaints/{id}/status', 'patch'>;

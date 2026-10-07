@@ -12,10 +12,11 @@ export const queryKeys = {
     list: (params?: Record<string, unknown>) => ['schools', 'list', params ?? {}] as const,
     detail: (schoolId: string) => ['schools', schoolId] as const,
   },
-  complaints: {
-    all: ['complaints'] as const,
-    list: () => ['complaints', 'list'] as const,
-    detail: (complaintId: string) => ['complaints', complaintId] as const,
+  tickets: {
+    all: ['tickets'] as const,
+    list: (params?: Record<string, unknown>) => ['tickets', 'list', params ?? {}] as const,
+    counts: (params?: Record<string, unknown>) => ['tickets', 'counts', params ?? {}] as const,
+    detail: (ticketId: string) => ['tickets', 'detail', ticketId] as const,
   },
   notifications: {
     all: ['notifications'] as const,

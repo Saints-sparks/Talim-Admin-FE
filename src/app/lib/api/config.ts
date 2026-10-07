@@ -50,13 +50,16 @@ export const API_ENDPOINTS = {
   SCHOOL_RESTORE: (schoolId: string) => `${API_BASE_URL}/schools/restore/${schoolId}`,
 
   UPLOAD_IMAGE: `${API_BASE_URL}/upload/image`,
+  UPLOAD_FILE: `${API_BASE_URL}/upload/file`,
 
   ADMIN_LOGIN: `${API_BASE_URL}/auth/admin-login`,
   ACTIVITY_LOGS: `${API_BASE_URL}/auth/activity-logs`,
 
-  COMPLAINTS: `${API_BASE_URL}/complaints`,
-  COMPLAINT_BY_ID: (id: string) => `${API_BASE_URL}/complaints/${id}`,
-  COMPLAINT_STATUS: (id: string) => `${API_BASE_URL}/complaints/${id}/status`,
+  // v1.5 tickets (talimBE-V2/docs/v1.5-platform-sync.md §1): the Talim desk.
+  TICKETS_TALIM_DESK: `${API_BASE_URL}/tickets/desk/talim`,
+  TICKETS_TALIM_DESK_COUNTS: `${API_BASE_URL}/tickets/desk/talim/counts`,
+  TICKET_BY_ID: (id: string) => `${API_BASE_URL}/tickets/${encodeURIComponent(id)}`,
+  TICKET_MESSAGES: (id: string) => `${API_BASE_URL}/tickets/${encodeURIComponent(id)}/messages`,
 
   NOTIFICATIONS: `${API_BASE_URL}/notifications`,
   NOTIFICATION_BY_ID: (id: string) => `${API_BASE_URL}/notifications/${id}`,
