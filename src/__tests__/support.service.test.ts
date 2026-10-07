@@ -36,12 +36,18 @@ beforeEach(() => {
 describe('supportService (v1.5 Talim desk)', () => {
   it('lists the desk with one request carrying every filter', async () => {
     fetchMock.mockResolvedValueOnce(jsonResponse({ success: true, data: { data: [], meta: { total: 0, page: 2, lastPage: 1, limit: 20 } } }));
-    const page = await supportService.listDesk({ status: 'open', area: 'fees', assigneeId: 'unassigned', q: 'late fee', page: 2, scope: 'all' });
+    const page = await supportService.listDesk({ status: ['open'], area: 'fees', assigneeId: 'unassigned', q: 'late fee', page: 2, scope: 'all' });
     expect(page.meta.page).toBe(2);
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(call().url).toBe(
       'http://api.test/tickets/desk/talim?limit=20&status=open&area=fees&assigneeId=unassigned&q=late+fee&page=2&scope=all',
     );
+  });
+
+  it('sends several statuses as one comma-separated parameter', async () => {
+    fetchMock.mockResolvedValueOnce(jsonResponse({ success: true, data: { data: [], meta: { total: 0, page: 1, lastPage: 1, limit: 20 } } }));
+    await supportService.listDesk({ status: ['open', 'in_progress'] });
+    expect(new URL(call().url).searchParams.get('status')).toBe('open,in_progress');
   });
 
   it('asks for counts, with the scope when it is "all"', async () => {

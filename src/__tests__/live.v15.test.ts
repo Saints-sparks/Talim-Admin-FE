@@ -143,7 +143,7 @@ async function refusal(call: () => Promise<unknown>): Promise<{ status: number; 
       expect(counts.total).toBeGreaterThanOrEqual(counts.open);
       expect(counts.unassigned).toBeGreaterThanOrEqual(2);
 
-      const page = await supportService.listDesk({ status: 'open', q: RUN });
+      const page = await supportService.listDesk({ status: ['open'], q: RUN });
       const ids = page.data.map((t) => t.id);
       expect(ids).toEqual(expect.arrayContaining([parentTicket, teacherTicket]));
       const row = page.data.find((t) => t.id === parentTicket)!;
@@ -183,7 +183,7 @@ async function refusal(call: () => Promise<unknown>): Promise<{ status: number; 
       const resolved = await supportService.updateTicket(parentTicket, { status: 'resolved' });
       expect(resolved.status).toBe('resolved');
       expect(resolved.reopenableUntil).toBeTruthy();
-      const mineFilter = await supportService.listDesk({ assigneeId: 'me', q: RUN, status: 'resolved' });
+      const mineFilter = await supportService.listDesk({ assigneeId: 'me', q: RUN, status: ['resolved'] });
       expect(mineFilter.data.map((t) => t.id)).toContain(parentTicket);
 
       // The parent's reply reopens it (assigned: back to in progress); the desk sees it unread.

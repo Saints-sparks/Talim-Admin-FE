@@ -184,14 +184,15 @@ export function deskFiltersToSearch(filters: DeskFilters): string {
 /**
  * Turns the URL filters into the `GET /tickets/desk/talim` query. The API
  * reads `assigneeId` as `me`, `unassigned` or a staff id, so the filter is
- * sent as it is.
+ * sent as it is; `status` is a list, here the tab's one status (none for
+ * `all`).
  *
  * @param filters - The filters.
  * @returns The query.
  */
 export function toDeskQuery(filters: DeskFilters): TicketDeskQuery {
   return {
-    ...(filters.status !== 'all' ? { status: filters.status } : {}),
+    ...(filters.status !== 'all' ? { status: [filters.status] } : {}),
     ...(filters.area ? { area: filters.area } : {}),
     ...(filters.priority ? { priority: filters.priority } : {}),
     ...(filters.assignee ? { assigneeId: filters.assignee } : {}),

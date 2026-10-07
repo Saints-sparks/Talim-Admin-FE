@@ -74,7 +74,7 @@ describe('Support desk queue', () => {
     expect(within(rows[1]).getByTestId('unread-badge')).toHaveTextContent('2 new messages from the requester');
 
     expect(listDesk).toHaveBeenCalledTimes(1);
-    expect(listDesk).toHaveBeenCalledWith({ status: 'open', page: 1 });
+    expect(listDesk).toHaveBeenCalledWith({ status: ['open'], page: 1 });
     expect(getDeskCounts).toHaveBeenCalledTimes(1);
     expect(getDeskCounts).toHaveBeenCalledWith(undefined);
     await waitFor(() => expect(listStaff).toHaveBeenCalledTimes(1));
@@ -173,7 +173,7 @@ describe('Support desk queue', () => {
     expect(within(row).getByText('School desk · read-only')).toBeInTheDocument();
     expect(screen.getByText(/School-desk tickets are read-only here/)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'All schools' })).toHaveAttribute('aria-pressed', 'true');
-    expect(listDesk).toHaveBeenCalledWith({ status: 'open', page: 1, scope: 'all' });
+    expect(listDesk).toHaveBeenCalledWith({ status: ['open'], page: 1, scope: 'all' });
     expect(getDeskCounts).toHaveBeenCalledWith('all');
 
     await userEvent.setup().click(screen.getByRole('button', { name: 'Talim desk' }));

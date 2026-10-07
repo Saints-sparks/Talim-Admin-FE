@@ -53,7 +53,7 @@ describe('desk filters in the URL', () => {
   });
 
   it('maps the filters onto the desk query (the API reads `me`, `unassigned` or an id)', () => {
-    expect(toDeskQuery(DEFAULT_DESK_FILTERS)).toEqual({ status: 'open', page: 1 });
+    expect(toDeskQuery(DEFAULT_DESK_FILTERS)).toEqual({ status: ['open'], page: 1 });
     expect(toDeskQuery({ ...DEFAULT_DESK_FILTERS, status: 'all', assignee: 'me', schoolId: 's1', scope: 'all', q: ' x ' })).toEqual({
       assigneeId: 'me',
       schoolId: 's1',
