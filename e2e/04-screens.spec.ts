@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import { test, expect } from "./support/fixtures";
-import { authFile } from "./support/creds";
+import { ACCOUNTS } from "./support/creds";
+import { signInPlatform } from "./support/auth";
 import { settled } from "./support/ui";
 
 /**
@@ -23,11 +24,13 @@ for (const [device, viewport] of [
   ["mobile", { width: 390, height: 844 }],
 ] as const) {
   test.describe(device, () => {
-    test.use({ storageState: authFile("platform"), viewport });
+    test.use({ viewport });
 
     test(`main screens (${device})`, async ({ page, browser }) => {
       test.setTimeout(300_000);
       fs.mkdirSync(`e2e/screenshots/${device}`, { recursive: true });
+      // A fresh sign-in: the refresh cookie rotates on every use (see 02-desk).
+      await signInPlatform(page, ACCOUNTS.platform);
       for (const screen of SCREENS) {
         await page.goto(screen.path);
         await expect(page.getByRole("heading", { level: 1, name: screen.heading }).first()).toBeVisible({ timeout: 60_000 });

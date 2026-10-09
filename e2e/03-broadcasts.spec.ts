@@ -1,8 +1,8 @@
 import type { Page } from "@playwright/test";
 import { test, expect, type Allowed } from "./support/fixtures";
-import { authFile } from "./support/creds";
 import { apiCall, apiLogin } from "./support/api";
 import { ACCOUNTS } from "./support/creds";
+import { signInPlatform } from "./support/auth";
 import { settled } from "./support/ui";
 import { axeFindings } from "./support/axe";
 
@@ -18,7 +18,9 @@ import { axeFindings } from "./support/axe";
 const RUN = Date.now().toString(36).slice(-5);
 const NEW = "/talimadmindashboard/talimannouncement/new";
 const HISTORY = "/talimadmindashboard/talimannouncement";
-const ALLOW: readonly Allowed[] = [];
+const ALLOW: readonly Allowed[] = [
+  { kind: "external", match: /fonts\.googleapis\.com|fonts\.gstatic\.com/, reason: "Google Fonts are blocked by the harness; the system font is used." },
+];
 
 interface Broadcast {
   id: string;
@@ -26,7 +28,11 @@ interface Broadcast {
   stats: { recipients: number; delivered: number };
 }
 
-test.use({ storageState: authFile("platform") });
+// The portal keeps its access token in memory and rotates the refresh cookie on every use, so a
+// stored session is good for one page load only: each test signs in through the form instead.
+test.beforeEach(async ({ page }) => {
+  await signInPlatform(page, ACCOUNTS.platform);
+});
 test.describe.configure({ mode: "serial" });
 
 let teachers = 0;
@@ -44,6 +50,7 @@ async function compose(page: Page, title: string): Promise<void> {
 }
 
 test("compose: the preview counts the audience; send now; the history has the stats", async ({ page, monitor }) => {
+  test.setTimeout(300_000);
   const platform = await apiLogin(ACCOUNTS.platform);
   teachers = (await apiCall<{ recipients: number }>(platform, "POST", "/admin/broadcasts/preview", { audience: { roles: ["teacher"] } })).recipients;
   expect(teachers).toBeGreaterThan(0);
@@ -63,7 +70,7 @@ test("compose: the preview counts the audience; send now; the history has the st
   await expect(page.getByText(`Sending to ${teachers} people`, { exact: true })).toBeVisible();
 
   // The broadcast's page: sent, with its stats (it refreshes while sending).
-  await expect(page).toHaveURL(/\/talimannouncement\/[a-f0-9]{24}$/);
+  await expect(page).toHaveURL(/\/talimannouncement\/[a-f0-9]{24}$/, { timeout: 90_000 });
   sentId = page.url().split("/").pop()!;
   const stats = page.getByRole("group", { name: "Delivery stats" });
   await expect(stats).toContainText(`Recipients${teachers}`, { timeout: 60_000 });
@@ -80,6 +87,7 @@ test("compose: the preview counts the audience; send now; the history has the st
 });
 
 test("schedule for tomorrow, then cancel", async ({ page, monitor }) => {
+  test.setTimeout(300_000);
   monitor.clear();
   const title = `E2E ${RUN}: scheduled reminder`;
   await compose(page, title);
@@ -93,7 +101,7 @@ test("schedule for tomorrow, then cancel", async ({ page, monitor }) => {
   const confirm = page.getByRole("dialog", { name: title });
   await confirm.getByRole("button", { name: `Schedule for ${teachers} ${teachers === 1 ? "person" : "people"}` }).click();
   await expect(page.getByText(`Scheduled for ${teachers} people`, { exact: true })).toBeVisible();
-  await expect(page).toHaveURL(/\/talimannouncement\/[a-f0-9]{24}$/);
+  await expect(page).toHaveURL(/\/talimannouncement\/[a-f0-9]{24}$/, { timeout: 90_000 });
   await expect(page.getByText("Scheduled", { exact: true }).first()).toBeVisible();
 
   await page.getByRole("button", { name: `Cancel “${title}”` }).click();
@@ -108,6 +116,7 @@ test("schedule for tomorrow, then cancel", async ({ page, monitor }) => {
 });
 
 test("axe: history, composer and a broadcast", async ({ page }) => {
+  test.setTimeout(300_000);
   const failures: string[] = [];
   for (const [route, label] of [
     [HISTORY, "history"],

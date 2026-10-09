@@ -9,6 +9,7 @@ import { settled } from "./support/ui";
  * with the access-denied banner and stays on the sign-in page.
  */
 const ALLOW: readonly Allowed[] = [
+  { kind: "external", match: /fonts\.googleapis\.com|fonts\.gstatic\.com/, reason: "Google Fonts are blocked by the harness; the system font is used." },
   {
     kind: "http",
     match: /POST \/auth\/admin-login -> 40[13]/,

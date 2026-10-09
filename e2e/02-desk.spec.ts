@@ -1,5 +1,6 @@
 import { test, expect, type Allowed } from "./support/fixtures";
-import { ACCOUNTS, authFile } from "./support/creds";
+import { ACCOUNTS } from "./support/creds";
+import { signInPlatform } from "./support/auth";
 import { apiCall, apiLogin } from "./support/api";
 import { settled } from "./support/ui";
 import { axeFindings } from "./support/axe";
@@ -12,7 +13,9 @@ import { axeFindings } from "./support/axe";
  * the ticket. Each run makes its own "E2E <run> ..." ticket.
  */
 const RUN = Date.now().toString(36).slice(-5);
-const ALLOW: readonly Allowed[] = [];
+const ALLOW: readonly Allowed[] = [
+  { kind: "external", match: /fonts\.googleapis\.com|fonts\.gstatic\.com/, reason: "Google Fonts are blocked by the harness; the system font is used." },
+];
 
 interface Ticket {
   id: string;
@@ -21,13 +24,18 @@ interface Ticket {
   messages: { body: string; internal: boolean }[];
 }
 
-test.use({ storageState: authFile("platform") });
+// The portal keeps its access token in memory and rotates the refresh cookie on every use, so a
+// stored session is good for one page load only: each test signs in through the form instead.
+test.beforeEach(async ({ page }) => {
+  await signInPlatform(page, ACCOUNTS.platform);
+});
 test.describe.configure({ mode: "serial" });
 
 let ticket: Ticket;
 const subject = `E2E ${RUN}: timetable export is blank`;
 
 test("queue → ticket: internal note, reply, status", async ({ page, monitor }) => {
+  test.setTimeout(300_000);
   const teacher = await apiLogin(ACCOUNTS.teacher);
   ticket = await apiCall<Ticket>(teacher, "POST", "/tickets", {
     desk: "talim",
@@ -47,7 +55,7 @@ test("queue → ticket: internal note, reply, status", async ({ page, monitor })
   await expect(row).toContainText("Open");
 
   await row.getByRole("link", { name: new RegExp(subject) }).click();
-  await expect(page).toHaveURL(new RegExp(`/talimsupport/${ticket.id}$`));
+  await expect(page).toHaveURL(new RegExp(`/talimsupport/${ticket.id}$`), { timeout: 90_000 });
   await expect(page.getByRole("heading", { level: 1, name: subject })).toBeVisible();
 
   // Internal note.
@@ -82,6 +90,7 @@ test("queue → ticket: internal note, reply, status", async ({ page, monitor })
 });
 
 test("axe: the desk queue and a ticket", async ({ page }) => {
+  test.setTimeout(300_000);
   const failures: string[] = [];
   for (const [route, label] of [
     ["/talimsupport", "/talimsupport"],
