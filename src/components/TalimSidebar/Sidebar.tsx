@@ -49,7 +49,9 @@ interface SidebarProps {
 
 export default function Sidebartalim({ className }: SidebarProps) {
   const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(true);
+  // Below lg the sidebar is a drawer: closed until the menu button opens it (it used to start open
+  // and cover every page on a phone). From lg it is always shown, whatever this says.
+  const [isOpen, setIsOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const { setIsNavigating } = useNavigationLoading();
   const { user, logout } = useAuthContext();
@@ -57,6 +59,11 @@ export default function Sidebartalim({ className }: SidebarProps) {
   useEffect(() => {
     setIsNavigating(false);
   }, [pathname, setIsNavigating]);
+
+  // A link was followed: put the phone drawer away.
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
@@ -87,6 +94,10 @@ export default function Sidebartalim({ className }: SidebarProps) {
 
       {/* Mobile toggle */}
       <button
+        type="button"
+        aria-label={isOpen ? 'Close menu' : 'Open menu'}
+        aria-expanded={isOpen}
+        aria-controls="talim-sidebar"
         className="fixed left-4 top-4 z-50 lg:hidden flex h-9 w-9 items-center justify-center rounded-lg border border-[#D7E6F6] bg-white text-[#003366] shadow-sm"
         onClick={() => setIsOpen(!isOpen)}
       >
@@ -95,6 +106,7 @@ export default function Sidebartalim({ className }: SidebarProps) {
 
       {/* Sidebar */}
       <div
+        id="talim-sidebar"
         className={cn(
           'fixed inset-y-0 left-0 z-40 w-[280px] transform transition-transform duration-200 ease-in-out lg:translate-x-0',
           'bg-[#FBFBFB] border-r border-[#F1F1F1] flex flex-col justify-between overflow-y-auto',
