@@ -99,6 +99,9 @@ export type PillTone = keyof typeof pillTone;
 /** A labelled form control (select, text input) in a sheet, a form or a toolbar. */
 export const fieldControl = `min-h-[46px] w-full rounded-[13px] border border-tl-control bg-tl-surface px-3.5 text-[15px] font-semibold text-tl-ink placeholder:font-medium placeholder:text-tl-faint disabled:cursor-not-allowed disabled:opacity-60 ${focusRing}`;
 
+/** A multi-line text box (a reply, a note, a reason). */
+export const fieldTextarea = `min-h-[120px] w-full resize-y rounded-[13px] border border-tl-control bg-tl-surface px-3.5 py-3 text-[15px] leading-[1.55] text-tl-ink placeholder:text-tl-faint ${focusRing}`;
+
 /** The label above a {@link fieldControl}. */
 export const fieldLabel = 'text-[13px] font-bold text-tl-muted';
 

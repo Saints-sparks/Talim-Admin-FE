@@ -8,7 +8,7 @@ import { supportService } from '@/app/services/support.service';
 import { ApiError } from '@/lib/apiError';
 import { logger } from '@/lib/logger';
 import { AttachmentPicker } from '@/components/attachments/AttachmentPicker';
-import { fieldHint, fieldLabel, focusRing, primaryButton, segment, segmentTrack } from '@/components/tl/styles';
+import { fieldHint, fieldLabel, fieldTextarea, primaryButton, segment, segmentTrack } from '@/components/tl/styles';
 import type { PostTicketMessagePayload } from '@/types/apiPayloads';
 import type { Ticket, TicketAttachmentInput } from '@/types/tickets';
 import { MESSAGE_MAX_LENGTH, ticketErrorMessage } from './desk-model';
@@ -113,7 +113,7 @@ export function ReplyComposer({ ticket }: { ticket: Ticket }) {
               submit();
             }
           }}
-          className={`min-h-[120px] w-full resize-y rounded-[13px] border border-tl-control bg-tl-surface px-3.5 py-3 text-[15px] leading-[1.55] text-tl-ink placeholder:text-tl-faint ${focusRing}`}
+          className={fieldTextarea}
         />
         <div className="flex flex-wrap justify-between gap-2">
           <span id="reply-help" className={`${fieldHint} ${internal ? 'text-tl-warning' : ''}`}>

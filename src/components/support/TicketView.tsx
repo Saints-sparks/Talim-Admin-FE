@@ -9,6 +9,7 @@ import { ApiError } from '@/lib/apiError';
 import { formatWhen } from '@/lib/format';
 import { listPrefix, queryKeys, staleTimes } from '@/lib/queryKeys';
 import { Avatar } from '@/components/tl/Avatar';
+import { Fact } from '@/components/tl/Fact';
 import { Banner, ErrorCard, SkeletonRows } from '@/components/tl/States';
 import { card, cardTitle, eyebrow, focusRing, pagePad, pageTitle, pill, pillTone, textLink } from '@/components/tl/styles';
 import type { Ticket } from '@/types/tickets';
@@ -25,23 +26,6 @@ import {
 import { ReplyComposer } from './ReplyComposer';
 import { TicketControls } from './TicketControls';
 import { TicketThread } from './TicketThread';
-
-/**
- * One fact in a side card ("Raised", "6 Oct 2026, 09:05").
- *
- * @param props - The label and value.
- * @param props.label - The term.
- * @param props.children - The value.
- * @returns The pair.
- */
-function Fact({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div className="flex flex-wrap justify-between gap-x-3 gap-y-0.5 border-t border-tl-line-soft py-2.5 first:border-t-0 first:pt-0">
-      <dt className="text-[13px] font-bold text-tl-muted">{label}</dt>
-      <dd className="m-0 text-right text-sm font-semibold text-tl-ink">{children}</dd>
-    </div>
-  );
-}
 
 /**
  * The requester, school, timeline and (when the requester's app sent it)
