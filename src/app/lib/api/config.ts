@@ -68,6 +68,9 @@ export const API_ENDPOINTS = {
   ADMIN_BROADCAST_BY_ID: (id: string) => `${API_BASE_URL}/admin/broadcasts/${encodeURIComponent(id)}`,
   ADMIN_BROADCAST_CANCEL: (id: string) => `${API_BASE_URL}/admin/broadcasts/${encodeURIComponent(id)}/cancel`,
   ADMIN_USERS_SEARCH: `${API_BASE_URL}/admin/users/search`,
+  // v1.5 addendum (2026-10-09): the user detail page.
+  ADMIN_USER_BY_ID: (id: string) => `${API_BASE_URL}/admin/users/${encodeURIComponent(id)}`,
+  ADMIN_USER_STATUS: (id: string) => `${API_BASE_URL}/admin/users/${encodeURIComponent(id)}/status`,
 
   PROFILE_UPDATE: `${API_BASE_URL}/auth/profile/update/`,
   PROFILE_AVATAR: `${API_BASE_URL}/auth/profile/avatar`,

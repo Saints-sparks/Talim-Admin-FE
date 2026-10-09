@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { Search } from 'lucide-react';
 import { useAuthContext } from '@/app/context/AuthContext';
 import { supportService } from '@/app/services/support.service';
-import { useDebounce } from '@/hooks/use-debounce';
+import { useUrlSearchTerm } from '@/hooks/useUrlSearchTerm';
 import { queryKeys, staleTimes } from '@/lib/queryKeys';
 import { SchoolPicker } from '@/components/schools/SchoolPicker';
 import { Banner, EmptyBlock, ErrorCard, SkeletonRows } from '@/components/tl/States';
@@ -163,22 +163,7 @@ export function DeskQueue() {
   };
 
   // The search box is local while typing; the URL (and the API) follow once it settles.
-  const [term, setTerm] = useState(filters.q);
-  const settled = useDebounce(term, SEARCH_DEBOUNCE_MS);
-  const lastApplied = useRef(filters.q);
-  useEffect(() => {
-    if (settled.trim() === lastApplied.current) return;
-    lastApplied.current = settled.trim();
-    apply({ q: settled });
-    // `apply` closes over the latest filters; only a settled term should trigger it.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [settled]);
-  // The back button or "Clear filters" changed the URL's term: show it in the box.
-  useEffect(() => {
-    if (filters.q === lastApplied.current) return;
-    lastApplied.current = filters.q;
-    setTerm(filters.q);
-  }, [filters.q]);
+  const [term, setTerm] = useUrlSearchTerm(filters.q, (q) => apply({ q }), SEARCH_DEBOUNCE_MS);
 
   const clearFilters = () => apply({ ...DEFAULT_DESK_FILTERS, scope: filters.scope, status: filters.status });
 

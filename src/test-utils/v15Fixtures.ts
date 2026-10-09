@@ -3,6 +3,7 @@
  * "v1.5 as built"), typed with the generated contract so a change there
  * fails here first.
  */
+import type { AdminUserDetail, AdminUserSearchHit } from '@/types/adminUsers';
 import type { AdminUserSearchItem, Broadcast, BroadcastPreview } from '@/types/broadcasts';
 import type { Ticket, TicketDeskCounts, TicketPage, TicketStaff, TicketSummary } from '@/types/tickets';
 
@@ -185,4 +186,47 @@ export const PEOPLE: AdminUserSearchItem[] = [
     role: 'parent',
     school: null,
   },
+];
+
+/** A parent, as `GET /admin/users/:id` answers (v1.5 addendum 2026-10-09). */
+export const PARENT_ID = '64c000000000000000000001';
+
+/**
+ * A user's detail: a parent with one child, two tickets and no pending deletion.
+ *
+ * @param overrides - Fields to change.
+ * @returns The detail.
+ */
+export function adminUserDetail(overrides: Partial<AdminUserDetail> = {}): AdminUserDetail {
+  return {
+    id: PARENT_ID,
+    firstName: 'Bola',
+    lastName: 'Ade',
+    email: 'bola@parent.test',
+    phoneNumber: '+2348012345678',
+    avatarUrl: null,
+    role: 'parent',
+    isActive: true,
+    createdAt: '2026-01-10T09:00:00.000Z',
+    lastLoginAt: '2026-10-08T07:30:00.000Z',
+    status: 'active',
+    school: { id: 's1', name: 'Greenfield Academy' },
+    children: [{ id: 'c1', name: 'Tobi Ade', className: 'JSS 2A', school: { id: 's1', name: 'Greenfield Academy' } }],
+    tickets: {
+      open: 1,
+      total: 2,
+      recent: [
+        ticketSummary({ requester: { id: PARENT_ID, name: 'Bola Ade', role: 'parent', email: 'bola@parent.test' } }),
+        ticketSummary({ id: 't9', reference: 'TS-10009', subject: 'Receipt missing', status: 'resolved' }),
+      ],
+    },
+    deletion: null,
+    ...overrides,
+  };
+}
+
+/** Users found by the directory (`GET /admin/users/search` with `status`). */
+export const USER_HITS: AdminUserSearchHit[] = [
+  { ...PEOPLE[0], status: 'active' },
+  { id: PARENT_ID, name: 'Bola Ade', email: 'bola@parent.test', role: 'parent', school: { id: 's1', name: 'Greenfield Academy' }, status: 'deletion_scheduled' },
 ];

@@ -1,6 +1,7 @@
 import { api } from '@/lib/apiClient';
 import { API_ENDPOINTS } from '@/app/lib/api/config';
 import { toQueryString } from '@/lib/queryString';
+import { adminUserService } from './admin-user.service';
 import type { CreateBroadcastPayload } from '@/types/apiPayloads';
 import type {
   AdminUserSearchItem,
@@ -89,14 +90,13 @@ export const broadcastService = {
   /**
    * Finds people anywhere on Talim for an audience's "specific people":
    * active users whose name or email contains every word of `q`, by name.
+   * The same search as the user directory ({@link adminUserService.search}).
    *
    * @param query - The words (`q`), and optionally a role, a school and a limit (1–50).
    * @returns The people found, each with their role and school.
    * @throws ApiError - `FORBIDDEN` when the caller is not a platform admin.
    */
   async searchPeople(query: AdminUserSearchQuery): Promise<AdminUserSearchItem[]> {
-    return api.get<AdminUserSearchItem[]>(
-      `${API_ENDPOINTS.ADMIN_USERS_SEARCH}${toQueryString({ limit: PEOPLE_SEARCH_LIMIT, ...query })}`,
-    );
+    return adminUserService.search({ limit: PEOPLE_SEARCH_LIMIT, ...query });
   },
 };

@@ -29,6 +29,12 @@ export const queryKeys = {
     /** People found for an audience's "specific people", by search term. */
     people: (term: string) => ['broadcasts', 'people', term] as const,
   },
+  users: {
+    all: ['users'] as const,
+    /** The user directory, by its query (words, role, school, status). */
+    search: (params?: Record<string, unknown>) => ['users', 'search', params ?? {}] as const,
+    detail: (userId: string) => ['users', 'detail', userId] as const,
+  },
   payments: {
     all: ['payments'] as const,
     providers: () => ['payments', 'providers'] as const,

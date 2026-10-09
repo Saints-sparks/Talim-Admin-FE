@@ -124,7 +124,7 @@ export const DEFAULT_DESK_FILTERS: DeskFilters = {
  * @param fallback - Returned when the value is not allowed.
  * @returns The value or the fallback.
  */
-function oneOf<T extends string>(value: string | null, allowed: readonly T[], fallback: T): T {
+export function oneOf<T extends string>(value: string | null, allowed: readonly T[], fallback: T): T {
   return value !== null && (allowed as readonly string[]).includes(value) ? (value as T) : fallback;
 }
 
