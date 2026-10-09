@@ -3,6 +3,9 @@ import { Manrope } from 'next/font/google';
 import './globals.css';
 import { AppProviders } from '@/app/providers';
 import AppShell from '@/components/layout/AppShell';
+import { siteMetadata } from '@/app/metadata';
+
+export const metadata = siteMetadata;
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
