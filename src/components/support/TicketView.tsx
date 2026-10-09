@@ -23,6 +23,7 @@ import {
   requesterName,
   schoolName,
 } from './desk-model';
+import { userHref } from '@/components/users/user-model';
 import { ReplyComposer } from './ReplyComposer';
 import { TicketControls } from './TicketControls';
 import { TicketThread } from './TicketThread';
@@ -46,7 +47,13 @@ function TicketFacts({ ticket }: { ticket: Ticket }) {
         <div className="mt-4 flex items-center gap-3">
           <Avatar id={ticket.requester.id} name={name} size={44} />
           <div className="min-w-0">
-            <p className="m-0 truncate text-[15px] font-extrabold text-tl-ink">{name}</p>
+            <Link
+              href={userHref(ticket.requester.id)}
+              className={`block truncate rounded-md text-[15px] font-extrabold text-tl-ink hover:underline ${focusRing}`}
+              data-testid="requester-link"
+            >
+              {name}
+            </Link>
             <p className="m-0 text-sm text-tl-muted">{ROLE_LABELS[ticket.requester.role] ?? ticket.requester.role}</p>
           </div>
         </div>

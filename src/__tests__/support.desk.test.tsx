@@ -65,6 +65,8 @@ describe('Support desk queue', () => {
     const rows = await screen.findAllByTestId('desk-row');
     expect(rows).toHaveLength(2);
     expect(within(rows[0]).getByRole('link', { name: /Card payment failed twice/ })).toHaveAttribute('href', '/talimsupport/t1');
+    // The requester's name opens their user page.
+    expect(within(rows[0]).getByRole('link', { name: 'Bola Ade' })).toHaveAttribute('href', '/talimadmindashboard/users/u-parent');
     expect(within(rows[0]).getByText('Greenfield Academy')).toBeInTheDocument();
     expect(within(rows[0]).getByText('Unassigned')).toBeInTheDocument();
     expect(within(rows[1]).getByText('Ada Admin')).toBeInTheDocument();

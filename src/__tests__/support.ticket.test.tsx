@@ -83,7 +83,7 @@ describe('Ticket thread', () => {
     await open();
     expect(screen.getByRole('heading', { name: 'Card payment failed twice' })).toBeInTheDocument();
     const requester = screen.getByRole('region', { name: 'Requester' });
-    expect(within(requester).getByText('Bola Ade')).toBeInTheDocument();
+    expect(within(requester).getByRole('link', { name: 'Bola Ade' })).toHaveAttribute('href', '/talimadmindashboard/users/u-parent');
     expect(within(requester).getByText('Parent')).toBeInTheDocument();
     expect(within(requester).getByRole('link', { name: /bola@parent\.test/ })).toHaveAttribute('href', 'mailto:bola@parent.test');
     const school = screen.getByRole('region', { name: 'School' });

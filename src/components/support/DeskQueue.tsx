@@ -49,6 +49,7 @@ import {
   type DeskFilters,
   type DeskTab,
 } from './desk-model';
+import { userHref } from '@/components/users/user-model';
 
 /** Quiet period before a search term reaches the URL and the API. */
 export const SEARCH_DEBOUNCE_MS = 400;
@@ -72,7 +73,8 @@ const tabDomId = (tab: DeskTab) => `desk-tab-${tab}`;
 const tabLabel = (tab: DeskTab) => (tab === 'all' ? 'All' : STATUS_META[tab].label);
 
 /**
- * One row of the queue: subject (the link), reference, requester, school,
+ * One row of the queue: subject (the link to the ticket), reference,
+ * requester (the link to their user page), school,
  * area, priority, status, assignee and last activity. A ticket with
  * requester messages the desk has not read shows them as "N new" and a bold
  * subject. School-desk tickets in the "All schools" view carry a read-only
@@ -92,23 +94,27 @@ function QueueRow({ ticket, now }: { ticket: TicketSummary; now: number }) {
       <th scope="row" className={`${tableCell} max-w-[360px] text-left font-normal`}>
         <Link
           href={`/talimsupport/${encodeURIComponent(ticket.id)}`}
-          className={`block min-h-[44px] rounded-md py-0.5 ${focusRing}`}
+          className={`flex min-h-[44px] items-center gap-2 rounded-md py-0.5 ${focusRing}`}
         >
-          <span className="flex items-center gap-2">
-            <span className={`block truncate text-[15px] text-tl-ink hover:underline ${unread ? 'font-extrabold' : 'font-bold'}`}>{ticket.subject}</span>
-            {unread ? (
-              <span className={`${pill} ${pillTone.info} shrink-0`} data-testid="unread-badge">
-                {unread}
-                <span className="sr-only"> {ticket.unread === 1 ? 'message' : 'messages'} from the requester</span>
-              </span>
-            ) : null}
-          </span>
-          <span className="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs text-tl-muted">
-            <span className="font-semibold">{ticket.reference}</span>
-            <span aria-hidden>·</span>
-            <span>{requesterName(ticket)}</span>
-          </span>
+          <span className={`block truncate text-[15px] text-tl-ink hover:underline ${unread ? 'font-extrabold' : 'font-bold'}`}>{ticket.subject}</span>
+          {unread ? (
+            <span className={`${pill} ${pillTone.info} shrink-0`} data-testid="unread-badge">
+              {unread}
+              <span className="sr-only"> {ticket.unread === 1 ? 'message' : 'messages'} from the requester</span>
+            </span>
+          ) : null}
         </Link>
+        <span className="flex flex-wrap items-center gap-1.5 text-xs text-tl-muted">
+          <span className="font-semibold">{ticket.reference}</span>
+          <span aria-hidden>·</span>
+          <Link
+            href={userHref(ticket.requester.id)}
+            className={`inline-flex min-h-[24px] items-center rounded-md hover:text-tl-ink hover:underline ${focusRing}`}
+            data-testid="requester-link"
+          >
+            {requesterName(ticket)}
+          </Link>
+        </span>
         {isReadOnlyTicket(ticket) ? <span className={`${pill} ${pillTone.muted} mt-1`}>School desk · read-only</span> : null}
         {ticket.escalatedFrom === 'school' ? <span className={`${pill} ${pillTone.accent} mt-1`}>Escalated</span> : null}
       </th>
