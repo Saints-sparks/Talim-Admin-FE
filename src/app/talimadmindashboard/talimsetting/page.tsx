@@ -4,6 +4,7 @@ import ProfilePicture from '@/components/setting/ProfilePicture';
 import PersonalInfo from '@/components/setting/PersonalInfo';
 import RecentActivity from '@/components/setting/RecentActivity';
 import { PageHeader } from '@/components/ui/page-header';
+import { PublicPageLinks } from '@/components/layout/PublicPageLinks';
 
 export default function ProfilePage() {
   return (
@@ -25,8 +26,15 @@ export default function ProfilePage() {
           <div className="lg:col-span-2">
             <PersonalInfo />
           </div>
-          <div className="lg:col-span-1">
+          <div className="flex flex-col gap-6 lg:col-span-1">
             <RecentActivity />
+            <section aria-labelledby="help-policies-title" className="rounded-xl border border-[#F1F1F1] bg-white px-6 py-4">
+              <h3 id="help-policies-title" className="text-base font-semibold text-[#030E18]">
+                Help and policies
+              </h3>
+              <p className="mt-0.5 text-xs text-[#6F6F6F]">On www.mytalim.com, for you and the schools you support.</p>
+              <PublicPageLinks className="mt-3 flex-col gap-2 text-sm font-medium" />
+            </section>
           </div>
         </div>
       </div>

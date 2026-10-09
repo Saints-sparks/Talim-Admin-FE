@@ -1,6 +1,6 @@
 /** @jest-environment jsdom */
 import userEvent from '@testing-library/user-event';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { LoginForm } from '@/components/talimloginform/Form';
 import { ApiError } from '@/lib/apiError';
 
@@ -55,5 +55,14 @@ describe('LoginForm', () => {
 
     expect(login).toHaveBeenCalledWith({ email: 'admin@talim.test', password: 'secret' });
     expect(replace).toHaveBeenCalledWith('/talimadmindashboard');
+  });
+
+  it('links the public privacy policy, terms and help pages in its footer', () => {
+    render(<LoginForm />);
+    const links = screen.getByRole('navigation', { name: 'Talim policies and help' });
+    expect(within(links).getByRole('link', { name: /Privacy policy/ })).toHaveAttribute('href', 'https://www.mytalim.com/privacy');
+    expect(within(links).getByRole('link', { name: /Terms of service/ })).toHaveAttribute('href', 'https://www.mytalim.com/terms');
+    expect(within(links).getByRole('link', { name: /Help and support/ })).toHaveAttribute('href', 'https://www.mytalim.com/support');
+    expect(within(links).getByRole('link', { name: /Privacy policy/ })).toHaveAttribute('target', '_blank');
   });
 });

@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuthContext } from '@/app/context/AuthContext';
 import { ApiError, getErrorMessage } from '@/lib/apiError';
+import { PublicPageLinks } from '@/components/layout/PublicPageLinks';
 
 
 // Mirrors AdminLoginDto: email format + max 254, password just non-empty +
@@ -178,10 +179,11 @@ export function LoginForm() {
             </Button>
           </form>
 
-          <p className="mt-10 text-center text-xs text-[#878787]">
+          <p className="mt-10 text-center text-xs text-[#6F6F6F]">
             © Talim {new Date().getFullYear()} ·{' '}
             <a href="mailto:support@mytalim.com" className="hover:underline text-[#003366]">support@mytalim.com</a>
           </p>
+          <PublicPageLinks className="mt-3 flex-wrap justify-center gap-x-4 gap-y-1 text-xs" />
         </div>
       </div>
 
