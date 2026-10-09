@@ -25,7 +25,7 @@ import {
   tableCell,
   tableHead,
 } from '@/components/tl/styles';
-import type { AdminUserSearchHit } from '@/types/adminUsers';
+import type { AdminUserSearchItem } from '@/types/broadcasts';
 import {
   DEFAULT_USER_FILTERS,
   USER_ROLES,
@@ -51,8 +51,8 @@ export const USER_SEARCH_DEBOUNCE_MS = 400;
  * @param props.user - The search hit.
  * @returns The table row.
  */
-function UserRow({ user }: { user: AdminUserSearchHit }) {
-  const status = user.status ? USER_STATUS_META[user.status] : null;
+function UserRow({ user }: { user: AdminUserSearchItem }) {
+  const status = USER_STATUS_META[user.status];
   const name = user.name || user.email || 'Unnamed user';
   return (
     <tr className="border-t border-tl-line-soft hover:bg-tl-subtle" data-testid="user-row">
@@ -67,7 +67,9 @@ function UserRow({ user }: { user: AdminUserSearchHit }) {
       </th>
       <td className={tableCell}>{roleLabel(user.role)}</td>
       <td className={`${tableCell} max-w-[220px] truncate`}>{user.school?.name ?? <span className="text-tl-faint">No school</span>}</td>
-      <td className={tableCell}>{status ? <span className={`${pill} ${pillTone[status.tone]}`}>{status.label}</span> : null}</td>
+      <td className={tableCell}>
+        <span className={`${pill} ${pillTone[status.tone]}`}>{status.label}</span>
+      </td>
     </tr>
   );
 }

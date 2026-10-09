@@ -3,7 +3,7 @@
  * "v1.5 as built"), typed with the generated contract so a change there
  * fails here first.
  */
-import type { AdminUserDetail, AdminUserSearchHit } from '@/types/adminUsers';
+import type { AdminUserDetail } from '@/types/adminUsers';
 import type { AdminUserSearchItem, Broadcast, BroadcastPreview } from '@/types/broadcasts';
 import type { Ticket, TicketDeskCounts, TicketPage, TicketStaff, TicketSummary } from '@/types/tickets';
 
@@ -178,6 +178,7 @@ export const PEOPLE: AdminUserSearchItem[] = [
     email: 'ngozi@greenfield.test',
     role: 'school_admin',
     school: { id: 's1', name: 'Greenfield Academy' },
+    status: 'active',
   },
   {
     id: '64b000000000000000000002',
@@ -185,6 +186,7 @@ export const PEOPLE: AdminUserSearchItem[] = [
     email: 'n.adeyemi@parent.test',
     role: 'parent',
     school: null,
+    status: 'active',
   },
 ];
 
@@ -211,7 +213,10 @@ export function adminUserDetail(overrides: Partial<AdminUserDetail> = {}): Admin
     lastLoginAt: '2026-10-08T07:30:00.000Z',
     status: 'active',
     school: { id: 's1', name: 'Greenfield Academy' },
-    children: [{ id: 'c1', name: 'Tobi Ade', className: 'JSS 2A', school: { id: 's1', name: 'Greenfield Academy' } }],
+    children: [
+      { id: '64c000000000000000000002', studentId: 'st1', name: 'Tobi Ade', className: 'JSS 2A', school: { id: 's1', name: 'Greenfield Academy' } },
+    ],
+    className: null,
     tickets: {
       open: 1,
       total: 2,
@@ -226,7 +231,7 @@ export function adminUserDetail(overrides: Partial<AdminUserDetail> = {}): Admin
 }
 
 /** Users found by the directory (`GET /admin/users/search` with `status`). */
-export const USER_HITS: AdminUserSearchHit[] = [
+export const USER_HITS: AdminUserSearchItem[] = [
   { ...PEOPLE[0], status: 'active' },
   { id: PARENT_ID, name: 'Bola Ade', email: 'bola@parent.test', role: 'parent', school: { id: 's1', name: 'Greenfield Academy' }, status: 'deletion_scheduled' },
 ];

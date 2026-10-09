@@ -1,13 +1,8 @@
 import { ApiError, getErrorMessage } from '@/lib/apiError';
 import type { PillTone } from '@/components/tl/styles';
 import { oneOf, ROLE_LABELS } from '@/components/support/desk-model';
-import type {
-  AdminUserDetail,
-  AdminUserListQuery,
-  AdminUserRole,
-  AdminUserStatus,
-  AdminUserStatusFilter,
-} from '@/types/adminUsers';
+import type { AdminUserDetail, AdminUserRole, AdminUserStatus, AdminUserStatusFilter } from '@/types/adminUsers';
+import type { AdminUserSearchQuery } from '@/types/broadcasts';
 
 /** The user directory's path. */
 export const USERS_PATH = '/talimadmindashboard/users';
@@ -92,13 +87,13 @@ export function userFiltersToSearch(filters: UserFilters): string {
 
 /**
  * Turns the URL filters into the `GET /admin/users/search` query. The status
- * is always sent, so a hit's status is known even when the API leaves it out.
+ * filter is always sent, so the results match the filter the page shows.
  *
  * @param filters - The filters.
  * @param limit - How many users to ask for.
  * @returns The query.
  */
-export function toUserQuery(filters: UserFilters, limit: number): AdminUserListQuery {
+export function toUserQuery(filters: UserFilters, limit: number): AdminUserSearchQuery {
   return {
     ...(filters.q.trim() ? { q: filters.q.trim() } : {}),
     ...(filters.role ? { role: filters.role } : {}),

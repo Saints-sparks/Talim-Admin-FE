@@ -42,6 +42,7 @@ describe('User directory', () => {
     expect(within(rows[1]).getByText('Parent')).toBeInTheDocument();
     expect(within(rows[1]).getByText('Deletion scheduled')).toBeInTheDocument();
     expect(within(rows[0]).getByText('School admin')).toBeInTheDocument();
+    expect(within(rows[0]).getByText('Active')).toBeInTheDocument();
     expect(searchUsers).toHaveBeenCalledTimes(1);
     expect(searchUsers).toHaveBeenCalledWith({ status: 'active', limit: 50 });
     expect(screen.getByText('2 users found.')).toBeInTheDocument();

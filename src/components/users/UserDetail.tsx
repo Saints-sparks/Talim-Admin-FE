@@ -28,7 +28,7 @@ import {
 } from '@/components/tl/styles';
 import { STATUS_META, relativeTime } from '@/components/support/desk-model';
 import type { AdminUserDetail } from '@/types/adminUsers';
-import { USERS_PATH, USER_STATUS_META, roleLabel, statusLock, userDisplayName } from './user-model';
+import { USERS_PATH, USER_STATUS_META, roleLabel, statusLock, userDisplayName, userHref } from './user-model';
 import { UserStatusSheet } from './UserStatusSheet';
 
 /**
@@ -76,14 +76,15 @@ function ProfileCard({ user }: { user: AdminUserDetail }) {
 }
 
 /**
- * A parent's children, with class and school.
+ * A parent's children, with class and school, each linking to the child's own
+ * page (a child's `id` is their user id).
  *
  * @param props - The parent.
  * @param props.user - The user (a parent).
  * @returns The card.
  */
 function ChildrenCard({ user }: { user: AdminUserDetail }) {
-  const children = user.children ?? [];
+  const { children } = user;
   return (
     <section className={card} aria-labelledby="children-title">
       <h2 id="children-title" className={cardTitle}>
@@ -92,14 +93,19 @@ function ChildrenCard({ user }: { user: AdminUserDetail }) {
       {children.length ? (
         <ul className="m-0 mt-3 flex list-none flex-col gap-2 p-0">
           {children.map((child) => (
-            <li key={child.id} className="flex items-center gap-3 rounded-2xl border border-tl-line-soft bg-tl-subtle px-3.5 py-2.5">
-              <Avatar id={child.id} name={child.name} size={34} />
-              <span className="min-w-0">
-                <span className="block truncate text-sm font-bold text-tl-ink">{child.name}</span>
-                <span className="block truncate text-xs text-tl-muted">
-                  {[child.className, child.school?.name].filter(Boolean).join(' · ') || 'No class yet'}
+            <li key={child.id}>
+              <Link
+                href={userHref(child.id)}
+                className={`flex items-center gap-3 rounded-2xl border border-tl-line-soft bg-tl-subtle px-3.5 py-2.5 hover:border-tl-line ${focusRing}`}
+              >
+                <Avatar id={child.id} name={child.name} size={34} />
+                <span className="min-w-0">
+                  <span className="block truncate text-sm font-bold text-tl-ink">{child.name}</span>
+                  <span className="block truncate text-xs text-tl-muted">
+                    {[child.className, child.school?.name].filter(Boolean).join(' · ') || 'No class yet'}
+                  </span>
                 </span>
-              </span>
+              </Link>
             </li>
           ))}
         </ul>

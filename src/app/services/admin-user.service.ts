@@ -1,12 +1,8 @@
 import { api } from '@/lib/apiClient';
 import { API_ENDPOINTS } from '@/app/lib/api/config';
 import { toQueryString } from '@/lib/queryString';
-import type {
-  AdminUserDetail,
-  AdminUserListQuery,
-  AdminUserSearchHit,
-  UpdateAdminUserStatusPayload,
-} from '@/types/adminUsers';
+import type { AdminUserDetail, UpdateAdminUserStatusPayload } from '@/types/adminUsers';
+import type { AdminUserSearchItem, AdminUserSearchQuery } from '@/types/broadcasts';
 
 /** Most users one directory search returns (the API's ceiling). */
 export const USER_SEARCH_LIMIT = 50;
@@ -27,8 +23,8 @@ export const adminUserService = {
    * @returns The users found, each with role, school and status.
    * @throws ApiError - `FORBIDDEN` when the caller is not a platform admin.
    */
-  async search(query: AdminUserListQuery): Promise<AdminUserSearchHit[]> {
-    return api.get<AdminUserSearchHit[]>(`${API_ENDPOINTS.ADMIN_USERS_SEARCH}${toQueryString(query)}`);
+  async search(query: AdminUserSearchQuery): Promise<AdminUserSearchItem[]> {
+    return api.get<AdminUserSearchItem[]>(`${API_ENDPOINTS.ADMIN_USERS_SEARCH}${toQueryString(query)}`);
   },
 
   /**

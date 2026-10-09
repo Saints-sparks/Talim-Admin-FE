@@ -44,6 +44,7 @@ describe('User detail', () => {
     const children = screen.getByRole('region', { name: 'Children' });
     expect(within(children).getByText('Tobi Ade')).toBeInTheDocument();
     expect(within(children).getByText('JSS 2A · Greenfield Academy')).toBeInTheDocument();
+    expect(within(children).getByRole('link', { name: /Tobi Ade/ })).toHaveAttribute('href', '/talimadmindashboard/users/64c000000000000000000002');
 
     const tickets = within(screen.getByRole('list', { name: 'Recent tickets' })).getAllByRole('link');
     expect(tickets).toHaveLength(2);
@@ -53,7 +54,7 @@ describe('User detail', () => {
   });
 
   it('shows a student’s class and no children card', async () => {
-    getUser.mockResolvedValue(adminUserDetail({ role: 'student', className: 'SS 1B', children: undefined }));
+    getUser.mockResolvedValue(adminUserDetail({ role: 'student', className: 'SS 1B', children: [] }));
     renderWithProviders(<UserDetail id={PARENT_ID} />);
     expect(await screen.findByText('SS 1B')).toBeInTheDocument();
     expect(screen.queryByRole('region', { name: 'Children' })).toBeNull();
@@ -80,7 +81,7 @@ describe('User detail', () => {
   });
 
   it('locks the switch on your own account', async () => {
-    getUser.mockResolvedValue(adminUserDetail({ id: ADMIN_USER.userId, role: 'admin', children: undefined }));
+    getUser.mockResolvedValue(adminUserDetail({ id: ADMIN_USER.userId, role: 'admin', children: [] }));
     renderWithProviders(<UserDetail id={ADMIN_USER.userId} />);
     expect(await screen.findByText(/This is your own account/)).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /Deactivate/ })).toBeNull();
